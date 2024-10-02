@@ -1611,7 +1611,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Signer email"
+          ["x-ms-summary"] = "Signer email"
         };
       }
       else if (recipientType.Equals("witnesses", StringComparison.OrdinalIgnoreCase))
@@ -1642,7 +1642,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Email"
+          ["x-ms-summary"] = "Email"
         };
       }
     }
@@ -2394,8 +2394,9 @@ public class Script : ScriptBase
     {
       new JObject(),
     };
+
     AddCoreRecipientParams(signers, body);
-    AddParamsForSelectedRecipientType(signers, body);
+    bool missingInput = AddParamsForSelectedRecipientType(signers, body);
 
     if (!string.IsNullOrEmpty(query.Get("embeddedRecipientStartURL")))
     {
@@ -2413,6 +2414,10 @@ public class Script : ScriptBase
     uriBuilder.Path = uriBuilder.Path.Replace("/recipients/addRecipientV2", "/recipients");
     uriBuilder.Path = uriBuilder.Path.Replace("/recipients/updateRecipient", "/recipients");
     this.Context.Request.RequestUri = uriBuilder.Uri;
+
+    if (missingInput) {
+      throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: at least one of email or phone number is required");
+    }
 
     return body;
   }
@@ -2777,10 +2782,12 @@ public class Script : ScriptBase
     return filteredEnvelopesDetails;
   }
   
-  private void AddParamsForSelectedRecipientType(JArray signers, JObject body) 
+  private bool AddParamsForSelectedRecipientType(JArray signers, JObject body) 
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var recipientType = query.Get("recipientType");
+
+    var missingInput = false;
 
     if (recipientType.Equals("inPersonSigners"))
     {
@@ -2797,8 +2804,20 @@ public class Script : ScriptBase
     else
     {
       signers[0]["name"] = body["name"];
-      signers[0]["email"] = body["email"];
+      if (body["email"] == null) 
+      {
+        signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
+        if (string.IsNullOrEmpty(query.Get("phoneNumber")))
+        {
+          missingInput = true;
+        }
+      }
+      else 
+      {
+        signers[0]["email"] = body["email"];
+      }
     }
+    return missingInput;
   }
 
   private void AddParamsForSelectedSignatureType(JArray signers, JObject body)
