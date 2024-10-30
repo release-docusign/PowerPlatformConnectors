@@ -1632,7 +1632,7 @@
             "in": "query",
             "type": "integer",
             "format": "int32"
-          },
+          }
         ],
         "responses": {
           "200": {
