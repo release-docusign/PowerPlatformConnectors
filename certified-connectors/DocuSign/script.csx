@@ -2451,14 +2451,7 @@ public class Script : ScriptBase
 
     if (returnUrl.Equals("DocuSign homepage"))
     {
-      if (url.Equals("demo.docusign.net"))
-      {
-        body["returnUrl"] = "https://appdemo.docusign.com/";
-      }
-      else
-      {
-        body["returnUrl"] = "https://app.docusign.com/";
-      }
+      body["returnUrl"] = GetDocusignApiBaseUri();
     }
     else
     {
@@ -2600,6 +2593,10 @@ public class Script : ScriptBase
   private string GetEnvelopeUrl(JToken envelope)
   {
     var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/dev
     var path = uriBuilder.Uri.ToString().Contains("demo") || uriBuilder.Uri.ToString().Contains("stage") ? 
     "/send/documents/details/" : "/documents/details/";
     var envelopeUrl = GetDocusignApiBaseUri() + path + envelope["envelopeId"];
