@@ -5218,6 +5218,13 @@
                   "x-ms-summary": "Envelope Created Date-Time",
                   "x-ms-visibility": "advanced"
                 },
+                "statusChangedDateTime": {
+                  "format": "date-time",
+                  "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                  "type": "string",
+                  "x-ms-summary": "Envelope Status Changed Date-Time",
+                  "x-ms-visibility": "advanced"
+                },
                 "envelopeId": {
                   "type": "string",
                   "x-ms-summary": "Envelope ID",

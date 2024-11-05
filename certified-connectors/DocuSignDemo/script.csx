@@ -1853,6 +1853,7 @@ public class Script : ScriptBase
       }
 
       body["data"]["envelopeSummary"]["customFields"] = parsedCustomFields;
+      body["data"]["statusChangedDateTime"] = envelopeSummary["statusChangedDateTime"];
 
       // tab code
       var recipientStatuses = envelopeSummary["recipients"];
