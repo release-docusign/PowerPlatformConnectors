@@ -3457,24 +3457,6 @@ public class Script : ScriptBase
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
-    if ("GetDocumentsV3".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
-    {
-      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
-      var newPath = uriBuilder.Path;
-      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-      acceptHeaderValue = "application/pdf";
-
-      if (HttpUtility.UrlDecode(uriBuilder.Path).Trim().Contains("CombinedWithCOC"))
-      {
-        newPath = newPath.Replace("CombinedWithCOC", "Combined");
-        query["certificate"] = "true";
-        uriBuilder.Query = query.ToString();
-      }
-      
-      uriBuilder.Path = newPath.Replace("/downloadDocuments", "");
-      this.Context.Request.RequestUri = uriBuilder.Uri;
-    }
-
     this.Context.Request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptHeaderValue));
   }
 
@@ -4102,7 +4084,6 @@ public class Script : ScriptBase
     {
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-      var docTypeFilter = query.Get("documentTypeFilter");
       JArray envelopeDocuments = new JArray();
       JObject newBody = new JObject();
 
@@ -4110,46 +4091,8 @@ public class Script : ScriptBase
       {
         throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Envelope do not contain documents");
       }
-      
-      var availableDocuments = body["envelopeDocuments"] as JArray ?? new JArray();
-      if(!string.IsNullOrEmpty(docTypeFilter))
-      {
-        if(docTypeFilter == "Single envelope document") 
-        {
-          availableDocuments = new JArray(availableDocuments.Where(doc => (string) doc["attachmentTabId"] == null));
-          availableDocuments.First(doc => (string) doc["documentId"] == "certificate")["name"] = "Certificate of completion (PDF)";
-        }
-        else if(docTypeFilter == "Signer attachment") 
-        {
-          availableDocuments = new JArray(availableDocuments.Where(doc => (string) doc["attachmentTabId"] != null));
-        }
-        else if(docTypeFilter == "Combined envelope documents")
-        {
-          availableDocuments = new JArray();
-          availableDocuments.Add(new JObject()
-          {
-            ["documentId"] = "Archive",
-            ["name"] = "Envelope documents with certificate of completion (ZIP)"
-          });
-          availableDocuments.Add(new JObject()
-            {
-              ["documentId"] = "CombinedWithCOC",
-              ["name"] = "All envelope documents with certificate of completion (PDF)"
-            });
-          availableDocuments.Add(new JObject()
-          {
-            ["documentId"] = "Combined",
-            ["name"] = "All envelope documents without certificate of completion (PDF)"
-          });
-          availableDocuments.Add(new JObject()
-          {
-            ["documentId"] = "Portfolio",
-            ["name"] = "All envelope documents (PDF Portfolio)"
-          });
-        }
-      }
 
-      foreach(var document in availableDocuments)
+      foreach(var document in body["envelopeDocuments"] as JArray ?? new JArray())
       {
         envelopeDocuments.Add(new JObject()
         {
@@ -4496,25 +4439,12 @@ public class Script : ScriptBase
     if (response.Content?.Headers?.ContentType != null)
     {
       if (("GetDocuments".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)) ||
-      ("GetDocumentsV2".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))||
-      ("GetDocumentsV3".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+      ("GetDocumentsV2".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
       {
         var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
 
         response.Content.Headers.ContentType = uriBuilder.Path.Contains("Archive") ? new MediaTypeHeaderValue("application/zip") :
           new MediaTypeHeaderValue("application/pdf");
-        
-         var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-          if (response.Content.Headers.ContentDisposition != null && query["rename"] != null)
-          {
-              var renameTo = query["rename"].ToString();
-              var fileName = Path.HasExtension(renameTo) ? renameTo : uriBuilder.Path.Contains("Archive") ? $"{renameTo}.zip"  : $"{renameTo}.pdf";
-
-              response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("file")
-              {
-                FileName = "\"" + fileName + "\""
-              };
-          }
       }
       else
       {
