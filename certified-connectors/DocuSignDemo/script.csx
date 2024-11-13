@@ -821,7 +821,8 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Validation Type",
-                    ["description"] = "true/false"
+                    ["description"] = "Select",
+                    ["enum"] = new JArray("Currency", "Number")
                   },
                   ["minNumericalValue"] = new JObject
                   {
