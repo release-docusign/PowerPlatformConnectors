@@ -2,9 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0",
-    "title": "Docusign",
+    "title": "Docusign Demo",
     "x-ms-keywords": [
-      "Docusign Demo",
       "Docusign",
       "Docusigns",
       "Docu sign",
