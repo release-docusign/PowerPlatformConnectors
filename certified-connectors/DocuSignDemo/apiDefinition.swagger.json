@@ -4527,7 +4527,7 @@
         "x-ms-visibility": "advanced"
       }
     },
-    "/signers/accounts/{accountId}/templates/{templateId}/recipients": {
+    "/signers/accounts/{accountId}/templates/{templateId}": {
       "get": {
         "tags": [
           "DocuSign"

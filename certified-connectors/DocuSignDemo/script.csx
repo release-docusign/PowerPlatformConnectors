@@ -2100,6 +2100,8 @@ public class Script : ScriptBase
       ["emailBlurb"] = query.Get("emailBody")
     };
 
+    string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "radioGroupTabs", "ssnTabs", "textTabs", "zipTabs"};
+
     foreach (var property in body)
     {
       var value = (string)property.Value;
@@ -2124,6 +2126,19 @@ public class Script : ScriptBase
         signer["signingGroupId"] = value;
         templateRoles.Add(signer);
         signer = new JObject();
+      }
+
+      string[] splittedTabKey = key.Split(new string[]{"Tab Type: ", " Tab Label:"}, StringSplitOptions.None);
+      if (splittedTabKey.Length > 2)
+      {
+        string tabType = splittedTabKey[1];
+        foreach (var editableTabType in editableTabs)
+        {
+          if (string.Equals(tabType, editableTabType, StringComparison.OrdinalIgnoreCase))
+          {
+            signer["tabs"] = "tabs";
+          }
+        }
       }
     }
 
@@ -3394,6 +3409,9 @@ public class Script : ScriptBase
     {
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
       uriBuilder.Path = uriBuilder.Path.Replace("/signers/accounts/", "/accounts/");
+      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      query["include"] = "tabs";
+      uriBuilder.Query = query.ToString();
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
@@ -4118,33 +4136,33 @@ public class Script : ScriptBase
     {
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var itemProperties = new JObject();
-      var basePropertyDefinition = new JObject
-      {
-        ["type"] = "string",
-        ["x-ms-keyOrder"] = 0,
-        ["x-ms-keyType"] = "none",
-        ["x-ms-sort"] = "none",
-      };
 
-      var signers = (body["signers"] as JArray) ?? new JArray();
-
-      foreach (var signer in signers)
+      Dictionary<string, JObject> recipientData = new Dictionary<string, JObject>();
+      if (body["recipients"] != null)
       {
-        var roleName = signer["roleName"];
+        if (body["recipients"]["signers"] != null)
+        {
+          var allSigners = body["recipients"]["signers"] as JArray;
+          foreach (var signer in allSigners)
+          {
+            recipientData[signer["roleName"].ToString()] = signer as JObject;
+          }
+        }
+      }
+
+      string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "radioGroupTabs", "ssnTabs", "textTabs", "zipTabs"};
+
+      foreach (KeyValuePair<string, JObject> pair in recipientData)
+      {
+        var roleName = pair.Key;
         itemProperties[roleName + " Name"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-keyOrder"] = 0,
-          ["x-ms-keyType"] = "none",
-          ["x-ms-sort"] = "none",
           ["x-ms-summary"] = roleName + " Recipient Or Signing Group Name"
         };
         itemProperties[roleName + " Email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-keyOrder"] = 0,
-          ["x-ms-keyType"] = "none",
-          ["x-ms-sort"] = "none",
           ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
         };
         itemProperties[roleName + " Signing Group"] = new JObject
@@ -4166,6 +4184,24 @@ public class Script : ScriptBase
               }
             }
         };
+        JObject singleRecipientData = recipientData[roleName] as JObject;
+        JObject tabsData = singleRecipientData["tabs"] as JObject;
+        if (tabsData != null)
+        {
+          foreach (var tabType in editableTabs)
+          {
+            if (tabsData.ContainsKey(tabType))
+            {
+              foreach (var tab in tabsData[tabType] as JArray)
+              {
+                itemProperties[roleName + " Tab Type: " + tabType + " Tab label: " + tab["tabLabel"].ToString()] = new JObject
+                {
+                  ["type"] = "string"
+                };
+              }
+            }
+          }
+        }
       }
 
       var newBody = new JObject
