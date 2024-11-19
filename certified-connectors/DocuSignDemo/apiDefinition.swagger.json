@@ -3821,6 +3821,129 @@
         "x-ms-visibility": "important"
       }
     },
+    "/accounts/{accountId}/bulk_send_lists": {
+      "post": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Create bulk send lists",
+        "description": "Create bulk send list",
+        "operationId": "CreateBulkSendList",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name of the bulk sending list",
+            "required": true,
+            "x-ms-summary": "Name of the bulk sending list",
+            "type": "string"
+          },
+          {
+            "name": "dataType",
+            "in": "query",
+            "description": "Choose data type",
+            "required": true,
+            "x-ms-summary": "Bulk Send Data Type",
+            "type": "string",
+            "enum": ["csv", "manual"]
+          },
+          {
+            "name": "bulkSendRequestBody",
+            "in": "body",
+            "description": "Bulk send request body",
+            "x-ms-visibility": "important",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BulkSendSchema"
+            },
+            "x-ms-summary": "Bulk Send Request Body"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "important"
+      }
+    },
+    "/accounts/{accountId}/bulk_send_lists/{bulkSendListId}/send": {
+      "post": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Bulk send",
+        "description": "Bulk send",
+        "operationId": "BulkSend",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "bulkSendListId",
+            "in": "path",
+            "description": "Bulk Sending List ID",
+            "required": true,
+            "x-ms-summary": "Bulk Sending List ID",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BulkSendListGuid"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "important"
+      }
+    },
     "/login_information": {
       "get": {
         "tags": [
@@ -4975,6 +5098,34 @@
         "x-ms-visibility": "internal"
       }
     },
+    "/bulksend_schema": {
+      "get": {
+        "tags": [
+          "StaticResponse"
+        ],
+        "description": "Get schema for a bulk send request.",
+        "operationId": "StaticResponseForBulkSendBodySchema",
+        "parameters": [
+          {
+            "name": "dataType",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "x-ms-summary": "Data Type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "internal"
+      }
+    },
     "/recipienttype_schema": {
       "get": {
         "tags": [
@@ -5844,6 +5995,20 @@
         "parameters": {
           "tabType": {
             "parameter": "tabType"
+          }
+        },
+        "value-path": "Schema"
+      }
+    },
+    "BulkSendSchema": {
+      "description": "An object that represents the schema for a bulk send request.",
+      "type": "object",
+      "properties": {},
+      "x-ms-dynamic-schema": {
+        "operationId": "StaticResponseForBulkSendBodySchema",
+        "parameters": {
+          "dataType": {
+            "parameter": "dataType"
           }
         },
         "value-path": "Schema"
@@ -6848,6 +7013,17 @@
           "description": "The name of the template.",
           "type": "string",
           "x-ms-summary": "Name"
+        }
+      }
+    },
+    "BulkSendListGuid": {
+      "type": "object",
+      "properties": {
+        "listId": {
+          "description": "Bulk Send List Guid",
+          "type": "string",
+          "x-ms-summary": "Bulk Send List Guid",
+          "x-ms-visibility": "important"
         }
       }
     },
