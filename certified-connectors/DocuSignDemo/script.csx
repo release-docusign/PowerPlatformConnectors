@@ -1841,13 +1841,12 @@ public class Script : ScriptBase
       // documents code
       foreach (var envelopeDocument in envelopeSummary["envelopeDocuments"] ?? new JArray())
       {
-        envelopeDocuments.Add(
-          new JObject(
-            ["documentId"] = envelopeDocument["documentId"],
-            ["documentGuid"] = envelopeDocument["documentIdGuid"],
-            ["documentName"] = envelopeDocument["name"]
-          );
-        );
+        envelopeDocuments.Add(new JObject()
+        {
+          ["documentId"] = envelopeDocument["documentId"],
+          ["documentGuid"] = envelopeDocument["documentIdGuid"],
+          ["documentName"] = envelopeDocument["name"]
+        });
       }
 
       body["data"]["envelopeSummary"]["envelopeDocuments"] = envelopeDocuments;
