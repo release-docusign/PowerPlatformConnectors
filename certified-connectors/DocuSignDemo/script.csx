@@ -474,8 +474,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["anchorXOffset"] = new JObject
                   {
@@ -1217,8 +1216,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Optional",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["anchorXOffset"] = new JObject
                   {
