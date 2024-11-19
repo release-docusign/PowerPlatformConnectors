@@ -2090,7 +2090,6 @@ public class Script : ScriptBase
   private JObject CreateEnvelopeFromTemplateV1BodyTransformation(JObject body)
   {
     var templateRoles = new JArray();
-    var signer = new JObject();
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
 
     var newBody = new JObject()
@@ -2100,46 +2099,72 @@ public class Script : ScriptBase
       ["emailBlurb"] = query.Get("emailBody")
     };
 
-    string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "radioGroupTabs", "ssnTabs", "textTabs", "zipTabs"};
-
+    Dictionary<string, JObject> recipientMapping = new Dictionary<string, JObject>();
     foreach (var property in body)
     {
       var value = (string)property.Value;
       var key = (string)property.Key;
-
-      if (key.Contains(" Name"))
+      string[] keyArray = key.Split(new string[]{":::", " Name", " Email"}, StringSplitOptions.None);
+      var roleName = keyArray[0];
+      if (!recipientMapping.ContainsKey(roleName))
       {
-        signer["roleName"] = key.Substring(0, key.Length - 5);
-        signer["name"] = value;
+        JObject newRecipientObj = new JObject();
+        newRecipientObj["roleName"] = roleName;
+        recipientMapping[roleName] = newRecipientObj;
       }
+      JObject recipientObj = recipientMapping[roleName];
 
-      //add every (name, email) pairs
-      if (key.Contains(" Email"))
+      if (keyArray.Length > 2)
       {
-        signer["email"] = value;
-        templateRoles.Add(signer);
-        signer = new JObject();
-      }
-
-      if (key.Contains(" Signing Group"))
-      {
-        signer["signingGroupId"] = value;
-        templateRoles.Add(signer);
-        signer = new JObject();
-      }
-
-      string[] splittedTabKey = key.Split(new string[]{"Tab Type: ", " Tab Label:"}, StringSplitOptions.None);
-      if (splittedTabKey.Length > 2)
-      {
-        string tabType = splittedTabKey[1];
-        foreach (var editableTabType in editableTabs)
+        if (!recipientObj.ContainsKey("tabs"))
         {
-          if (string.Equals(tabType, editableTabType, StringComparison.OrdinalIgnoreCase))
-          {
-            signer["tabs"] = "tabs";
-          }
+          recipientObj["tabs"] = new JObject();
         }
+        var tabType = keyArray[1];
+        var tabLabel = keyArray[2];
+        JObject tabObj = new JObject
+        {
+          ["tabLabel"] = tabLabel,
+          ["value"] = value
+        };
+        JObject recipientTabs = (JObject) recipientObj["tabs"];
+        if (!recipientTabs.ContainsKey(tabType))
+        {
+          recipientTabs[tabType] = new JArray();
+        }
+        JArray recipientObjArray = (JArray) recipientTabs[tabType];
+        recipientObjArray.Add(tabObj);
       }
+      if (string.Equals(keyArray[1], "IDV", StringComparison.OrdinalIgnoreCase))
+      {
+        if (!newBody.ContainsKey("recipients"))
+        {
+          newBody["recipients"] = new JObject();
+        }
+        JObject allRecipientsObj = newBody["recipients"] as JObject;
+        
+      }
+      if (string.Equals(keyArray[1], "Name", StringComparison.OrdinalIgnoreCase))
+      {
+        recipientObj["name"] = value;
+      }
+      if (string.Equals(keyArray[1], "Email", StringComparison.OrdinalIgnoreCase))
+      {
+        recipientObj["email"] = value;
+      }
+      if (string.Equals(keyArray[1], "Signing Group", StringComparison.OrdinalIgnoreCase))
+      {
+        recipientObj["signingGroupId"] = value;
+      }
+      else
+      {
+        continue;
+      }
+    }
+
+    foreach (JObject value in recipientMapping.Values)
+    {
+      templateRoles.Add(value);
     }
 
     newBody["templateRoles"] = templateRoles;
@@ -4150,11 +4175,12 @@ public class Script : ScriptBase
         }
       }
 
-      string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "radioGroupTabs", "ssnTabs", "textTabs", "zipTabs"};
+      string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "ssnTabs", "textTabs", "zipTabs"};
 
       foreach (KeyValuePair<string, JObject> pair in recipientData)
       {
         var roleName = pair.Key;
+        JObject recipientObj = pair.Value as JObject;
         itemProperties[roleName + " Name"] = new JObject
         {
           ["type"] = "string",
@@ -4165,7 +4191,7 @@ public class Script : ScriptBase
           ["type"] = "string",
           ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
         };
-        itemProperties[roleName + " Signing Group"] = new JObject
+        itemProperties[roleName + ":::Signing Group"] = new JObject
         {
           ["type"] = "string",
           ["x-ms-summary"] = roleName + " Signing Group",
@@ -4184,7 +4210,12 @@ public class Script : ScriptBase
               }
             }
         };
-        JObject singleRecipientData = recipientData[roleName] as JObject;
+        itemProperties[roleName + ":::IDV:::" + recipientObj["recipientId"]] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " IDV Workflow ID"
+        };
+        JObject singleRecipientData = recipientObj as JObject;
         JObject tabsData = singleRecipientData["tabs"] as JObject;
         if (tabsData != null)
         {
@@ -4194,9 +4225,10 @@ public class Script : ScriptBase
             {
               foreach (var tab in tabsData[tabType] as JArray)
               {
-                itemProperties[roleName + " Tab Type: " + tabType + " Tab label: " + tab["tabLabel"].ToString()] = new JObject
+                itemProperties[roleName + ":::" + tabType + ":::" + tab["tabLabel"].ToString()] = new JObject
                 {
-                  ["type"] = "string"
+                  ["type"] = "string",
+                  ["x-ms-summary"] = roleName + " Tab Type: " + tabType + " Tab label: " + tab["tabLabel"].ToString()
                 };
               }
             }
