@@ -3820,6 +3820,7 @@ public class Script : ScriptBase
         signer["signingGroupId"] = value;
         templateRoles.Add(signer);
         signer = new JObject();
+      }
     }
 
     newBody["templateRoles"] = templateRoles;
