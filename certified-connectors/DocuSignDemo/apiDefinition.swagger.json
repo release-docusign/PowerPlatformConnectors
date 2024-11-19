@@ -3105,6 +3105,14 @@
             "required": false,
             "x-ms-summary": "Phone Number",
             "type": "string"
+          },
+          {
+            "name": "recipientIdGuid",
+            "in": "query",
+            "description": "Recipient ID Guid",
+            "required": false,
+            "x-ms-summary": "Recipient ID Guid",
+            "type": "string"
           }
         ],
         "responses": {

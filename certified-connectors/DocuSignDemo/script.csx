@@ -4009,6 +4009,7 @@ public class Script : ScriptBase
       var matchingSigner = new JObject();
       var newBody = new JObject();
       var recipientEmailId = query.Get("recipientEmail");
+      var recipientIdGuid = query.Get("recipientIdGuid");
       var phoneNumber = query.Get("areaCode") + " " + query.Get("phoneNumber");
       var signerPhoneNumber = "";
 
@@ -4022,6 +4023,12 @@ public class Script : ScriptBase
         foreach(var signer in body[signerTypes[i]])
         {
           if (recipientEmailId?.ToString() == signer.SelectToken("email")?.ToString())
+          {
+            matchingSigner = signer as JObject;
+            break;
+          }
+
+          if (recipientIdGuid?.ToString() == signer.SelectToken("recipientIdGuid")?.ToString())
           {
             matchingSigner = signer as JObject;
             break;
