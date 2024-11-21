@@ -2090,7 +2090,54 @@ public class Script : ScriptBase
   private JObject CreateEnvelopeFromTemplateV1BodyTransformation(JObject body)
   {
     var templateRoles = new JArray();
+    var signer = new JObject();
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+
+    var newBody = new JObject()
+    {
+      ["templateId"] = query.Get("templateId"),
+      ["emailSubject"] = query.Get("emailSubject"),
+      ["emailBlurb"] = query.Get("emailBody")
+    };
+
+    foreach (var property in body)
+    {
+      var value = (string)property.Value;
+      var key = (string)property.Key;
+
+      if (key.Contains(" Name"))
+      {
+        signer["roleName"] = key.Substring(0, key.Length - 5);
+        signer["name"] = value;
+      }
+
+      //add every (name, email) pairs
+      if (key.Contains(" Email"))
+      {
+        signer["email"] = value;
+        templateRoles.Add(signer);
+        signer = new JObject();
+      }
+    }
+
+    newBody["templateRoles"] = templateRoles;
+
+    if (!string.IsNullOrEmpty(query.Get("status")))
+    {
+      newBody["status"] = query.Get("status");
+    }
+
+    return newBody;
+  }
+
+  private JObject CreateEnvelopeFromTemplateV3BodyTransformation(JObject body)
+  {
+    var templateRoles = new JArray();
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+    uriBuilder.Path = uriBuilder.Path.Replace("/envelopes/createWithRecipientFields", "/envelopes");
+    this.Context.Request.RequestUri = uriBuilder.Uri;
 
     var newBody = new JObject()
     {
@@ -2104,8 +2151,49 @@ public class Script : ScriptBase
     {
       var value = (string)property.Value;
       var key = (string)property.Key;
-      string[] keyArray = key.Split(new string[]{":::", " Name", " Email"}, StringSplitOptions.None);
+      string[] keyArray = key.Split(new string[]{":::"}, StringSplitOptions.None);
       var roleName = keyArray[0];
+      // custom fields parsing
+      if (string.Equals(keyArray[0], "List Custom Fields", StringComparison.OrdinalIgnoreCase))
+      {
+        if (!newBody.ContainsKey("customFields"))
+        {
+          newBody["customFields"] = new JObject();
+        }
+        JObject recipientCustomFieldObj = (JObject) newBody["customFields"];
+        if (!recipientCustomFieldObj.ContainsKey("listCustomFields"))
+        {
+          recipientCustomFieldObj["listCustomFields"] = new JArray();
+        }
+        JArray listCustomFieldsArray = (JArray) recipientCustomFieldObj["listCustomFields"];
+        listCustomFieldsArray.Add(new JObject
+        {
+          ["name"] = keyArray[1],
+          ["value"] = value,
+          ["show"] = "true"
+        });
+      }
+      if (string.Equals(keyArray[0], "Text Custom Fields", StringComparison.OrdinalIgnoreCase))
+      {
+        if (!newBody.ContainsKey("customFields"))
+        {
+          newBody["customFields"] = new JObject();
+        }
+        JObject recipientCustomFieldObj = (JObject) newBody["customFields"];
+        if (!recipientCustomFieldObj.ContainsKey("textCustomFields"))
+        {
+          recipientCustomFieldObj["textCustomFields"] = new JArray();
+        }
+        JArray textCustomFieldsArray = (JArray) recipientCustomFieldObj["textCustomFields"];
+        textCustomFieldsArray.Add(new JObject
+        {
+          ["name"] = keyArray[1],
+          ["value"] = value,
+          ["show"] = "true"
+        });
+      }
+
+      // template roles parsing
       if (!recipientMapping.ContainsKey(roleName))
       {
         JObject newRecipientObj = new JObject();
@@ -2135,15 +2223,6 @@ public class Script : ScriptBase
         JArray recipientObjArray = (JArray) recipientTabs[tabType];
         recipientObjArray.Add(tabObj);
       }
-      if (string.Equals(keyArray[1], "IDV", StringComparison.OrdinalIgnoreCase))
-      {
-        if (!newBody.ContainsKey("recipients"))
-        {
-          newBody["recipients"] = new JObject();
-        }
-        JObject allRecipientsObj = newBody["recipients"] as JObject;
-        
-      }
       if (string.Equals(keyArray[1], "Name", StringComparison.OrdinalIgnoreCase))
       {
         recipientObj["name"] = value;
@@ -2155,6 +2234,28 @@ public class Script : ScriptBase
       if (string.Equals(keyArray[1], "Signing Group", StringComparison.OrdinalIgnoreCase))
       {
         recipientObj["signingGroupId"] = value;
+      }
+      if (string.Equals(keyArray[1], "In Person Signer", StringComparison.OrdinalIgnoreCase))
+      {
+        recipientObj["inPersonSignerName"] = value;
+      }
+      if (string.Equals(keyArray[1], "Country Code", StringComparison.OrdinalIgnoreCase))
+      {
+        if (!recipientObj.ContainsKey("phoneNumber"))
+        {
+          recipientObj["phoneNumber"] = new JObject();
+        }
+        JObject recipientPhoneObj = (JObject) recipientObj["phoneNumber"];
+        recipientPhoneObj["countryCode"] = value;
+      }
+      if (string.Equals(keyArray[1], "Phone Number", StringComparison.OrdinalIgnoreCase))
+      {
+        if (!recipientObj.ContainsKey("phoneNumber"))
+        {
+          recipientObj["phoneNumber"] = new JObject();
+        }
+        JObject recipientPhoneObj = (JObject) recipientObj["phoneNumber"];
+        recipientPhoneObj["number"] = value;
       }
       else
       {
@@ -2173,7 +2274,6 @@ public class Script : ScriptBase
     {
       newBody["status"] = query.Get("status");
     }
-
     return newBody;
   }
 
@@ -3177,6 +3277,11 @@ public class Script : ScriptBase
       await this.TransformRequestJsonBody(this.CreateEnvelopeFromTemplateV1BodyTransformation).ConfigureAwait(false);
     }
 
+    if ("SendEnvelopeWithRecipientFields".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      await this.TransformRequestJsonBody(this.CreateEnvelopeFromTemplateV3BodyTransformation).ConfigureAwait(false);
+    }
+
     if ("AddReminders".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.AddRemindersBodyTransformation).ConfigureAwait(false);
@@ -3431,6 +3536,13 @@ public class Script : ScriptBase
     }
 
     if ("GetDynamicSigners".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      uriBuilder.Path = uriBuilder.Path.Replace("/signers/accounts/", "/accounts/");
+      this.Context.Request.RequestUri = uriBuilder.Uri;
+    }
+
+    if ("GetDynamicRecipients".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
       uriBuilder.Path = uriBuilder.Path.Replace("/signers/accounts/", "/accounts/");
@@ -4161,16 +4273,63 @@ public class Script : ScriptBase
     {
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var itemProperties = new JObject();
+      var basePropertyDefinition = new JObject
+      {
+        ["type"] = "string",
+        ["x-ms-keyOrder"] = 0,
+        ["x-ms-keyType"] = "none",
+        ["x-ms-sort"] = "none",
+      };
+
+      var signers = (body["signers"] as JArray) ?? new JArray();
+
+      foreach (var signer in signers)
+      {
+        var roleName = signer["roleName"];
+        itemProperties[roleName + " Name"] = basePropertyDefinition.DeepClone();
+        itemProperties[roleName + " Email"] = basePropertyDefinition.DeepClone();
+      }
+
+      var newBody = new JObject
+      {
+        ["name"] = "dynamicSchema",
+        ["title"] = "dynamicSchema",
+        ["x-ms-permission"] = "read-write",
+        ["schema"] = new JObject
+        {
+          ["type"] = "array",
+          ["items"] = new JObject
+          {
+            ["type"] = "object",
+            ["properties"] = itemProperties,
+          },
+        },
+      };
+
+      response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
+    }
+
+    if ("GetDynamicRecipients".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
+      var itemProperties = new JObject();
 
       Dictionary<string, JObject> recipientData = new Dictionary<string, JObject>();
+      string[] recipientTypes = new string[] {"agents", "carbonCopies", "certifiedDeliveries", "editors", "inPersonSigners", "signers", "intermediaries"};
       if (body["recipients"] != null)
       {
-        if (body["recipients"]["signers"] != null)
+        foreach (var recipientType in recipientTypes)
         {
-          var allSigners = body["recipients"]["signers"] as JArray;
-          foreach (var signer in allSigners)
+          if (body["recipients"][recipientType] != null)
           {
-            recipientData[signer["roleName"].ToString()] = signer as JObject;
+            var recipients = body["recipients"][recipientType] as JArray;
+            foreach (JObject recipient in recipients)
+            {
+              if (recipient.ContainsKey("roleName"))
+              {
+                recipientData[recipient["roleName"].ToString()] = recipient as JObject;
+              }
+            }
           }
         }
       }
@@ -4181,21 +4340,18 @@ public class Script : ScriptBase
       {
         var roleName = pair.Key;
         JObject recipientObj = pair.Value as JObject;
-        itemProperties[roleName + " Name"] = new JObject
+        if (string.Equals(recipientObj["recipientType"].ToString(), "signer"))
         {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " Recipient Or Signing Group Name"
-        };
-        itemProperties[roleName + " Email"] = new JObject
-        {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
-        };
-        itemProperties[roleName + ":::Signing Group"] = new JObject
-        {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " Signing Group",
-          ["x-ms-dynamic-values"] = new JObject
+          itemProperties[roleName + ":::Name"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Recipient Or Signing Group Name"
+          };
+          itemProperties[roleName + ":::Signing Group"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Signing Group",
+            ["x-ms-dynamic-values"] = new JObject
             {
               ["operationId"] = "GetSigningGroups",
               ["value-collection"] = "groups",
@@ -4209,12 +4365,56 @@ public class Script : ScriptBase
                 }
               }
             }
-        };
-        itemProperties[roleName + ":::IDV:::" + recipientObj["recipientId"]] = new JObject
+          };
+        }
+        else
         {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " IDV Workflow ID"
-        };
+          itemProperties[roleName + ":::Name"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Recipient Name"
+          };
+          if (string.Equals(recipientObj["recipientType"].ToString(), "inpersonsigner", StringComparison.OrdinalIgnoreCase))
+          {
+            itemProperties[roleName + ":::In Person Signer"] = new JObject
+            {
+              ["type"] = "string",
+              ["x-ms-summary"] = roleName + " In Person Signer Name"
+            };
+          }
+        }
+        if (string.Equals(recipientObj["deliveryMethod"].ToString(), "SMS", StringComparison.OrdinalIgnoreCase))
+        {
+          itemProperties[roleName + ":::Country Code"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " SMS Country Code"
+          };
+          itemProperties[roleName + ":::Phone Number"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " SMS Phone Number"
+          };
+        }
+        else
+        {
+          if (string.Equals(recipientObj["recipientType"].ToString(), "signer"))
+          {
+            itemProperties[roleName + ":::Email"] = new JObject
+            {
+              ["type"] = "string",
+              ["x-ms-summary"] = roleName + " Recipient Email"
+            };
+          }
+          else
+          {
+            itemProperties[roleName + ":::Email"] = new JObject
+            {
+              ["type"] = "string",
+              ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
+            };
+          }
+        }
         JObject singleRecipientData = recipientObj as JObject;
         JObject tabsData = singleRecipientData["tabs"] as JObject;
         if (tabsData != null)
@@ -4231,6 +4431,38 @@ public class Script : ScriptBase
                   ["x-ms-summary"] = roleName + " Tab Type: " + tabType + " Tab label: " + tab["tabLabel"].ToString()
                 };
               }
+            }
+          }
+        }
+      }
+
+      if (body["customFields"] != null)
+      {
+        if (body["listCustomFields"] != null)
+        {
+          foreach (var customField in body["customFields"]["listCustomFields"] as JArray)
+          {
+            if (string.Equals(customField["show"].ToString(), "true"))
+            {
+              itemProperties["List Custom Fields:::" + customField["name"].ToString()] = new JObject
+              {
+                ["type"] = "string",
+                ["x-ms-summary"] = "List Custom Fields: " + customField["name"].ToString()
+              };
+            }
+          }
+        }
+        else
+        {
+          foreach (var customField in body["customFields"]["textCustomFields"] as JArray)
+          {
+            if (string.Equals(customField["show"].ToString(), "true"))
+            {
+              itemProperties["Text Custom Fields:::" + customField["name"].ToString()] = new JObject
+              {
+                ["type"] = "string",
+                ["x-ms-summary"] = "Text Custom Fields: " + customField["name"].ToString()
+              };
             }
           }
         }
