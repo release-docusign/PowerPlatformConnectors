@@ -4009,7 +4009,7 @@ public class Script : ScriptBase
       var matchingSigner = new JObject();
       var newBody = new JObject();
       var recipientEmailId = query.Get("recipientEmail");
-      var recipientIdGuid = query.Get("recipientIdGuid");
+      var recipientId = query.Get("recipientId");
       var phoneNumber = query.Get("areaCode") + " " + query.Get("phoneNumber");
       var signerPhoneNumber = "";
 
@@ -4028,7 +4028,7 @@ public class Script : ScriptBase
             break;
           }
 
-          if (recipientIdGuid?.ToString() == signer.SelectToken("recipientIdGuid")?.ToString())
+          if (recipientId?.ToString() == signer.SelectToken("recipientId")?.ToString())
           {
             matchingSigner = signer as JObject;
             break;
@@ -4063,9 +4063,9 @@ public class Script : ScriptBase
         }
       }
 
-      if ((recipientEmailId == null) && (query.Get("phoneNumber") == null))
+      if ((recipientEmailId == null) && (query.Get("phoneNumber") == null) && (recipientId == null))
       {
-        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Please fill either Recipient Email or Phone Number to retrieve Recipient information");
+        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Please fill either Recipient Email or Phone Number or recipient Id to retrieve Recipient information");
       } 
 
       if (string.IsNullOrEmpty((string)matchingSigner["recipientIdGuid"]))

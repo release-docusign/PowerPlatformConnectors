@@ -3107,11 +3107,11 @@
             "type": "string"
           },
           {
-            "name": "recipientIdGuid",
+            "name": "recipientId",
             "in": "query",
-            "description": "Recipient ID Guid",
+            "description": "Recipinet Id",
             "required": false,
-            "x-ms-summary": "Recipient ID Guid",
+            "x-ms-summary": "Recipient Id",
             "type": "string"
           }
         ],
