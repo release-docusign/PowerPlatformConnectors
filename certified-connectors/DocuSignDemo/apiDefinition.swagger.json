@@ -3129,6 +3129,60 @@
         "x-ms-visibility": "advanced"
       }
     },
+    "/accounts/{accountId}/envelopes/{envelopeId}/audit_events": {
+      "get": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Get audit event list",
+        "description": "Get audit event list",
+        "operationId": "GetAuditEvents",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account id",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "envelopeId",
+            "in": "path",
+            "description": "Envelope id",
+            "required": true,
+            "x-ms-summary": "Envelope",
+            "x-ms-test-value": "insert envelope id",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuditResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "advanced"
+      }
+    },
     "/accounts/{accountId}/envelopes/{envelopeId}/recipients/addRecipientV2": {
       "post": {
         "tags": [
@@ -6407,6 +6461,10 @@
       "properties": {}
     },
     "SendDraftEnvelopeResponse": {
+      "type": "object",
+      "properties": {}
+    },
+    "AuditResponse":{
       "type": "object",
       "properties": {}
     },
