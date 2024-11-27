@@ -3106,6 +3106,14 @@
             "required": false,
             "x-ms-summary": "Phone Number",
             "type": "string"
+          },
+          {
+            "name": "recipientId",
+            "in": "query",
+            "description": "Recipinet Id",
+            "required": false,
+            "x-ms-summary": "Recipient Id",
+            "type": "string"
           }
         ],
         "responses": {
