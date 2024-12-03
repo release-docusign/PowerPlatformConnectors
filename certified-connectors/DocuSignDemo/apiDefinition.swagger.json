@@ -2320,8 +2320,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Create envelope with pre-populated recipient information",
-        "description": "Create a new envelope with pre-populated recipient information.",
+        "summary": "Create an envelope using template with recipients (V2)",
+        "description": "Create an envelope using template with recipients (V2)",
         "operationId": "SendEnvelopeWithRecipientFields",
         "x-ms-no-generic-test": true,
         "consumes": [
