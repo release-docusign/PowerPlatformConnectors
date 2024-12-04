@@ -3855,35 +3855,31 @@
           {
             "name": "name",
             "in": "query",
-            "description": "Name of the bulk sending list",
+            "description": "Name of the bulk send list",
             "required": true,
-            "x-ms-summary": "Name of the bulk sending list",
+            "x-ms-summary": "Name of the bulk send list",
             "type": "string"
           },
           {
-            "name": "dataType",
-            "in": "query",
-            "description": "Choose data type",
-            "required": true,
-            "x-ms-summary": "Bulk Send Data Type",
-            "type": "string",
-            "enum": ["csv", "manual"]
-          },
-          {
-            "name": "bulkSendRequestBody",
+            "name": "csv",
             "in": "body",
-            "description": "Bulk send request body",
+            "description": "CSV File",
             "x-ms-visibility": "important",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/BulkSendSchema"
+              "type": "string",
+              "x-ms-summary": "CSV File",
+              "description": "CSV File"
             },
-            "x-ms-summary": "Bulk Send Request Body"
+            "x-ms-summary": "CSV File"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BulkSendListGuid"
+            }
           }
         },
         "deprecated": false,
@@ -5098,34 +5094,6 @@
         "x-ms-visibility": "internal"
       }
     },
-    "/bulksend_schema": {
-      "get": {
-        "tags": [
-          "StaticResponse"
-        ],
-        "description": "Get schema for a bulk send request.",
-        "operationId": "StaticResponseForBulkSendBodySchema",
-        "parameters": [
-          {
-            "name": "dataType",
-            "in": "query",
-            "required": true,
-            "type": "string",
-            "x-ms-summary": "Data Type"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-visibility": "internal"
-      }
-    },
     "/recipienttype_schema": {
       "get": {
         "tags": [
@@ -5995,20 +5963,6 @@
         "parameters": {
           "tabType": {
             "parameter": "tabType"
-          }
-        },
-        "value-path": "Schema"
-      }
-    },
-    "BulkSendSchema": {
-      "description": "An object that represents the schema for a bulk send request.",
-      "type": "object",
-      "properties": {},
-      "x-ms-dynamic-schema": {
-        "operationId": "StaticResponseForBulkSendBodySchema",
-        "parameters": {
-          "dataType": {
-            "parameter": "dataType"
           }
         },
         "value-path": "Schema"
