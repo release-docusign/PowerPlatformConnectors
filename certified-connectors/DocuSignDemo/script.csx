@@ -2153,7 +2153,7 @@ public class Script : ScriptBase
       var key = (string)property.Key;
       string[] keyArray = key.Split(new string[]{":::"}, StringSplitOptions.None);
       var roleName = keyArray[0];
-      // custom fields parsing
+      // custom fields parsing to match request body object from Docusign API
       if (string.Equals(keyArray[0], "List Custom Fields", StringComparison.OrdinalIgnoreCase))
       {
         if (!newBody.ContainsKey("customFields"))
@@ -2195,139 +2195,8 @@ public class Script : ScriptBase
         continue;
       }
 
-      // template roles parsing
-      if (!recipientMapping.ContainsKey(roleName))
-      {
-        JObject newRecipientObj = new JObject();
-        newRecipientObj["roleName"] = roleName;
-        recipientMapping[roleName] = newRecipientObj;
-      }
-      JObject recipientObj = recipientMapping[roleName];
-
-      if (keyArray.Length > 2)
-      {
-        if (!recipientObj.ContainsKey("tabs"))
-        {
-          recipientObj["tabs"] = new JObject();
-        }
-        var tabType = keyArray[1];
-        var tabLabel = keyArray[2];
-        if (string.Equals(tabType, "checkboxTabs", StringComparison.OrdinalIgnoreCase))
-        {
-          var tabObj = new JObject
-          {
-            ["tabLabel"] = tabLabel,
-            ["name"] = keyArray[3],
-            ["selected"] = value
-          };
-          JObject recipientTabs = (JObject) recipientObj["tabs"];
-          if (!recipientTabs.ContainsKey(tabType))
-          {
-            recipientTabs[tabType] = new JArray();
-          }
-          JArray recipientObjArray = (JArray) recipientTabs[tabType];
-          recipientObjArray.Add(tabObj);
-        }
-        else
-        {
-          var tabObj = new JObject
-          {
-            ["tabLabel"] = tabLabel,
-            ["value"] = value
-          };
-          JObject recipientTabs = (JObject) recipientObj["tabs"];
-          if (!recipientTabs.ContainsKey(tabType))
-          {
-            recipientTabs[tabType] = new JArray();
-          }
-          JArray recipientObjArray = (JArray) recipientTabs[tabType];
-          recipientObjArray.Add(tabObj);
-        }
-      }
-      if (string.Equals(keyArray[1], "Name", StringComparison.OrdinalIgnoreCase))
-      {
-        recipientObj["name"] = value;
-      }
-      if (string.Equals(keyArray[1], "Email", StringComparison.OrdinalIgnoreCase))
-      {
-        recipientObj["email"] = value;
-      }
-      if (string.Equals(keyArray[1], "Signing Group", StringComparison.OrdinalIgnoreCase))
-      {
-        recipientObj["signingGroupId"] = value;
-      }
-      if (string.Equals(keyArray[1], "In Person Signer", StringComparison.OrdinalIgnoreCase))
-      {
-        recipientObj["inPersonSignerName"] = value;
-      }
-      if (string.Equals(keyArray[1], "Secondary Country Code", StringComparison.OrdinalIgnoreCase))
-      {
-        if (!recipientObj.ContainsKey("additionalNotifications"))
-        {
-          recipientObj["additionalNotifications"] = new JArray();
-        }
-        JArray additionalNotificationsArray = recipientObj["additionalNotifications"] as JArray;
-        if (additionalNotificationsArray.Count == 0)
-        {
-          additionalNotificationsArray.Add(new JObject 
-          {
-            ["phoneNumber"] = new JObject 
-            {
-              ["countryCode"] = value
-            },
-            ["secondaryDeliveryMethod"] = "SMS"
-          });
-        }
-        else
-        {
-          additionalNotificationsArray[0]["phoneNumber"]["countryCode"] = value;
-        }
-      }
-      if (string.Equals(keyArray[1], "Secondary Phone Number", StringComparison.OrdinalIgnoreCase))
-      {
-        if (!recipientObj.ContainsKey("additionalNotifications"))
-        {
-          recipientObj["additionalNotifications"] = new JArray();
-        }
-        JArray additionalNotificationsArray = recipientObj["additionalNotifications"] as JArray;
-        if (additionalNotificationsArray.Count == 0)
-        {
-          additionalNotificationsArray.Add(new JObject 
-          {
-            ["phoneNumber"] = new JObject 
-            {
-              ["number"] = value
-            },
-            ["secondaryDeliveryMethod"] = "SMS"
-          });
-        }
-        else
-        {
-          additionalNotificationsArray[0]["phoneNumber"]["number"] = value;
-        }
-      }
-      if (string.Equals(keyArray[1], "Country Code", StringComparison.OrdinalIgnoreCase))
-      {
-        if (!recipientObj.ContainsKey("phoneNumber"))
-        {
-          recipientObj["phoneNumber"] = new JObject();
-        }
-        JObject recipientPhoneObj = (JObject) recipientObj["phoneNumber"];
-        recipientPhoneObj["countryCode"] = value;
-      }
-      if (string.Equals(keyArray[1], "Phone Number", StringComparison.OrdinalIgnoreCase))
-      {
-        if (!recipientObj.ContainsKey("phoneNumber"))
-        {
-          recipientObj["phoneNumber"] = new JObject();
-        }
-        JObject recipientPhoneObj = (JObject) recipientObj["phoneNumber"];
-        recipientPhoneObj["number"] = value;
-      }
-      else
-      {
-        continue;
-      }
+      // template roles parsing to match request body object from Docusign API
+      ParseRecipientFields(recipientMapping, keyArray, value, roleName);
     }
 
     foreach (JObject value in recipientMapping.Values)
@@ -3212,6 +3081,340 @@ public class Script : ScriptBase
     newBody["docGenFormFields"] = docGenFormFields;
 
     this.Context.Request.Content = CreateJsonContent(newBody.ToString());
+  }
+
+  private Dictionary<string, JObject> GenerateRecipientsMappings(JObject body)
+  {
+    Dictionary<string, JObject> recipientData = new Dictionary<string, JObject>();
+    string[] recipientTypes = new string[] {"agents", "carbonCopies", "certifiedDeliveries", "editors", "inPersonSigners", "signers", "intermediaries"};
+    if (body["recipients"] != null)
+    {
+      foreach (var recipientType in recipientTypes)
+      {
+        if (body["recipients"][recipientType] != null)
+        {
+          var recipients = body["recipients"][recipientType] as JArray;
+          foreach (JObject recipient in recipients)
+          {
+            if (recipient.ContainsKey("roleName"))
+            {
+              recipientData[recipient["roleName"].ToString()] = recipient as JObject;
+            }
+          }
+        }
+      }
+    }
+    return recipientData;
+  }
+
+  private void GenerateRecipientInformationFields(Dictionary<string, JObject> recipientData, JObject itemProperties)
+  {
+    string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "ssnTabs", "textTabs", "zipTabs", "checkboxTabs"};
+
+    foreach (KeyValuePair<string, JObject> pair in recipientData)
+    {
+      var roleName = pair.Key;
+      JObject recipientObj = pair.Value as JObject;
+      // Name fields
+      if (string.Equals(recipientObj["recipientType"].ToString(), "signer"))
+      {
+        itemProperties[roleName + ":::Name"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " Recipient Or Signing Group Name"
+        };
+        itemProperties[roleName + ":::Signing Group"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " Signing Group",
+          ["x-ms-dynamic-values"] = new JObject
+          {
+            ["operationId"] = "GetSigningGroups",
+            ["value-collection"] = "groups",
+            ["value-path"] = "signingGroupId",
+            ["value-title"] = "groupName",
+            ["parameters"] = new JObject
+            {
+              ["accountId"] = new JObject
+              {
+                ["parameter"] = "accountId"
+              }
+            }
+          }
+        };
+      }
+      else
+      {
+        itemProperties[roleName + ":::Name"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " Recipient Name"
+        };
+        if (string.Equals(recipientObj["recipientType"].ToString(), "inpersonsigner", StringComparison.OrdinalIgnoreCase))
+        {
+          itemProperties[roleName + ":::In Person Signer"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " In Person Signer Name"
+          };
+        }
+      }
+
+      // SMS/Email fields
+      if ((recipientObj["additionalNotifications"] != null && 
+      ((JArray) recipientObj["additionalNotifications"]).Count > 0 &&
+      recipientObj["additionalNotifications"][0]["secondaryDeliveryMethod"] != null && 
+      string.Equals(recipientObj["additionalNotifications"][0]["secondaryDeliveryMethod"].ToString(), "SMS", StringComparison.OrdinalIgnoreCase)))
+      {
+        itemProperties[roleName + ":::Secondary Country Code"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " SMS Country Code"
+        };
+        itemProperties[roleName + ":::Secondary Phone Number"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " SMS Phone Number"
+        };
+      }
+      if (string.Equals(recipientObj["deliveryMethod"].ToString(), "SMS", StringComparison.OrdinalIgnoreCase))
+      {
+        itemProperties[roleName + ":::Country Code"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " SMS Country Code"
+        };
+        itemProperties[roleName + ":::Phone Number"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " SMS Phone Number"
+        };
+      }
+      else
+      {
+        if (string.Equals(recipientObj["recipientType"].ToString(), "signer"))
+        {
+          itemProperties[roleName + ":::Email"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
+          };
+        }
+        else
+        {
+          itemProperties[roleName + ":::Email"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Recipient Email"
+          };
+        }
+      }
+
+      // Tabs fields
+      JObject singleRecipientData = recipientObj as JObject;
+      JObject tabsData = singleRecipientData["tabs"] as JObject;
+      if (tabsData != null)
+      {
+        foreach (var tabType in editableTabs)
+        {
+          if (tabsData.ContainsKey(tabType))
+          {
+            foreach (var tab in tabsData[tabType] as JArray)
+            {
+              if (string.Equals(tabType, "checkboxTabs", StringComparison.OrdinalIgnoreCase))
+              {
+                itemProperties[roleName + ":::" + tabType + ":::" + tab["tabLabel"].ToString() + ":::" + tab["name"].ToString()] = new JObject
+                {
+                  ["type"] = "string",
+                  ["enum"] = new JArray("true", "false"),
+                  ["x-ms-summary"] = roleName + " - Tab Type: " + tabType + " - Tab label: " + tab["tabLabel"].ToString() + " - Name: " + tab["name"].ToString() +" Selected"
+                };
+              }
+              else
+              {
+                itemProperties[roleName + ":::" + tabType + ":::" + tab["tabLabel"].ToString()] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = roleName + " - Tab Type: " + tabType + " - Tab label: " + tab["tabLabel"].ToString()
+                };
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private void GenerateCustomFields(JObject body, JObject itemProperties)
+  {
+    if (body["customFields"] != null)
+    {
+      if (body["customFields"]["listCustomFields"] != null)
+      {
+        foreach (var customField in body["customFields"]["listCustomFields"] as JArray)
+        {
+          var required = "";
+          if (string.Equals(customField["required"].ToString(), "true"))
+          {
+            required = " *";
+          }
+          itemProperties["List Custom Fields:::" + customField["name"].ToString()] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = "List Custom Fields: " + required + customField["name"].ToString(),
+            ["enum"] = customField["listItems"]
+          };
+        }
+      }
+      if (body["customFields"]["textCustomFields"] != null)
+      {
+        foreach (var customField in body["customFields"]["textCustomFields"] as JArray)
+        {
+          var required = "";
+          if (string.Equals(customField["required"].ToString(), "true"))
+          {
+            required = " *";
+          }
+          itemProperties["Text Custom Fields:::" + customField["name"].ToString()] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = "Text Custom Fields: " + required + customField["name"].ToString()
+          };
+        }
+      }
+    }
+  }
+
+  private void ParseRecipientFields(Dictionary<string, JObject> recipientMapping, string[] keyArray, string value, string roleName)
+  {
+    if (!recipientMapping.ContainsKey(roleName))
+    {
+      JObject newRecipientObj = new JObject();
+      newRecipientObj["roleName"] = roleName;
+      recipientMapping[roleName] = newRecipientObj;
+    }
+    JObject recipientObj = recipientMapping[roleName];
+
+    if (keyArray.Length > 2)
+    {
+      if (!recipientObj.ContainsKey("tabs"))
+      {
+        recipientObj["tabs"] = new JObject();
+      }
+      var tabType = keyArray[1];
+      var tabLabel = keyArray[2];
+      if (string.Equals(tabType, "checkboxTabs", StringComparison.OrdinalIgnoreCase))
+      {
+        var tabObj = new JObject
+        {
+          ["tabLabel"] = tabLabel,
+          ["name"] = keyArray[3],
+          ["selected"] = value
+        };
+        JObject recipientTabs = (JObject) recipientObj["tabs"];
+        if (!recipientTabs.ContainsKey(tabType))
+        {
+          recipientTabs[tabType] = new JArray();
+        }
+        JArray recipientObjArray = (JArray) recipientTabs[tabType];
+        recipientObjArray.Add(tabObj);
+      }
+      else
+      {
+        var tabObj = new JObject
+        {
+          ["tabLabel"] = tabLabel,
+          ["value"] = value
+        };
+        JObject recipientTabs = (JObject) recipientObj["tabs"];
+        if (!recipientTabs.ContainsKey(tabType))
+        {
+          recipientTabs[tabType] = new JArray();
+        }
+        JArray recipientObjArray = (JArray) recipientTabs[tabType];
+        recipientObjArray.Add(tabObj);
+      }
+    }
+    if (string.Equals(keyArray[1], "Name", StringComparison.OrdinalIgnoreCase))
+    {
+      recipientObj["name"] = value;
+    }
+    if (string.Equals(keyArray[1], "Email", StringComparison.OrdinalIgnoreCase))
+    {
+      recipientObj["email"] = value;
+    }
+    if (string.Equals(keyArray[1], "Signing Group", StringComparison.OrdinalIgnoreCase))
+    {
+      recipientObj["signingGroupId"] = value;
+    }
+    if (string.Equals(keyArray[1], "In Person Signer", StringComparison.OrdinalIgnoreCase))
+    {
+      recipientObj["inPersonSignerName"] = value;
+    }
+    if (string.Equals(keyArray[1], "Secondary Country Code", StringComparison.OrdinalIgnoreCase))
+    {
+      if (!recipientObj.ContainsKey("additionalNotifications"))
+      {
+        recipientObj["additionalNotifications"] = new JArray();
+      }
+      JArray additionalNotificationsArray = recipientObj["additionalNotifications"] as JArray;
+      if (additionalNotificationsArray.Count == 0)
+      {
+        additionalNotificationsArray.Add(new JObject 
+        {
+          ["phoneNumber"] = new JObject 
+          {
+            ["countryCode"] = value
+          },
+          ["secondaryDeliveryMethod"] = "SMS"
+        });
+      }
+      else
+      {
+        additionalNotificationsArray[0]["phoneNumber"]["countryCode"] = value;
+      }
+    }
+    if (string.Equals(keyArray[1], "Secondary Phone Number", StringComparison.OrdinalIgnoreCase))
+    {
+      if (!recipientObj.ContainsKey("additionalNotifications"))
+      {
+        recipientObj["additionalNotifications"] = new JArray();
+      }
+      JArray additionalNotificationsArray = recipientObj["additionalNotifications"] as JArray;
+      if (additionalNotificationsArray.Count == 0)
+      {
+        additionalNotificationsArray.Add(new JObject 
+        {
+          ["phoneNumber"] = new JObject 
+          {
+            ["number"] = value
+          },
+          ["secondaryDeliveryMethod"] = "SMS"
+        });
+      }
+      else
+      {
+        additionalNotificationsArray[0]["phoneNumber"]["number"] = value;
+      }
+    }
+    if (string.Equals(keyArray[1], "Country Code", StringComparison.OrdinalIgnoreCase))
+    {
+      if (!recipientObj.ContainsKey("phoneNumber"))
+      {
+        recipientObj["phoneNumber"] = new JObject();
+      }
+      JObject recipientPhoneObj = (JObject) recipientObj["phoneNumber"];
+      recipientPhoneObj["countryCode"] = value;
+    }
+    if (string.Equals(keyArray[1], "Phone Number", StringComparison.OrdinalIgnoreCase))
+    {
+      if (!recipientObj.ContainsKey("phoneNumber"))
+      {
+        recipientObj["phoneNumber"] = new JObject();
+      }
+      JObject recipientPhoneObj = (JObject) recipientObj["phoneNumber"];
+      recipientPhoneObj["number"] = value;
+    }
   }
 
   private async Task UpdateApiEndpoint()
@@ -4381,198 +4584,16 @@ public class Script : ScriptBase
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var itemProperties = new JObject();
 
-      Dictionary<string, JObject> recipientData = new Dictionary<string, JObject>();
-      string[] recipientTypes = new string[] {"agents", "carbonCopies", "certifiedDeliveries", "editors", "inPersonSigners", "signers", "intermediaries"};
-      if (body["recipients"] != null)
-      {
-        foreach (var recipientType in recipientTypes)
-        {
-          if (body["recipients"][recipientType] != null)
-          {
-            var recipients = body["recipients"][recipientType] as JArray;
-            foreach (JObject recipient in recipients)
-            {
-              if (recipient.ContainsKey("roleName"))
-              {
-                recipientData[recipient["roleName"].ToString()] = recipient as JObject;
-              }
-            }
-          }
-        }
-      }
+      // Generate a recipient role name to reicipient data object mapping
+      Dictionary<string, JObject> recipientData = GenerateRecipientsMappings(body);
 
-      string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "ssnTabs", "textTabs", "zipTabs", "checkboxTabs"};
+      // generate flattened-recipient related fields and add to itemProperties
+      // for instance, for role name "tester", with tab type "textTab" and tab label "text label",
+      // generate field name: "Tester:::textTabs:::Text label", that can be easily parsed out before sending API request to DS
+      GenerateRecipientInformationFields(recipientData, itemProperties);
 
-      foreach (KeyValuePair<string, JObject> pair in recipientData)
-      {
-        var roleName = pair.Key;
-        JObject recipientObj = pair.Value as JObject;
-        // Name fields
-        if (string.Equals(recipientObj["recipientType"].ToString(), "signer"))
-        {
-          itemProperties[roleName + ":::Name"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " Recipient Or Signing Group Name"
-          };
-          itemProperties[roleName + ":::Signing Group"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " Signing Group",
-            ["x-ms-dynamic-values"] = new JObject
-            {
-              ["operationId"] = "GetSigningGroups",
-              ["value-collection"] = "groups",
-              ["value-path"] = "signingGroupId",
-              ["value-title"] = "groupName",
-              ["parameters"] = new JObject
-              {
-                ["accountId"] = new JObject
-                {
-                  ["parameter"] = "accountId"
-                }
-              }
-            }
-          };
-        }
-        else
-        {
-          itemProperties[roleName + ":::Name"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " Recipient Name"
-          };
-          if (string.Equals(recipientObj["recipientType"].ToString(), "inpersonsigner", StringComparison.OrdinalIgnoreCase))
-          {
-            itemProperties[roleName + ":::In Person Signer"] = new JObject
-            {
-              ["type"] = "string",
-              ["x-ms-summary"] = roleName + " In Person Signer Name"
-            };
-          }
-        }
-
-        // SMS/Email fields
-        if ((recipientObj["additionalNotifications"] != null && 
-        ((JArray) recipientObj["additionalNotifications"]).Count > 0 &&
-        recipientObj["additionalNotifications"][0]["secondaryDeliveryMethod"] != null && 
-        string.Equals(recipientObj["additionalNotifications"][0]["secondaryDeliveryMethod"].ToString(), "SMS", StringComparison.OrdinalIgnoreCase)))
-        {
-          itemProperties[roleName + ":::Secondary Country Code"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " SMS Country Code"
-          };
-          itemProperties[roleName + ":::Secondary Phone Number"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " SMS Phone Number"
-          };
-        }
-        if (string.Equals(recipientObj["deliveryMethod"].ToString(), "SMS", StringComparison.OrdinalIgnoreCase))
-        {
-          itemProperties[roleName + ":::Country Code"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " SMS Country Code"
-          };
-          itemProperties[roleName + ":::Phone Number"] = new JObject
-          {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " SMS Phone Number"
-          };
-        }
-        else
-        {
-          if (string.Equals(recipientObj["recipientType"].ToString(), "signer"))
-          {
-            itemProperties[roleName + ":::Email"] = new JObject
-            {
-              ["type"] = "string",
-              ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
-            };
-          }
-          else
-          {
-            itemProperties[roleName + ":::Email"] = new JObject
-            {
-              ["type"] = "string",
-              ["x-ms-summary"] = roleName + " Recipient Email"
-            };
-          }
-        }
-
-        // Tabs fields
-        JObject singleRecipientData = recipientObj as JObject;
-        JObject tabsData = singleRecipientData["tabs"] as JObject;
-        if (tabsData != null)
-        {
-          foreach (var tabType in editableTabs)
-          {
-            if (tabsData.ContainsKey(tabType))
-            {
-              foreach (var tab in tabsData[tabType] as JArray)
-              {
-                if (string.Equals(tabType, "checkboxTabs", StringComparison.OrdinalIgnoreCase))
-                {
-                  itemProperties[roleName + ":::" + tabType + ":::" + tab["tabLabel"].ToString() + ":::" + tab["name"].ToString()] = new JObject
-                  {
-                    ["type"] = "string",
-                    ["enum"] = new JArray("true", "false"),
-                    ["x-ms-summary"] = roleName + " - Tab Type: " + tabType + " - Tab label: " + tab["tabLabel"].ToString() + " - Name: " + tab["name"].ToString() +" Selected"
-                  };
-                }
-                else
-                {
-                  itemProperties[roleName + ":::" + tabType + ":::" + tab["tabLabel"].ToString()] = new JObject
-                  {
-                    ["type"] = "string",
-                    ["x-ms-summary"] = roleName + " - Tab Type: " + tabType + " - Tab label: " + tab["tabLabel"].ToString()
-                  };
-                }
-              }
-            }
-          }
-        }
-      }
-
-      // Envelope Custom fields
-      if (body["customFields"] != null)
-      {
-        if (body["customFields"]["listCustomFields"] != null)
-        {
-          foreach (var customField in body["customFields"]["listCustomFields"] as JArray)
-          {
-            var required = "";
-            if (string.Equals(customField["required"].ToString(), "true"))
-            {
-              required = " *";
-            }
-            itemProperties["List Custom Fields:::" + customField["name"].ToString()] = new JObject
-            {
-              ["type"] = "string",
-              ["x-ms-summary"] = "List Custom Fields: " + required + customField["name"].ToString(),
-              ["enum"] = customField["listItems"]
-            };
-          }
-        }
-        if (body["customFields"]["textCustomFields"] != null)
-        {
-          foreach (var customField in body["customFields"]["textCustomFields"] as JArray)
-          {
-            var required = "";
-            if (string.Equals(customField["required"].ToString(), "true"))
-            {
-              required = " *";
-            }
-            itemProperties["Text Custom Fields:::" + customField["name"].ToString()] = new JObject
-            {
-              ["type"] = "string",
-              ["x-ms-summary"] = "Text Custom Fields: " + required + customField["name"].ToString()
-            };
-          }
-        }
-      }
+      // generate flattened-custom fields and add to itemProperties
+      GenerateCustomFields(body, itemProperties);
 
       var newBody = new JObject
       {
