@@ -2355,20 +2355,6 @@
             "type": "string"
           },
           {
-            "name": "status",
-            "in": "query",
-            "description": "Envelope status",
-            "required": true,
-            "x-ms-summary": "Envelope status",
-            "x-ms-test-value": "Created",
-            "x-ms-visibility": "important",
-            "type": "string",
-            "enum": [
-              "Sent",
-              "Created"
-            ]
-          },
-          {
             "name": "templateId",
             "in": "query",
             "description": "Template id",

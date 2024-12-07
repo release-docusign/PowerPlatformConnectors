@@ -2205,11 +2205,6 @@ public class Script : ScriptBase
     }
 
     newBody["templateRoles"] = templateRoles;
-
-    if (!string.IsNullOrEmpty(query.Get("status")))
-    {
-      newBody["status"] = query.Get("status");
-    }
     return newBody;
   }
 
@@ -3145,11 +3140,6 @@ public class Script : ScriptBase
       }
       else
       {
-        itemProperties[roleName + ":::Name"] = new JObject
-        {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " Recipient Name"
-        };
         if (string.Equals(recipientObj["recipientType"].ToString(), "inpersonsigner", StringComparison.OrdinalIgnoreCase))
         {
           itemProperties[roleName + ":::In Person Signer"] = new JObject
@@ -3158,6 +3148,11 @@ public class Script : ScriptBase
             ["x-ms-summary"] = roleName + " In Person Signer Name"
           };
         }
+        itemProperties[roleName + ":::Name"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " Recipient Name"
+        };
       }
 
       // SMS/Email fields
