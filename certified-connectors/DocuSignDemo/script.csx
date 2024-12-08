@@ -236,15 +236,13 @@ public class Script : ScriptBase
                           {
                             ["type"] = "string",
                             ["x-ms-summary"] = "Read Only",
-                            ["description"] = "Select",
-                            ["enum"] = new JArray ("true", "false")
+                            ["description"] = "true/false"
                           },
                           ["required"] = new JObject
                           {
                             ["type"] = "string",
                             ["x-ms-summary"] = "Required",
-                            ["description"] = "Select",
-                            ["enum"] = new JArray ("true", "false")
+                            ["description"] = "true/false"
                           },
                           ["anchorXOffset"] = new JObject
                           {
@@ -291,8 +289,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["anchorXOffset"] = new JObject
                   {
@@ -341,8 +338,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["anchorXOffset"] = new JObject
                   {
@@ -478,8 +474,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Optional",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["tabLabel"] = new JObject
                   {
@@ -654,15 +649,13 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["required"] = new JObject
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Required",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["tooltip"] = new JObject
                   {
@@ -761,15 +754,13 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["required"] = new JObject
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Required",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["anchorXOffset"] = new JObject
                   {
@@ -818,15 +809,13 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["required"] = new JObject
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Required",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["validationType"] = new JObject
                   {
@@ -938,8 +927,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["selected"] = new JObject
                   {
@@ -1043,8 +1031,7 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Optional",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["anchorXOffset"] = new JObject
                   {
@@ -1189,15 +1176,13 @@ public class Script : ScriptBase
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Required",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["locked"] = new JObject
                   {
                     ["type"] = "string",
                     ["x-ms-summary"] = "Read Only",
-                    ["description"] = "Select",
-                    ["enum"] = new JArray ("true", "false")
+                    ["description"] = "true/false"
                   },
                   ["validationPattern"] = new JObject
                   {
@@ -1305,15 +1290,13 @@ public class Script : ScriptBase
                 {
                   ["type"] = "string",
                   ["x-ms-summary"] = "Required",
-                  ["description"] = "Select",
-                  ["enum"] = new JArray ("true", "false")
+                  ["description"] = "true/false"
                 },
                 ["locked"] = new JObject
                 {
                   ["type"] = "string",
                   ["x-ms-summary"] = "Read Only",
-                  ["description"] = "Select",
-                  ["enum"] = new JArray ("true", "false")
+                  ["description"] = "true/false"
                 },
                 ["tabLabel"] = new JObject
                 {
@@ -1598,7 +1581,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["signerName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Signer name"
+          ["x-ms-summary"] = "* Signer or signing group name"
         };
       }
       else if (recipientType.Equals("signers", StringComparison.OrdinalIgnoreCase))
@@ -1606,7 +1589,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["name"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Signer name"
+          ["x-ms-summary"] = "* Signer or signing group name"
         };
         response["schema"]["properties"]["email"] = new JObject
         {
@@ -1637,12 +1620,12 @@ public class Script : ScriptBase
         response["schema"]["properties"]["name"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Name"
+          ["x-ms-summary"] = "* Recipient or signing group name"
         };
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Email"
+          ["x-ms-summary"] = "Recipient email (leave empty if there’s a signing group)"
         };
       }
     }
@@ -1842,6 +1825,7 @@ public class Script : ScriptBase
       var envelopeSummary = body["data"]["envelopeSummary"];
       var customFields = envelopeSummary["customFields"];
       var parsedCustomFields = new JObject();
+      var envelopeDocuments = new JArray();
 
       if (customFields is JObject)
       {
@@ -1854,6 +1838,19 @@ public class Script : ScriptBase
 
       body["data"]["envelopeSummary"]["customFields"] = parsedCustomFields;
       body["data"]["statusChangedDateTime"] = envelopeSummary["statusChangedDateTime"];
+
+      // documents code
+      foreach (var envelopeDocument in envelopeSummary["envelopeDocuments"] ?? new JArray())
+      {
+        envelopeDocuments.Add(new JObject()
+        {
+          ["documentId"] = envelopeDocument["documentId"],
+          ["documentGuid"] = envelopeDocument["documentIdGuid"],
+          ["documentName"] = envelopeDocument["name"]
+        });
+      }
+
+      body["data"]["envelopeSummary"]["envelopeDocuments"] = envelopeDocuments;
 
       // tab code
       var recipientStatuses = envelopeSummary["recipients"];
@@ -2038,7 +2035,8 @@ public class Script : ScriptBase
     string eventData = @"[
       'tabs',
       'custom_fields',
-      'recipients'
+      'recipients',
+      'document_fields'
     ]";
 
     JArray includeData = JArray.Parse(eventData);
@@ -2137,10 +2135,11 @@ public class Script : ScriptBase
         signer = new JObject();
       }
 
-      if (key.Contains("/"))
+      if (key.Contains(" Signing Group"))
       {
-        var newKey = key.Split('/')[1];
-        signer[newKey] = value;
+        signer["signingGroupId"] = value;
+        templateRoles.Add(signer);
+        signer = new JObject();
       }
     }
 
@@ -2691,6 +2690,11 @@ public class Script : ScriptBase
       signers[0]["note"] = query.Get("note");
     }
 
+    if (!string.IsNullOrEmpty(query.Get("signingGroupId")))
+    {
+      signers[0]["signingGroupId"] = query.Get("signingGroupId");
+    }
+
     if (!string.IsNullOrEmpty(query.Get("roleName")))
     {
       signers[0]["roleName"] = query.Get("roleName");
@@ -2807,10 +2811,13 @@ public class Script : ScriptBase
       signers[0]["name"] = body["name"];
       if (body["email"] == null) 
       {
-        signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
-        if (string.IsNullOrEmpty(query.Get("phoneNumber")))
+        if (string.IsNullOrEmpty(query.Get("signingGroupId")))
         {
-          missingInput = true;
+          if (string.IsNullOrEmpty(query.Get("phoneNumber")))
+          {
+            return true;
+          }
+          signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
         }
       }
       else 
@@ -2818,7 +2825,7 @@ public class Script : ScriptBase
         signers[0]["email"] = body["email"];
       }
     }
-    return missingInput;
+    return false;
   }
 
   private void AddParamsForSelectedSignatureType(JArray signers, JObject body)
@@ -4029,6 +4036,7 @@ public class Script : ScriptBase
       var matchingSigner = new JObject();
       var newBody = new JObject();
       var recipientEmailId = query.Get("recipientEmail");
+      var recipientId = query.Get("recipientId");
       var phoneNumber = query.Get("areaCode") + " " + query.Get("phoneNumber");
       var signerPhoneNumber = "";
 
@@ -4042,6 +4050,12 @@ public class Script : ScriptBase
         foreach(var signer in body[signerTypes[i]])
         {
           if (recipientEmailId?.ToString() == signer.SelectToken("email")?.ToString())
+          {
+            matchingSigner = signer as JObject;
+            break;
+          }
+
+          if (recipientId?.ToString() == signer.SelectToken("recipientId")?.ToString())
           {
             matchingSigner = signer as JObject;
             break;
@@ -4076,9 +4090,9 @@ public class Script : ScriptBase
         }
       }
 
-      if ((recipientEmailId == null) && (query.Get("phoneNumber") == null))
+      if ((recipientEmailId == null) && (query.Get("phoneNumber") == null) && (recipientId == null))
       {
-        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Please fill either Recipient Email or Phone Number to retrieve Recipient information");
+        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Please fill either Recipient Email or Phone Number or recipient Id to retrieve Recipient information");
       } 
 
       if (string.IsNullOrEmpty((string)matchingSigner["recipientIdGuid"]))
@@ -4142,8 +4156,41 @@ public class Script : ScriptBase
       foreach (var signer in signers)
       {
         var roleName = signer["roleName"];
-        itemProperties[roleName + " Name"] = basePropertyDefinition.DeepClone();
-        itemProperties[roleName + " Email"] = basePropertyDefinition.DeepClone();
+        itemProperties[roleName + " Name"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-keyOrder"] = 0,
+          ["x-ms-keyType"] = "none",
+          ["x-ms-sort"] = "none",
+          ["x-ms-summary"] = roleName + " Recipient Or Signing Group Name"
+        };
+        itemProperties[roleName + " Email"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-keyOrder"] = 0,
+          ["x-ms-keyType"] = "none",
+          ["x-ms-sort"] = "none",
+          ["x-ms-summary"] = roleName + " Recipient Email (Leave empty if there’s a signing group)"
+        };
+        itemProperties[roleName + " Signing Group"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = roleName + " Signing Group",
+          ["x-ms-dynamic-values"] = new JObject
+            {
+              ["operationId"] = "GetSigningGroups",
+              ["value-collection"] = "groups",
+              ["value-path"] = "signingGroupId",
+              ["value-title"] = "groupName",
+              ["parameters"] = new JObject
+              {
+                ["accountId"] = new JObject
+                {
+                  ["parameter"] = "accountId"
+                }
+              }
+            }
+        };
       }
 
       var newBody = new JObject
