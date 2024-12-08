@@ -1837,6 +1837,7 @@ public class Script : ScriptBase
       }
 
       body["data"]["envelopeSummary"]["customFields"] = parsedCustomFields;
+      body["data"]["statusChangedDateTime"] = envelopeSummary["statusChangedDateTime"];
 
       // documents code
       foreach (var envelopeDocument in envelopeSummary["envelopeDocuments"] ?? new JArray())
