@@ -1829,6 +1829,7 @@ public class Script : ScriptBase
       var envelopeSummary = body["data"]["envelopeSummary"];
       var customFields = envelopeSummary["customFields"];
       var parsedCustomFields = new JObject();
+      var envelopeDocuments = new JArray();
 
       if (customFields is JObject)
       {
@@ -1840,6 +1841,19 @@ public class Script : ScriptBase
       }
 
       body["data"]["envelopeSummary"]["customFields"] = parsedCustomFields;
+
+      // documents code
+      foreach (var envelopeDocument in envelopeSummary["envelopeDocuments"] ?? new JArray())
+      {
+        envelopeDocuments.Add(new JObject()
+        {
+          ["documentId"] = envelopeDocument["documentId"],
+          ["documentGuid"] = envelopeDocument["documentIdGuid"],
+          ["documentName"] = envelopeDocument["name"]
+        });
+      }
+
+      body["data"]["envelopeSummary"]["envelopeDocuments"] = envelopeDocuments;
 
       // tab code
       var recipientStatuses = envelopeSummary["recipients"];
@@ -2024,7 +2038,8 @@ public class Script : ScriptBase
     string eventData = @"[
       'tabs',
       'custom_fields',
-      'recipients'
+      'recipients',
+      'document_fields'
     ]";
 
     JArray includeData = JArray.Parse(eventData);
