@@ -1625,11 +1625,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-<<<<<<< HEAD
-          ["x-ms-summary"] = "Email"
-=======
           ["x-ms-summary"] = "Recipient email (leave empty if there’s a signing group)"
->>>>>>> pre-dev
         };
       }
     }
@@ -2814,12 +2810,6 @@ public class Script : ScriptBase
       signers[0]["name"] = body["name"];
       if (body["email"] == null) 
       {
-<<<<<<< HEAD
-        signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
-        if (string.IsNullOrEmpty(query.Get("phoneNumber")))
-        {
-          missingInput = true;
-=======
         if (string.IsNullOrEmpty(query.Get("signingGroupId")))
         {
           if (string.IsNullOrEmpty(query.Get("phoneNumber")))
@@ -2827,7 +2817,6 @@ public class Script : ScriptBase
             return true;
           }
           signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
->>>>>>> pre-dev
         }
       }
       else 
@@ -2835,11 +2824,7 @@ public class Script : ScriptBase
         signers[0]["email"] = body["email"];
       }
     }
-<<<<<<< HEAD
-    return missingInput;
-=======
     return false;
->>>>>>> pre-dev
   }
 
   private void AddParamsForSelectedSignatureType(JArray signers, JObject body)
