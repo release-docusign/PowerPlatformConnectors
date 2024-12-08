@@ -5354,7 +5354,7 @@
                     "type": "string"
                   },
                   "x-ms-visibility": "important",
-                  "x-ms-summary": "Custom Fields"
+                  "x-ms-summary": "Envelope Custom Fields"
                 },
                 "createdDateTime": {
                   "format": "date-time",
@@ -5464,7 +5464,7 @@
                           },
                           "recipientId": {
                             "type": "string",
-                            "x-ms-summary": "Recipient Id",
+                            "x-ms-summary": "Recipient ID",
                             "x-ms-visibility": "advanced"
                           },
                           "routingOrder": {
@@ -5677,7 +5677,7 @@
             "type": "string"
           },
           "x-ms-visibility": "important",
-          "x-ms-summary": "Custom Fields"
+          "x-ms-summary": "Envelope Custom Fields"
         },
         "DocuSignEnvelopeInformation": {
           "type": "object",
@@ -5757,7 +5757,7 @@
                           },
                           "RecipientId": {
                             "type": "string",
-                            "x-ms-summary": "Recipient Id",
+                            "x-ms-summary": "Recipient ID",
                             "x-ms-visibility": "advanced"
                           },
                           "RoutingOrder": {
