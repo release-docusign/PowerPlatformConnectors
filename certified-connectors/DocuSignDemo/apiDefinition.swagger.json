@@ -2320,8 +2320,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Create envelope using template with recipients (V2)",
-        "description": "Create envelope using template with recipients (V2)",
+        "summary": "Create envelope using template with recipients and tabs",
+        "description": "Create envelope using template with recipients and tabs",
         "operationId": "SendEnvelopeWithRecipientFields",
         "x-ms-no-generic-test": true,
         "consumes": [
