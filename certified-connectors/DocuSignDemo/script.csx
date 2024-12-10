@@ -1630,6 +1630,1702 @@ public class Script : ScriptBase
       }
     }
 
+    // Composite Templates Request Body (please toggle up when not working on this part of code)
+    if (operationId.Equals("StaticResponseForCompositeTemplates", StringComparison.OrdinalIgnoreCase))
+    {
+      var tabsJsonObj = new JObject
+      {
+        ["type"] = "object",
+        ["properties"] = new JObject
+        {
+          ["- approveTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Approve",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- label"
+                },
+                ["buttonText"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Button Text"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- checkboxTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Checkbox",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Tab Label"
+                },
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["anchorHorizontalAlignment"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Horizontal Alignment"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["selected"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Selected",
+                  ["description"] = "true/false"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["- tabGroupLabels"] = new JObject
+                {
+                  ["type"] = "array",
+                  ["x-ms-summary"] = "- Tab Group Labels",
+                  ["items"] = new JObject
+                    {
+                      ["type"] = "string",
+                      ["x-ms-summary"] = "",
+                    }
+                }
+              }
+            }
+          },
+          ["- tabGroups"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Checkbox Group",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["groupLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Group Label"
+                },
+                ["documentId"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Document ID"
+                },
+                ["validationMessage"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Validation Message"
+                },
+                ["groupRule"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Group Rule",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("SelectAtLeast", "SelectAtMost", "SelectExactly", "SelectARange")
+                },
+                ["minimumRequired"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Minimum Required"
+                },
+                ["maximumAllowed"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Maximum Allowed"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset",
+                }
+              }
+            }
+          },
+          ["- companyTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Company",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- dateTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Date",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Value"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- dateSignedTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Date Signed",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- declineTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Decline",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["buttonText"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Button Text"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- listTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Dropdown",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["- listItems"] = new JObject
+                {
+                  ["type"] = "array",
+                  ["items"] = new JObject
+                    {
+                      ["type"] = "object",
+                      ["x-ms-summary"] = "- List Item",
+                      ["properties"] = new JObject
+                      {
+                        ["selected"] = new JObject
+                        {
+                          ["type"] = "string",
+                          ["x-ms-summary"] = "- Selected",
+                          ["description"] = "true/false"
+                        },
+                        ["text"] = new JObject
+                        {
+                          ["x-ms-summary"] = "- Text",
+                          ["type"] = "string"
+                        },
+                        ["value"] = new JObject
+                        {
+                          ["x-ms-summary"] = "- Value",
+                          ["type"] = "string"
+                        }
+                      }
+                    }
+                },
+                ["listSelectedValue"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Default Option"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["tooltip"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Tooltip"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- emailTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Email",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- firstNameTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "First Name",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- formulaTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Formula",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["formula"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Formula"
+                },
+                ["hidden"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Hidden",
+                  ["description"] = "true/false"
+                },
+                ["roundDecimalPlaces"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Decimal places"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- fullNameTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Full Name",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                },
+                ["font"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Font"
+                },
+                ["fontColor"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Font Color"
+                },
+                ["fontSize"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Font Size"
+                },
+                ["bold"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Bold",
+                  ["description"] = "true/false"
+                },
+                ["italic"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Italic",
+                  ["description"] = "true/false"
+                }
+              }
+            }
+          },
+          ["- initialHereTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Initial",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["optional"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Optional",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- lastNameTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Last Name",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- noteTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Note",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Note Text"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- numberTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Number",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Value"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- numericalTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Numerical",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["numericalValue"] = new JObject
+                {
+                  ["x-ms-summary"] = "- Value",
+                  ["type"] = "string"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["validationType"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Validation Type",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray("Currency", "Number")
+                },
+                ["minNumericalValue"] = new JObject
+                {
+                  ["x-ms-summary"] = "- Minimum Amount",
+                  ["type"] = "string"
+                },
+                ["maxNumericalValue"] = new JObject
+                {
+                  ["x-ms-summary"] = "- Maximum Amount",
+                  ["type"] = "string"
+                },
+                ["- localePolicyTab"] = new JObject
+                {
+                  ["type"] = "array",
+                  ["x-ms-summary"] = "- Locale Policy",
+                  ["items"] = new JObject
+                    {
+                      ["type"] = "object",
+                      ["x-ms-summary"] = "- Locale Policy",
+                      ["properties"] = new JObject
+                      {
+                        ["cultureName"] = new JObject
+                        {
+                          ["type"] = "string",
+                          ["x-ms-summary"] = "Culture Name",
+                          ["description"] = "- The two letter ISO 639-1 language code.",
+                        },
+                        ["currencyCode"] = new JObject
+                        {
+                          ["type"] = "string",
+                          ["x-ms-summary"] = "Currency Code",
+                          ["description"] = "- The ISO 4217 currency code.",
+                        },
+                        ["currencyPositiveFormat"] = new JObject
+                        {
+                          ["type"] = "string",
+                          ["x-ms-summary"] = "- Currency Positive Format"
+                        },
+                        ["currencyNegativeFormat"] = new JObject
+                        {
+                          ["type"] = "string",
+                          ["x-ms-summary"] = "- Currency Negative Format"
+                        },
+                        ["useLongCurrencyFormat"] = new JObject
+                        {
+                          ["type"] = "string",
+                          ["x-ms-summary"] = "- Use Long Currency Format",
+                          ["description"] = "true/false",
+                        }
+                      }
+                    }
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- radioGroupTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Radio Group",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["anchorHorizontalAlignment"] = new JObject
+                {
+                  ["x-ms-summary"] = "- Anchor Horizontal Alignment",
+                  ["type"] = "string",
+                  ["description"] = "left/right"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Value"
+                },
+                ["selected"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Selected",
+                  ["description"] = "true/false"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["x-ms-summary"] = "- Anchor X Offset",
+                  ["type"] = "string"
+                }
+                ["anchorYOffset"] = new JObject
+                {
+                  ["x-ms-summary"] = "- Anchor Y Offset",
+                  ["type"] = "string"
+                }
+              }
+            }
+          },
+          ["- signHereTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Signature",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["optional"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Optional",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- signerAttachmentTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Signer Attachment",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["optional"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Optional",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- ssnTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- SSN",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Value"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- textTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Text",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Value"
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["validationPattern"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Validation Pattern",
+                  ["description"] = "enter custom regex pattern"
+                },
+                ["validationMessage"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Validation Message"
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                },
+                ["font"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Font"
+                },
+                ["fontColor"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Font Color"
+                },
+                ["fontSize"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Font Size"
+                },
+                ["bold"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Bold",
+                  ["description"] = "true/false"
+                },
+                ["italic"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Italic",
+                  ["description"] = "true/false"
+                }
+              }
+            }
+          },
+          ["- titleTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Title",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["tabLabel"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Label"
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          },
+          ["- zipTabs"] = new JObject
+          {
+            ["type"] = "array",
+            ["x-ms-summary"] = "- Zip",
+            ["items"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["anchorString"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor String"
+                },
+                ["value"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Value"
+                },
+                ["locked"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Read Only",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["required"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Required",
+                  ["description"] = "Select",
+                  ["enum"] = new JArray ("true", "false")
+                },
+                ["anchorXOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor X Offset"
+                },
+                ["anchorYOffset"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Anchor Y Offset"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      var query = HttpUtility.ParseQueryString(context.Request.RequestUri.Query);
+      var templateId = query.Get("templateId") ?? "";
+
+      response["name"] = "dynamicSchema";
+      response["title"] = "dynamicSchema";
+      response["schema"] = new JObject
+      {
+        ["type"] = "object",
+        ["properties"] = new JObject()
+      };
+      response["schema"]["properties"]["compositeTemplates"] = new JObject
+      {
+        ["type"] = "array",
+        ["x-ms-summary"] = "Composite Templates",
+        ["items"] = new JObject
+        {
+          ["type"] = "object",
+          ["properties"] = new JObject
+          {
+            ["serverTemplates"] = new JObject
+            {
+              ["type"] = "array",
+              ["x-ms-summary"] = "Server templates",
+              ["description"] = "Server templates",
+              ["x-ms-visibility"] = "important",
+              ["items"] = new JObject
+              {
+                ["type"] = "object",
+                ["properties"] = new JObject
+                {
+                  ["sequence"] = new JObject
+                  {
+                    ["type"] = "string",
+                    ["x-ms-summary"] = "- sequence"
+                  },
+                  ["templateId"] = new JObject
+                  {
+                    ["type"] = "string",
+                    ["x-ms-summary"] = "- Template ID"
+                  }
+                }
+              }
+            },
+            ["document"] = new JObject
+            {
+              ["type"] = "object",
+              ["properties"] = new JObject
+              {
+                ["documentId"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Document ID"
+                },
+                ["name"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Name"
+                },
+                ["fileExtension"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Document type",
+                  ["description"] = "pdf, docx etc."
+                },
+                ["documentBase64"] = new JObject
+                {
+                  ["type"] = "string",
+                  ["x-ms-summary"] = "- Document base64"
+                }
+              }
+            },
+            ["inlineTemplates"] = new JObject
+            {
+              ["type"] = "array",
+              ["x-ms-summary"] = "Inline Templates",
+              ["description"] = "Inline Templates",
+              ["items"] = new JObject
+              {
+                ["type"] = "object",
+                ["properties"] = new JObject
+                {
+                  ["sequence"] = new JObject
+                  {
+                    ["type"] = "string",
+                    ["x-ms-summary"] = "- sequence"
+                  },
+                  ["- Envelope Custom Fields"] = new JObject
+                  {
+                    ["type"] = "object",
+                    ["x-ms-summary"] = "- Envelope Custom Fields",
+                    ["properties"] = new JObject
+                    {
+                      ["- Text Custom Fields"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["x-ms-summary"] = "- Text Custom Fields",
+                          ["properties"] = new JObject
+                          {
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["value"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Value"
+                            },
+                            ["show"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Show",
+                              ["description"] = "Select",
+                              ["enum"] = new JArray ("true", "false")
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  ["- recipients"] = new JObject
+                  {
+                    ["type"] = "object",
+                    ["x-ms-summary"] = "recipients",
+                    ["properties"] = new JObject
+                    {
+                      ["- Receives a Copy"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- Receives a Copy",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["email"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Email"
+                            },
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            }
+                          }
+                        }
+                      },
+                      ["- Needs to View"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- Needs to View",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["email"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Email"
+                            },
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            }
+                          }
+                        }
+                      },
+                      ["- Allow to Edit"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- Allow to Edit",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["email"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Email"
+                            },
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            }
+                          }
+                        }
+                      },
+                      ["- In Person Signer"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- In Person Signer",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["hostEmail"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Host Email"
+                            },
+                            ["hostName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Host Name"
+                            },
+                            ["signerEmail"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signer Email"
+                            },
+                            ["signerName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signer Name"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            },
+                            ["- tabs"] = tabsJsonObj.DeepClone()
+                          }
+                        }
+                      },
+                      ["- Update Recipients"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- Update Recipients",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["email"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Email"
+                            },
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            }
+                          }
+                        }
+                      },
+                      ["- Signs with Witness"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- Signs with Witness",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["email"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Email"
+                            },
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["witnessFor"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Witness For"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            },
+                            ["- tabs"] = tabsJsonObj.DeepClone()
+                          }
+                        }
+                      },
+                      ["- Needs to Sign"] = new JObject
+                      {
+                        ["type"] = "array",
+                        ["x-ms-summary"] = "- Needs to Sign",
+                        ["items"] = new JObject
+                        {
+                          ["type"] = "object",
+                          ["properties"] = new JObject
+                          {
+                            ["recipientId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["email"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Email"
+                            },
+                            ["name"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Name"
+                            },
+                            ["roleName"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Role Name"
+                            },
+                            ["routingOrder"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Routing Order"
+                            },
+                            ["accessCode"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Access Code"
+                            },
+                            ["clientUserId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Client User ID"
+                            },
+                            ["- recipientSignatureProviders"] = new JObject
+                            {
+                              ["type"] = "array",
+                              ["x-ms-summary"] = "- Recipient Signature Providers",
+                              ["items"] = new JObject
+                              {
+                                ["type"] = "object",
+                                ["properties"] = new JObject
+                                {
+                                  ["signatureProviderName"] = new JObject
+                                  {
+                                    ["type"] = "string",
+                                    ["x-ms-summary"] = "- Signature Provider Name"
+                                  },
+                                  ["- signatureProviderOptions"] = new JObject
+                                  {
+                                    ["type"] = "object",
+                                    ["properties"] = new JObject
+                                    {
+                                      ["SMS"] = new JObject
+                                      {
+                                        ["type"] = "string",
+                                        ["x-ms-summary"] = "- SMS"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            ["- identityVerification"] = new JObject
+                            {
+                              ["type"] = "object",
+                              ["properties"] = new JObject
+                              {
+                                ["workflowId"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Workflow ID"
+                                },
+                                ["- inputOptions"] = new JObject
+                                {
+                                  ["type"] = "array",
+                                  ["x-ms-summary"] = "- Input Options",
+                                  ["items"] = new JObject
+                                  {
+                                    ["type"] = "object",
+                                    ["properties"] = new JObject
+                                    {
+                                      ["name"] = new JObject
+                                      {
+                                        ["type"] = "string",
+                                        ["x-ms-summary"] = "- Name"
+                                      },
+                                      ["valueType"] = new JObject
+                                      {
+                                        ["type"] = "string",
+                                        ["x-ms-summary"] = "- Value Type"
+                                      },
+                                      ["- phoneNumberList"] = new JObject
+                                      {
+                                        ["type"] = "array",
+                                        ["x-ms-summary"] = "- Phone Number List",
+                                        ["items"] = new JObject
+                                        {
+                                          ["type"] = "object",
+                                          ["properties"] = new JObject
+                                          {
+                                            ["countryCode"] = new JObject
+                                            {
+                                              ["type"] = "string",
+                                              ["x-ms-summary"] = "- Country Code"
+                                            },
+                                            ["number"] = new JObject
+                                            {
+                                              ["type"] = "string",
+                                              ["x-ms-summary"] = "- Number"
+                                            },
+                                            ["extension"] = new JObject
+                                            {
+                                              ["type"] = "string",
+                                              ["x-ms-summary"] = "- Extension"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            ["- tabs"] = tabsJsonObj.DeepClone()
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      };
+    }
+    // end of Composite Templates Request Body
     return CreateJsonContent(response.ToString());
   }
 
@@ -2318,6 +4014,120 @@ public class Script : ScriptBase
 
     return body;
   }
+
+  private JObject CompositeTemplatesBodyTransformation(JObject body)
+  {
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+
+    body["emailSubject"] = query.Get("emailSubject");
+    var emailBody = query.Get("emailBody");
+
+    if (!string.IsNullOrEmpty(emailBody))
+    {
+      body["emailBlurb"] = emailBody;
+    }
+
+    if (!string.IsNullOrEmpty(query.Get("status")))
+    {
+      body["status"] = query.Get("status");
+    }
+
+    RenameKeysWithoutDashes(body);
+
+    var keyMappings = new Dictionary<string, string> { 
+      { "Envelope Custom Fields", "customFields" },
+      { "Text Custom Fields", "textCustomFields" },
+      { "Receives a Copy", "carbonCopies" },
+      { "Needs to View", "certifiedDeliveries" },
+      { "Allow to Edit", "editors" },
+      { "In Person Signer", "inPersonSigners" },
+      { "Update Recipients", "intermediaries" },
+      { "Signs with Witness", "witnesses" },
+      { "Needs to Sign", "signers" }
+    };
+
+    RenameSpecificKeys(body, keyMappings);
+
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+    uriBuilder.Path = uriBuilder.Path.Replace("/envelopes/compositeTemplates", "/envelopes");
+    this.Context.Request.RequestUri = uriBuilder.Uri;
+
+    return body;
+  }
+
+// Removes all dashes (-) appended to field names
+private void RenameKeysWithoutDashes(JObject jObject)
+{
+    var propertiesToRename = new List<JProperty>();
+
+    foreach (var property in jObject.Properties())
+    {
+        if (property.Name.StartsWith("-"))
+        {
+            propertiesToRename.Add(property);
+        }
+
+        if (property.Value is JObject nestedObject)
+        {
+            RenameKeysWithoutDashes(nestedObject);
+        }
+        else if (property.Value is JArray array)
+        {
+            foreach (var item in array)
+            {
+                if (item is JObject arrayObject)
+                {
+                    RenameKeysWithoutDashes(arrayObject);
+                }
+            }
+        }
+    }
+
+    foreach (var property in propertiesToRename)
+    {
+        var newKey = property.Name.TrimStart('-', ' ');
+        jObject[newKey] = property.Value;
+        jObject.Remove(property.Name);
+    }
+}
+
+private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyMappings)
+{
+    var propertiesToRename = new List<JProperty>();
+
+    // Collect properties that need renaming based on the provided keyMappings
+    foreach (var property in jObject.Properties())
+    {
+        if (keyMappings.ContainsKey(property.Name))
+        {
+            propertiesToRename.Add(property);
+        }
+
+        // If the property is a nested object, recursively call the function
+        if (property.Value is JObject nestedObject)
+        {
+            RenameSpecificKeys(nestedObject, keyMappings);
+        }
+        else if (property.Value is JArray array)
+        {
+            foreach (var item in array)
+            {
+                if (item is JObject arrayObject)
+                {
+                    RenameSpecificKeys(arrayObject, keyMappings);
+                }
+            }
+        }
+    }
+
+    // Rename collected properties
+    foreach (var property in propertiesToRename)
+    {
+        var newKey = keyMappings[property.Name];
+        jObject[newKey] = property.Value;
+        jObject.Remove(property.Name);
+    }
+}
 
   private JObject EnvelopeVoidBodyTransformation(JObject body)
   {
@@ -3120,6 +4930,11 @@ public class Script : ScriptBase
     if ("CreateBlankEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.CreateBlankEnvelopeBodyTransformation).ConfigureAwait(false);
+    }
+
+    if ("CompositeTemplates".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      await this.TransformRequestJsonBody(this.CompositeTemplatesBodyTransformation).ConfigureAwait(false);
     }
 
     if("VoidEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
