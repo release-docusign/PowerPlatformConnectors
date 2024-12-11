@@ -3826,8 +3826,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Create bulk send lists",
-        "description": "Create bulk send list",
+        "summary": "Add bulk send list",
+        "description": "Add bulk send list",
         "operationId": "CreateBulkSendList",
         "consumes": [],
         "produces": [
@@ -3855,9 +3855,9 @@
           {
             "name": "name",
             "in": "query",
-            "description": "Name of the bulk send list",
+            "description": "Bulk Send List Name",
             "required": true,
-            "x-ms-summary": "Name of the bulk send list",
+            "x-ms-summary": "Bulk Send List Name",
             "type": "string"
           },
           {
@@ -3892,8 +3892,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Bulk send",
-        "description": "Bulk send",
+        "summary": "Bulk send envelope",
+        "description": "Bulk send envelope",
         "operationId": "BulkSend",
         "consumes": [],
         "produces": [
@@ -3921,9 +3921,9 @@
           {
             "name": "bulkSendListId",
             "in": "path",
-            "description": "Bulk Sending List ID",
+            "description": "Bulk send list ID",
             "required": true,
-            "x-ms-summary": "Bulk Sending List ID",
+            "x-ms-summary": "Bulk send list ID",
             "type": "string"
           }
         ],
