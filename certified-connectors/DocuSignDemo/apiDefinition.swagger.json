@@ -1190,8 +1190,8 @@
     },
     "/accounts/{accountId}/envelopes/compositeTemplates": {
       "post": {
-        "summary": "Composite Templates",
-        "operationId": "CompositeTemplates",
+        "summary": "Create an envelope using composite templates",
+        "operationId": "Create an envelope using composite templates",
         "parameters": [
           {
             "name": "accountId",
@@ -1258,19 +1258,27 @@
               "properties": {
                 "envelopeId": {
                   "type": "string",
-                  "description": "envelopeId"
+                  "description": "envelopeId",
+                  "x-ms-summary": "Envelope Id",
+                  "x-ms-visibility": "important"
                 },
                 "uri": {
                   "type": "string",
-                  "description": "uri"
+                  "description": "uri",
+                  "x-ms-summary": "URI",
+                  "x-ms-visibility": "important"
                 },
                 "statusDateTime": {
                   "type": "string",
-                  "description": "statusDateTime"
+                  "description": "statusDateTime",
+                  "x-ms-summary": "Status date time",
+                  "x-ms-visibility": "important"
                 },
                 "status": {
                   "type": "string",
-                  "description": "status"
+                  "description": "status",
+                  "x-ms-summary": "Status",
+                  "x-ms-visibility": "important"
                 }
               }
             }
@@ -3196,14 +3204,6 @@
             "required": false,
             "x-ms-summary": "Phone Number",
             "type": "string"
-          },
-          {
-            "name": "recipientId",
-            "in": "query",
-            "description": "Recipinet Id",
-            "required": false,
-            "x-ms-summary": "Recipient Id",
-            "type": "string"
           }
         ],
         "responses": {
@@ -3211,60 +3211,6 @@
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/Signer"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-no-generic-test": true,
-        "x-ms-visibility": "advanced"
-      }
-    },
-    "/accounts/{accountId}/envelopes/{envelopeId}/audit_events": {
-      "get": {
-        "tags": [
-          "DocuSign"
-        ],
-        "summary": "Get audit event list",
-        "description": "Get audit event list",
-        "operationId": "GetAuditEvents",
-        "consumes": [],
-        "produces": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml"
-        ],
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account id",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account id",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string"
-          },
-          {
-            "name": "envelopeId",
-            "in": "path",
-            "description": "Envelope id",
-            "required": true,
-            "x-ms-summary": "Envelope",
-            "x-ms-test-value": "insert envelope id",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/AuditResponse"
             }
           }
         },
@@ -6579,10 +6525,6 @@
       "properties": {}
     },
     "SendDraftEnvelopeResponse": {
-      "type": "object",
-      "properties": {}
-    },
-    "AuditResponse":{
       "type": "object",
       "properties": {}
     },
