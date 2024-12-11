@@ -3695,12 +3695,20 @@ public class Script : ScriptBase
       {
         foreach(var tab in tabTypes.Value)
         {
-          if(tab["tabLabel"] != null && (tab["tabLabel"].ToString()).Equals(tabLabel))
+          if(tab["tabType"].ToString().Equals("radiogroup"))
           {
-            newBody["name"] = tab["name"];
+            newBody["value"] = tab["value"] ?? tab["value"];
+            newBody["documentId"] = tab["documentId"] ?? tab["documentId"];
+            newBody["tabType"] = tab["tabType"];
+            newBody["recipientId"] = tab["recipientId"];
+          }
+
+          if(tab["tabLabel"] != null && (tab["tabLabel"].ToString()).Equals(tabLabel.ToString()))
+          {
+            newBody["name"] = tab["name"] ?? tab["name"];
             newBody["tabLabel"] = tab["tabLabel"];
-            newBody["value"] = tab["value"];
-            newBody["documentId"] = tab["documentId"];
+            newBody["value"] = tab["value"] ?? tab["value"];
+            newBody["documentId"] = tab["documentId"] ?? tab["documentId"];
             newBody["tabId"] = tab["tabId"];
             newBody["tabType"] = tab["tabType"];
             newBody["recipientId"] = tab["recipientId"];
@@ -3709,9 +3717,9 @@ public class Script : ScriptBase
         }
       }
 
-      if (newBody["name"] == null)
+      if (newBody["tabType"] == null)
       {
-        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Could not find the Tab Label for the specified recipient");
+        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Could not find the Tab Type for the specified recipient");
       }
 
       response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
