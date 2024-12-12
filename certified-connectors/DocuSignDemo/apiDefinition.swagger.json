@@ -1191,7 +1191,7 @@
     "/accounts/{accountId}/envelopes/compositeTemplates": {
       "post": {
         "summary": "Create an envelope using composite templates",
-        "operationId": "Create an envelope using composite templates",
+        "operationId": "CompositeTemplates",
         "parameters": [
           {
             "name": "accountId",
