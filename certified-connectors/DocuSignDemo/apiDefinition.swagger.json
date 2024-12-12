@@ -1190,8 +1190,8 @@
     },
     "/accounts/{accountId}/envelopes/compositeTemplates": {
       "post": {
-        "summary": "Composite Templates",
-        "operationId": "CompositeTemplates",
+        "summary": "Create an envelope using composite templates",
+        "operationId": "Create an envelope using composite templates",
         "parameters": [
           {
             "name": "accountId",
@@ -1257,20 +1257,28 @@
               "type": "object",
               "properties": {
                 "envelopeId": {
+                  "description": "The id of the envelope.",
                   "type": "string",
-                  "description": "envelopeId"
-                },
-                "uri": {
-                  "type": "string",
-                  "description": "uri"
-                },
-                "statusDateTime": {
-                  "type": "string",
-                  "description": "statusDateTime"
+                  "x-ms-summary": "Envelope Id",
+                  "x-ms-visibility": "important"
                 },
                 "status": {
+                  "description": "The status of the envelope.",
                   "type": "string",
-                  "description": "status"
+                  "x-ms-summary": "Status",
+                  "x-ms-visibility": "important"
+                },
+                "statusDateTime": {
+                  "description": "The datetime the status was set.",
+                  "type": "string",
+                  "x-ms-summary": "Status date time",
+                  "x-ms-visibility": "important"
+                },
+                "uri": {
+                  "description": "The URI for the envelope in DocuSign.",
+                  "type": "string",
+                  "x-ms-summary": "URI",
+                  "x-ms-visibility": "important"
                 }
               }
             }
