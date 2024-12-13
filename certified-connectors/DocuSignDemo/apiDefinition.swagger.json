@@ -2413,6 +2413,108 @@
         "x-ms-visibility": "important"
       }
     },
+    "/accounts/{accountId}/envelopes/createWithRecipientFields": {
+      "post": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Create envelope using template with recipients and tabs",
+        "description": "Create envelope using template with recipients and tabs",
+        "operationId": "SendEnvelopeWithRecipientFields",
+        "x-ms-no-generic-test": true,
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account id",
+            "x-ms-visibility": "important",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "templateId",
+            "in": "query",
+            "description": "Template id",
+            "required": true,
+            "x-ms-summary": "Template",
+            "x-ms-test-value": "insert template id",
+            "x-ms-visibility": "important",
+            "x-ms-dynamic-values": {
+              "operationId": "GetEnvelopeTemplates",
+              "parameters": {
+                "accountId": {
+                  "parameter": "accountId"
+                }
+              },
+              "value-collection": "envelopeTemplates",
+              "value-path": "templateId",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "recipients",
+            "in": "body",
+            "description": "The signers of the document.",
+            "x-ms-visibility": "important",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/DynamicRecipients"
+            },
+            "x-ms-summary": "Recipients"
+          },
+          {
+            "name": "emailSubject",
+            "in":"query",
+            "description": "Email subject",
+            "required":false,
+            "x-ms-summary": "Email subject",
+            "type":"string",
+            "x-ms-visibility": "advanced"
+          },
+          {
+            "name": "emailBody",
+            "in":"query",
+            "description": "Email body",
+            "required":false,
+            "x-ms-summary": "Email body",
+            "type":"string",
+            "x-ms-visibility": "advanced"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/CreateEnvelopeResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "important"
+      }
+    },
     "/accounts/{accountId}/envelopes/{envelopeId}": {
       "put": {
         "tags": [
@@ -4735,6 +4837,54 @@
         "x-ms-visibility": "internal"
       }
     },
+    "/signers/accounts/{accountId}/templates/{templateId}": {
+      "get": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Get the signers of a template in dynamic schema format",
+        "description": "Get the signers of a template in dynamic schema format.",
+        "operationId": "GetDynamicRecipients",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account to get the signers for.",
+            "required": true,
+            "x-ms-summary": "Account Id",
+            "x-ms-test-value": "insert account id",
+            "type": "string"
+          },
+          {
+            "name": "templateId",
+            "in": "path",
+            "description": "Template to get the signers for.",
+            "required": true,
+            "x-ms-summary": "Template Id",
+            "x-ms-test-value": "insert template id",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "internal"
+      }
+    },
     "/accounts/{accountId}/envelopes/{envelopeId}/recipients/{recipientId}/tabs": {
       "post": {
         "tags": [
@@ -5921,6 +6071,23 @@
       "properties": {},
       "x-ms-dynamic-schema": {
         "operationId": "GetDynamicSigners",
+        "parameters": {
+          "accountId": {
+            "parameter": "accountId"
+          },
+          "templateId": {
+            "parameter": "templateId"
+          }
+        },
+        "value-path": "Schema/Items"
+      }
+    },
+    "DynamicRecipients": {
+      "description": "An object that represents recipients based on a template.",
+      "type": "object",
+      "properties": {},
+      "x-ms-dynamic-schema": {
+        "operationId": "GetDynamicRecipients",
         "parameters": {
           "accountId": {
             "parameter": "accountId"
