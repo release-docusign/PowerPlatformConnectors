@@ -4156,6 +4156,32 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
+  private JObject SearchListEnvelopesTransformation(JObject body)
+  { 
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      uriBuilder.Path = uriBuilder.Path.Replace("/SearchListEnvelopes", "");
+
+      query["include"] = "custom_fields, recipients, documents, folders";
+      query["order"] = "desc";
+      
+      query["status"] = string.IsNullOrEmpty(query.Get("envelopeStatus")) ? 
+        null : query.Get("envelopeStatus");
+      query["folder_ids"] = string.IsNullOrEmpty(query.Get("folder_ids")) ? 
+        null : query.Get("folder_ids").ToString();
+       query["order_by"] = string.IsNullOrEmpty(query.Get("order_by")) ? 
+        "status_changed" : query.Get("order_by");
+      query["from_date"] = string.IsNullOrEmpty(query.Get("from_date")) ? 
+        "2000-01-02T12:45Z" : query.Get("from_date");
+      query["to_date"] = string.IsNullOrEmpty(query.Get("to_date")) ? 
+        DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : query.Get("to_date");
+
+      uriBuilder.Query = query.ToString();
+      this.Context.Request.RequestUri = uriBuilder.Uri;
+
+    return body;
+  }
+
   private JObject AddRecipientToEnvelopeBodyTransformation(JObject body)
   {
       var signers = body["signers"] as JArray;
@@ -4945,6 +4971,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if("ResendEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.EnvelopeResendBodyTransformation).ConfigureAwait(false);
+    }
+    
+    if(("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+    {
+      await this.TransformRequestJsonBody(this.SearchListEnvelopesTransformation).ConfigureAwait(false);
     }
 
     if ("SendEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
@@ -5818,6 +5849,81 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
       filteredEnvelopesDetails = this.Context.OperationId.Contains("SalesCopilot") ? GetFilteredEnvelopeDetailsForSalesCopilot(envelopes) :
       GetFilteredEnvelopeDetails(envelopes);
+      newBody["value"] = (filteredEnvelopesDetails.Count < top) ? 
+        filteredEnvelopesDetails : 
+        new JArray(filteredEnvelopesDetails.Skip(skip).Take(top).ToArray());
+      newBody["hasMoreResults"] = (skip + top < filteredEnvelopesDetails.Count) ? true : false;
+      response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
+    }
+
+    if (("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+    {
+      var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
+      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      JObject newBody = new JObject();
+
+      int top = string.IsNullOrEmpty(query.Get("top")) ? 10: int.Parse(query.Get("top"));
+      int skip = string.IsNullOrEmpty(query.Get("skip")) ? 0: int.Parse(query.Get("skip"));
+
+      JArray envelopes = (body["envelopes"] as JArray) ?? new JArray();
+      JArray filteredEnvelopes = new JArray();
+      var filteredEnvelopesDetails = new JArray();
+      var recipientName = query.Get("recipientName") ?? null;
+      var recipientEmailId = query.Get("recipientEmailId") ?? null;
+      var envelopeTitle = query.Get("envelopeTitle") ?? null;
+      var customFieldName = query.Get("customFieldName") ?? null;
+      var customFieldValue = query.Get("customFieldValue") ?? null;
+
+      var envelopeFilterMap = new Dictionary<string, string>() {
+        {"recipientName", recipientName},
+        {"recipientEmailId", recipientEmailId},
+        {"envelopeTitle", envelopeTitle},
+        {"customFieldName", customFieldName},
+        {"customFieldValue", customFieldValue}
+      };
+
+      foreach (var filter in envelopeFilterMap.Keys) 
+      {
+        if (envelopeFilterMap[filter] != null)
+        {
+          switch (filter)
+          {
+            case "recipientName":
+            case "recipientEmailId":
+              filteredEnvelopes = new JArray(envelopes.Where(envelope =>
+                envelope["recipients"].ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower())));
+              break;
+            case "envelopeTitle":
+              filteredEnvelopes = new JArray(envelopes.Where(envelope =>
+                envelope["emailSubject"].ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower())));
+              break;
+            case "customFieldName":
+            case "customFieldValue":
+              filteredEnvelopes = new JArray(envelopes.Where(envelope =>
+              {
+                var customFields = envelope["customFields"] as JToken;
+                return customFields?.ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower()) ?? false;
+              }));
+              break;
+            default:
+              break;
+          }
+
+          if (filteredEnvelopes.Count > 0)
+          {
+            envelopes.Clear();
+            envelopes = new JArray(filteredEnvelopes);
+            filteredEnvelopes.Clear();
+          }
+          else
+          {
+            envelopes.Clear();
+            break;
+          }
+        }
+      }
+
+      filteredEnvelopesDetails = GetFilteredEnvelopeDetails(envelopes);
       newBody["value"] = (filteredEnvelopesDetails.Count < top) ? 
         filteredEnvelopesDetails : 
         new JArray(filteredEnvelopesDetails.Skip(skip).Take(top).ToArray());
