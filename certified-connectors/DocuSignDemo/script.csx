@@ -4500,6 +4500,56 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return accountServerBaseUri;
   }
 
+  private JArray GetFormFields(JArray docGenFormfields, JArray formFields)
+  {
+    foreach (var doc in docGenFormfields)
+    {
+      foreach(var field in (doc["docGenFormFieldList"] as JArray) ?? new JArray())
+      {
+        formFields.Add(new JObject()
+        {
+          ["name"] =  field["name"],
+          ["type"] =  field["type"],
+          ["value"] = field["value"],
+          ["label"] =  field["label"],
+          ["documentId"] =  doc["documentId"]
+        });
+
+        if (field["type"].ToString().Equals("TableRow"))
+        {
+          JArray rowValues = (field["rowValues"] as JArray) ?? new JArray();
+          formFields = GetFormFields(rowValues, formFields);
+        }
+      }
+    }
+
+    return formFields;
+  }
+
+  private JArray createRowValueList(Dictionary<int, List<JToken>> tableMap)
+  {
+    var rowValueList = new JArray();
+    foreach (var row in tableMap)
+    {
+      var docGenFormFieldList = new JArray();
+      foreach (var column in row.Value)
+      {
+        docGenFormFieldList.Add(new JObject
+        {
+          ["name"] = column["name"],
+          ["value"] = column["value"]
+        });
+      }
+
+      rowValueList.Add(new JObject
+      {
+        ["docGenFormFieldList"] = docGenFormFieldList
+      });
+    }
+
+    return rowValueList;
+  }
+
   private void AddCoreRecipientParams(JArray signers, JObject body) 
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
@@ -4861,17 +4911,54 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     var body = ParseContentAsJArray(await this.Context.Request.Content.ReadAsStringAsync().ConfigureAwait(false), true);
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var fieldList = new JArray();
+    var rowValueList = new JArray();
     var documentId = query.Get("documentGuid");
+    string tableName = string.Empty;
+    Dictionary<int, List<JToken>> tableMap = new Dictionary<int, List<JToken>>();
 
-    foreach (var field in body)
+    try
     {
-      fieldList.Add(new JObject
+      foreach (var field in body)
+      {
+        if (field["fieldType"].ToString() == "Table row")
         {
-          ["name"] = field["name"],
-          ["value"] = field["value"]
-        });
+          var rowNumber = field["rowNumber"].Value<int>();
+          tableName = field["tableName"].ToString();
+
+          if (!tableMap.ContainsKey(rowNumber))
+          {
+            tableMap[rowNumber] = new List<JToken>();
+          }
+          tableMap[rowNumber].Add(field);
+        }
+        else
+        {
+          fieldList.Add(new JObject
+          {
+            ["name"] = field["name"],
+            ["value"] = field["value"]
+          });
+        }
+      }
+    }
+     catch (HttpRequestException ex)
+    {
+      throw new ConnectorException(HttpStatusCode.BadGateway, "Docgen field name not found" + ex.Message, ex);
     }
 
+    if (!string.IsNullOrEmpty(tableName))
+    {
+      rowValueList = createRowValueList(tableMap);
+      fieldList.Add(new JObject
+      {
+        ["label"] = tableName,
+        ["type"] = "TableRow",
+        ["required"] = "True",
+        ["name"] = tableName,
+        ["rowValues"] = rowValueList
+      });
+    }
+    
     var docGenFormFields = new JArray
     {
       new JObject
@@ -5938,21 +6025,9 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       JObject newBody = new JObject();
       JArray formFields = new JArray();
+      JArray docGenFormfields = (body["docGenFormFields"] as JArray) ?? new JArray();
 
-      foreach (var doc in (body["docGenFormFields"] as JArray) ?? new JArray())
-      {
-        foreach(var field in (doc["docGenFormFieldList"] as JArray) ?? new JArray())
-        {
-          formFields.Add(new JObject()
-          {
-            ["name"] =  field["name"],
-            ["type"] =  field["type"],
-            ["value"] =  field["value"],
-            ["label"] =  field["label"],
-            ["documentId"] =  doc["documentId"]
-          });
-        }
-      }
+      formFields = GetFormFields(docGenFormfields, formFields);
 
       newBody["docgenFields"] = formFields;
       response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
