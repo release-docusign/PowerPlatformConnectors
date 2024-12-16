@@ -454,9 +454,22 @@
             "required": true,
             "schema": {
               "type": "array",
+              "x-ms-summary": "Field",
               "items": {
                 "type": "object",
                 "properties": {
+                  "fieldType": {
+                    "type": "string",
+                    "x-ms-summary": "Type",
+                    "description": "Type of the Docgen field",
+                    "enum": [
+                      "Text box",
+                      "Date",
+                      "Number",
+                      "Select",
+                      "Table row"
+                    ]
+                  },
                   "name": {
                     "type": "string",
                     "x-ms-summary": "Name",
@@ -466,10 +479,19 @@
                     "type": "string",
                     "x-ms-summary": "Value",
                     "description": "Value"
+                  },
+                  "tableName": {
+                    "type": "string",
+                    "x-ms-summary": "Table name (optional)",
+                    "description": "TableName"
+                  },
+                  "rowNumber": {
+                    "type": "string",
+                    "x-ms-summary": "Row number",
+                    "description": "Row number"
                   }
                 }
-              },
-              "x-ms-summary": "Field"
+              }
             }
           }
         ],
