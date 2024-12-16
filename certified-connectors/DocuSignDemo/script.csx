@@ -4652,6 +4652,56 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return filteredEnvelopesDetails;
   }
   
+  private JArray createRowValueList(Dictionary<int, List<JToken>> tableMap)
+  {
+    var rowValueList = new JArray();
+    foreach (var row in tableMap)
+    {
+      var docGenFormFieldList = new JArray();
+      foreach (var column in row.Value)
+      {
+        docGenFormFieldList.Add(new JObject
+        {
+          ["name"] = column["name"],
+          ["value"] = column["value"]
+        });
+      }
+
+      rowValueList.Add(new JObject
+      {
+        ["docGenFormFieldList"] = docGenFormFieldList
+      });
+    }
+
+    return rowValueList;
+  }
+
+  private JArray GetFormFields(JArray docGenFormfields, JArray formFields)
+  {
+    foreach (var doc in docGenFormfields)
+    {
+      foreach(var field in (doc["docGenFormFieldList"] as JArray) ?? new JArray())
+      {
+        formFields.Add(new JObject()
+        {
+          ["name"] =  field["name"],
+          ["type"] =  field["type"],
+          ["value"] = field["value"],
+          ["label"] =  field["label"],
+          ["documentId"] =  doc["documentId"]
+        });
+
+        if (field["type"].ToString().Equals("TableRow"))
+        {
+          JArray rowValues = (field["rowValues"] as JArray) ?? new JArray();
+          formFields = GetFormFields(rowValues, formFields);
+        }
+      }
+    }
+
+    return formFields;
+  }
+
   private bool AddParamsForSelectedRecipientType(JArray signers, JObject body) 
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
@@ -4924,7 +4974,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
     this.Context.Request.Content = CreateJsonContent(newBody.ToString());
   }
-  
+
   private Dictionary<string, JObject> GenerateRecipientsMappings(JObject body)
   {
     Dictionary<string, JObject> recipientData = new Dictionary<string, JObject>();
@@ -5976,21 +6026,9 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       JObject newBody = new JObject();
       JArray formFields = new JArray();
+      JArray docGenFormfields = (body["docGenFormFields"] as JArray) ?? new JArray();
 
-      foreach (var doc in (body["docGenFormFields"] as JArray) ?? new JArray())
-      {
-        foreach(var field in (doc["docGenFormFieldList"] as JArray) ?? new JArray())
-        {
-          formFields.Add(new JObject()
-          {
-            ["name"] =  field["name"],
-            ["type"] =  field["type"],
-            ["value"] =  field["value"],
-            ["label"] =  field["label"],
-            ["documentId"] =  doc["documentId"]
-          });
-        }
-      }
+      formFields = GetFormFields(docGenFormfields, formFields);
 
       newBody["docgenFields"] = formFields;
       response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
