@@ -4862,17 +4862,54 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     var body = ParseContentAsJArray(await this.Context.Request.Content.ReadAsStringAsync().ConfigureAwait(false), true);
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var fieldList = new JArray();
+    var rowValueList = new JArray();
     var documentId = query.Get("documentGuid");
+    string tableName = string.Empty;
+    Dictionary<int, List<JToken>> tableMap = new Dictionary<int, List<JToken>>();
 
-    foreach (var field in body)
+    try
     {
-      fieldList.Add(new JObject
+      foreach (var field in body)
+      {
+        if (field["fieldType"].ToString() == "Table row")
         {
-          ["name"] = field["name"],
-          ["value"] = field["value"]
-        });
+          var rowNumber = field["rowNumber"].Value<int>();
+          tableName = field["tableName"].ToString();
+
+          if (!tableMap.ContainsKey(rowNumber))
+          {
+            tableMap[rowNumber] = new List<JToken>();
+          }
+          tableMap[rowNumber].Add(field);
+        }
+        else
+        {
+          fieldList.Add(new JObject
+          {
+            ["name"] = field["name"],
+            ["value"] = field["value"]
+          });
+        }
+      }
+    }
+     catch (HttpRequestException ex)
+    {
+      throw new ConnectorException(HttpStatusCode.BadGateway, "Docgen field name not found" + ex.Message, ex);
     }
 
+    if (!string.IsNullOrEmpty(tableName))
+    {
+      rowValueList = createRowValueList(tableMap);
+      fieldList.Add(new JObject
+      {
+        ["label"] = tableName,
+        ["type"] = "TableRow",
+        ["required"] = "True",
+        ["name"] = tableName,
+        ["rowValues"] = rowValueList
+      });
+    }
+    
     var docGenFormFields = new JArray
     {
       new JObject
@@ -4887,7 +4924,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
     this.Context.Request.Content = CreateJsonContent(newBody.ToString());
   }
-
+  
   private Dictionary<string, JObject> GenerateRecipientsMappings(JObject body)
   {
     Dictionary<string, JObject> recipientData = new Dictionary<string, JObject>();
