@@ -5,8 +5,8 @@
         "type": "securestring",
         "uiDefinition": {
           "displayName": "API Key",
-          "description": "Enter the API Key provided to you by Tendocs",
-          "tooltip": "You can find your API Key on the Profile page within your Tendocs account.",
+          "description": "The API Key for this api",
+          "tooltip": "Provide your API Key",
           "constraints": {
             "tabIndex": 2,
             "clearText": false,
@@ -15,11 +15,10 @@
         }
       }
     },
-    "iconBrandColor": "#000000",
-    "capabilities": [
-      "Actions"
-    ],
-    "publisher": "Tendocs",
-    "stackOwner": "Tendocs"
+    "iconBrandColor": "#da3b01",
+    "capabilities": [],
+    "publisher": "Richard Wilson, Daniel Cox",
+    "stackOwner": "Washington Metropolitan Area Transit Authority",
+    "policyTemplateInstances": []
   }
 }

@@ -1625,7 +1625,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Recipient email (leave empty if there’s a signing group)"
+          ["x-ms-summary"] = "Email"
         };
       }
     }
@@ -4657,6 +4657,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var recipientType = query.Get("recipientType");
 
+    var missingInput = false;
+
     if (recipientType.Equals("inPersonSigners"))
     {
       signers[0]["hostName"] = body["hostName"];
@@ -4674,13 +4676,10 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       signers[0]["name"] = body["name"];
       if (body["email"] == null) 
       {
-        if (string.IsNullOrEmpty(query.Get("signingGroupId")))
+        signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
+        if (string.IsNullOrEmpty(query.Get("phoneNumber")))
         {
-          if (string.IsNullOrEmpty(query.Get("phoneNumber")))
-          {
-            return true;
-          }
-          signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
+          missingInput = true;
         }
       }
       else 
@@ -4688,7 +4687,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         signers[0]["email"] = body["email"];
       }
     }
-    return false;
+    return missingInput;
   }
 
   private void AddParamsForSelectedSignatureType(JArray signers, JObject body)
