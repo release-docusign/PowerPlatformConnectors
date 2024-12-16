@@ -458,7 +458,7 @@
                   "fieldType": {
                     "type": "string",
                     "x-ms-summary": "Type",
-                    "description": "Type of the Docgen field`",
+                    "description": "Type of the Docgen field",
                     "enum": [
                       "Text box",
                       "Date",
