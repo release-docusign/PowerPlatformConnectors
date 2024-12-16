@@ -207,6 +207,9 @@
             "schema": {
               "type": "object"
             }
+          },
+          "400": {
+            "description": "This Account lacks sufficient permissions. Connect not enabled for account."
           }
         },
         "deprecated": false,
