@@ -2989,41 +2989,29 @@ public class Script : ScriptBase
   {
     var input = inputBody.GetValue("csv").ToString();
     var body = new JObject();
-
     var result = new JObject();
-
     try
     {
         var lines = input.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-
         var headerLine = lines[0];
         var headerItems = headerLine.Split(',');
-
         var parsedHeaders = new string[headerItems.Length][];
-
+        string[] recipientFields = { "accessCode", "clientUserId", "deliveryMethod", "email", "embeddedRecipientStartURL", "hostEmail", "hostName", "idCheckConfigurationName", "name", "note", "recipientId", "roleName", "signerName", "signingGroupId" };
+        // This map contains each copy of recipients. The key here would be the role name and the value is the recipient request object that gets added as request body
+        Dictionary<string, JObject> recipientDataMap = new Dictionary<string, JObject>();
+        body["recipients"] = new JArray();
+        result["bulkCopies"] = new JArray();
+        var recipientObject = new JObject();
         for (int i = 0; i < headerItems.Length; i++)
         {
             parsedHeaders[i] = headerItems[i].Split(new string[] { "::" }, StringSplitOptions.None);
         }
-
-        string[] recipientFields = { "accessCode", "clientUserId", "deliveryMethod", "email", "embeddedRecipientStartURL", "hostEmail", "hostName", "idCheckConfigurationName", "name", "note", "recipientId", "roleName", "signerName", "signingGroupId" };
-
-        // This map contains each copy of recipients. The key here would be the role name and the value is the recipient request object that gets added as request body
-        Dictionary<string, JObject> recipientDataMap = new Dictionary<string, JObject>();
-
-        body["recipients"] = new JArray();
-
-        result["bulkCopies"] = new JArray();
-      
-        var recipientObject = new JObject();
-
         // Iterate over the other lines (index at 1 to skip header line)
         for (var index = 1; index < lines.Length; index++)
         {
             var fieldValues = lines[index].Split(',');
             var roleName = "";
             var fieldName = "";
-
             for (var index2 = 0; index2 < fieldValues.Length; index2++)
             {
               var columnName = parsedHeaders[index2];
@@ -3039,7 +3027,6 @@ public class Script : ScriptBase
                 fieldName = columnName[1];
                 fieldName = fieldName.Replace(" ", "");
                 fieldName = char.ToLower(fieldName[0]) + fieldName.Substring(1);
-
                 JObject recipientObj;
                 if (recipientDataMap.ContainsKey(roleName))
                 {
@@ -3093,7 +3080,6 @@ public class Script : ScriptBase
                   });
               }
             }
-            
             foreach (KeyValuePair<string, JObject> pair in recipientDataMap)
             {
               var recipientObj = pair.Value;
@@ -3105,7 +3091,6 @@ public class Script : ScriptBase
             body["customFields"] = new JArray();
             recipientDataMap = new Dictionary<string, JObject>(); 
         }
-
     }
     catch (JsonReaderException ex)
     {
