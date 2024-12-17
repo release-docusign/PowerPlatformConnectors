@@ -4108,6 +4108,150 @@
         "x-ms-visibility": "important"
       }
     },
+    "/accounts/{accountId}/bulk_send_lists": {
+      "post": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Add bulk send list",
+        "description": "Add bulk send list",
+        "operationId": "CreateBulkSendList",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Bulk Send List Name",
+            "required": true,
+            "x-ms-summary": "Bulk Send List Name",
+            "type": "string"
+          },
+          {
+            "name": "csv",
+            "in": "body",
+            "description": "CSV File",
+            "x-ms-visibility": "important",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "csv": {
+                  "description": "Upload CSV File",
+                  "type": "string",
+                  "x-ms-summary": "CSV File"
+                }
+              }
+            },
+            "x-ms-summary": "CSV File"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BulkSendListGuid"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "important"
+      }
+    },
+    "/accounts/{accountId}/bulk_send_lists/{bulkSendListId}/send": {
+      "post": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Bulk send envelope",
+        "description": "Bulk send envelope",
+        "operationId": "BulkSend",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          },
+          {
+            "name": "bulkSendListId",
+            "in": "path",
+            "description": "Bulk send list ID",
+            "required": true,
+            "x-ms-summary": "Bulk send list ID",
+            "type": "string"
+          },
+          {
+            "name": "envelopeOrTemplateId",
+            "in": "query",
+            "description": "Enter the envelope or template ID, or choose a template from the dropdown",
+            "required": true,
+            "x-ms-summary": "Envelope or Template ID",
+            "x-ms-test-value": "insert template id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetEnvelopeTemplates",
+              "parameters": {
+                "accountId": {
+                  "parameter": "accountId"
+                }
+              },
+              "value-collection": "envelopeTemplates",
+              "value-path": "templateId",
+              "value-title": "name"
+            },
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BulkSendListGuid"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "important"
+      }
+    },
     "/login_information": {
       "get": {
         "tags": [
@@ -7232,6 +7376,17 @@
           "description": "The name of the template.",
           "type": "string",
           "x-ms-summary": "Name"
+        }
+      }
+    },
+    "BulkSendListGuid": {
+      "type": "object",
+      "properties": {
+        "listId": {
+          "description": "Bulk Send List Guid",
+          "type": "string",
+          "x-ms-summary": "Bulk Send List Guid",
+          "x-ms-visibility": "important"
         }
       }
     },
