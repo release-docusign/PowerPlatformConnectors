@@ -3867,9 +3867,14 @@
             "x-ms-visibility": "important",
             "required": true,
             "schema": {
-              "type": "string",
-              "x-ms-summary": "CSV File",
-              "description": "CSV File"
+              "type": "object",
+              "properties": {
+                "csv": {
+                  "description": "Upload CSV File",
+                  "type": "string",
+                  "x-ms-summary": "CSV File"
+                }
+              }
             },
             "x-ms-summary": "CSV File"
           }
@@ -3924,6 +3929,26 @@
             "description": "Bulk send list ID",
             "required": true,
             "x-ms-summary": "Bulk send list ID",
+            "type": "string"
+          },
+          {
+            "name": "envelopeOrTemplateId",
+            "in": "query",
+            "description": "Enter the envelope or template ID, or choose a template from the dropdown",
+            "required": true,
+            "x-ms-summary": "Envelope or Template ID",
+            "x-ms-test-value": "insert template id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetEnvelopeTemplates",
+              "parameters": {
+                "accountId": {
+                  "parameter": "accountId"
+                }
+              },
+              "value-collection": "envelopeTemplates",
+              "value-path": "templateId",
+              "value-title": "name"
+            },
             "type": "string"
           }
         ],
