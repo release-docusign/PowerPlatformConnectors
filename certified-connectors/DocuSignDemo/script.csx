@@ -3312,6 +3312,11 @@ public class Script : ScriptBase
                                 }
                               }
                             },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
+                            },
                             ["- tabs"] = tabsJsonObj.DeepClone()
                           }
                         }
