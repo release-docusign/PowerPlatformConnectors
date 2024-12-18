@@ -5053,7 +5053,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     {
       foreach (var field in body)
       {
-        if (field["fieldType"].ToString() == "Table row")
+        if ((field["fieldType"] != null) && (field["fieldType"].ToString() == "Table row"))
         {
           var rowNumber = field["rowNumber"].Value<int>();
           tableName = field["tableName"].ToString();
