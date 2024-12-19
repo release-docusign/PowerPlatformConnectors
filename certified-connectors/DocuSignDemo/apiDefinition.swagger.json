@@ -2519,7 +2519,7 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Create envelope using template with recipients",
+        "summary": "DEPRECATED: Create envelope using template with recipients",
         "description": "Create a new envelope using a specified template and specify recipients.",
         "operationId": "SendEnvelope",
         "x-ms-no-generic-test": true,
