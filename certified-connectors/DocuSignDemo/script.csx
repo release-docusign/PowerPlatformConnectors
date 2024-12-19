@@ -6075,7 +6075,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
             ["tabId"] = tab["tabId"],
             ["tabType"] = tabTypes.Name,
             ["prefill"] = false,
-            ["selected"] = tab["selected"] ?? null
+            ["selected"] = tab["selected"] ?? null,
+            ["name"] = tab["name"] ?? null
           });
         }
       }
