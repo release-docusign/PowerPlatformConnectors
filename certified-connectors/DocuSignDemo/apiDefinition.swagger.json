@@ -418,7 +418,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Account ID",
             "required": true,
             "x-ms-summary": "Account",
             "x-ms-test-value": "insert account id",
@@ -433,7 +433,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": "Envelope ID",
             "required": true,
             "x-ms-summary": "Envelope",
             "x-ms-test-value": "insert envelope id",
@@ -442,9 +442,9 @@
           {
             "name": "documentGuid",
             "in": "query",
-            "description": "Document Guid",
+            "description": "Document GUID",
             "required": true,
-            "x-ms-summary": "Document Guid",
+            "x-ms-summary": "Document GUID",
             "x-ms-test-value": "insert document guid",
             "type": "string"
           },
@@ -461,7 +461,7 @@
                   "fieldType": {
                     "type": "string",
                     "x-ms-summary": "Type",
-                    "description": "Type of the Docgen field",
+                    "description": "Choose the type of document generation field to update",
                     "enum": [
                       "Text box",
                       "Date",
@@ -473,22 +473,22 @@
                   "name": {
                     "type": "string",
                     "x-ms-summary": "Name",
-                    "description": "Name"
+                    "description": "Enter the field name or table column name"
                   },
                   "value": {
                     "type": "string",
                     "x-ms-summary": "Value",
-                    "description": "Value"
+                    "description": "Enter the field data"
                   },
                   "tableName": {
                     "type": "string",
-                    "x-ms-summary": "Table name (optional)",
-                    "description": "TableName"
+                    "x-ms-summary": ": Table Name",
+                    "description": "Enter the table name only if the field type is 'table row'"
                   },
                   "rowNumber": {
                     "type": "string",
-                    "x-ms-summary": "Row number",
-                    "description": "Row number"
+                    "x-ms-summary": ": Table Row",
+                    "description": "Enter the table row number to place the field data"
                   }
                 }
               }
