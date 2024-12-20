@@ -7178,6 +7178,11 @@
           "description": "Indicates whether the tab is of prefill type.",
           "type": "boolean",
           "x-ms-summary": "Is Prefill"
+        },
+        "selected": {
+          "description": "If tabs is checkbox, indicates whether the tab is selected.",
+          "type": "string",
+          "x-ms-summary": "Selected"
         }
       }
     },
