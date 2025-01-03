@@ -1991,7 +1991,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Account ID",
             "required": true,
             "x-ms-summary": "Account",
             "x-ms-test-value": "insert account id",
@@ -2013,7 +2013,7 @@
           },
           {
             "name": "recipientEmailId",
-            "x-ms-summary": "Recipient emailId",
+            "x-ms-summary": "Recipient email ID",
             "description": "This action lists envelopes based on recipient email id",
             "in": "query",
             "type": "string",
@@ -2048,36 +2048,36 @@
             "x-ms-summary": "Envelope status",
             "description": "This action lists envelopes based on status of the envelope",
             "enum": [
-              "any",
-              "created",
-              "sent",
-              "delivered",
-              "signed",
-              "completed",
-              "declined",
-              "voided",
-              "deleted"
+              "Any",
+              "Created",
+              "Sent",
+              "Delivered",
+              "Signed",
+              "Completed",
+              "Declined",
+              "Voided",
+              "Deleted"
             ],
             "in": "query",
             "type": "string",
             "required": false,
-            "default": "any"
+            "default": "Any"
           },
           {
             "name": "folder_ids",
             "x-ms-summary": "Folder",
             "description": "This action lists envelopes based on various states of the envelope",
             "enum": [
-              "awaiting_my_signature",
-              "completed",
-              "draft",
-              "drafts",
-              "expiring_soon",
-              "inbox",
-              "out_for_signature",
-              "recyclebin",
-              "sentitems",
-              "waiting_for_others"
+              "Awaiting my signature",
+              "Completed",
+              "Draft",
+              "Drafts",
+              "Expiring soon",
+              "Inbox",
+              "Out for signature",
+              "Recycle bin",
+              "Sent items",
+              "Waiting for others"
             ],
             "in": "query",
             "type": "string",
@@ -2088,28 +2088,28 @@
             "x-ms-summary": "Order by",
             "description": "This action orders envelopes based on specific property",
             "enum": [
-              "last_modified",
-              "action_required",
-              "created",
-              "completed",
-              "envelope_name",
-              "expire",
-              "sent",
-              "signer_list",
-              "status",
-              "subject",
-              "user_name",
-              "status_changed"
+              "Action required",
+              "Created",
+              "Completed",
+              "Envelope name",
+              "Expire",
+              "Last modified",
+              "Sent",
+              "Signer list",
+              "Status",
+              "Subject",
+              "User name",
+              "Status changed"
             ],
             "in": "query",
             "type": "string",
             "required": false,
-            "default": "status_changed"
+            "default": "Status changed"
           },
           {
             "name": "top",
             "x-ms-summary": "Top",
-            "description": "Top envelopes to be returned",
+            "description": "Envelopes to return",
             "in": "query",
             "type": "integer",
             "format": "int32"
@@ -2117,7 +2117,7 @@
           {
             "name": "skip",
             "x-ms-summary": "Skip",
-            "description": "Envelopes to be skipped",
+            "description": "Envelopes to skip",
             "in": "query",
             "type": "integer",
             "format": "int32"
@@ -2125,8 +2125,8 @@
           {
             "name": "from_date",
             "x-ms-summary": "Start date",
-            "description": "Enter '' when no value is provided by user. Enter start date-time in the pattern or format: 2017-05-02T01:44Z.",
-            "default": "2000-01-02T12:45Z",
+            "description": "Enter start date-time in UTC format: 2017-05-02T01:44z",
+            "default": "2024-01-02T12:45Z",
             "in": "query",
             "type": "string",
             "required": false,
@@ -2135,7 +2135,7 @@
           {
             "name": "to_date",
             "x-ms-summary": "End date",
-            "description": "Enter '' when no value is provided by user. Enter end date-time in the pattern or format: 2017-05-02T01:44Z.",
+            "description": "Enter start date-time in UTC format: 2017-05-02T01:44z.",
             "in": "query",
             "type": "string",
             "required": false,
@@ -6626,8 +6626,8 @@
         },
         "envelopeId": {
           "minLength": 1,
-          "x-ms-summary": "Envelope Id",
-          "description": "Envelope Id",
+          "x-ms-summary": "Envelope ID",
+          "description": "Envelope ID",
           "type": "string"
         },
         "documents": {
@@ -6638,7 +6638,7 @@
         },
         "recipients": {
           "minLength": 1,
-          "x-ms-summary": "Recipient names",
+          "x-ms-summary": "Recipient Names",
           "description": "List of recipient names",
           "type": "string"
         },
@@ -6890,7 +6890,7 @@
         "envelopeId": {
           "description": "The id of the envelope.",
           "type": "string",
-          "x-ms-summary": "Envelope Id",
+          "x-ms-summary": "Envelope ID",
           "x-ms-visibility": "important"
         },
         "envelopeUri": {
@@ -6960,7 +6960,8 @@
         },
         "hasMoreResults": {
           "type": "boolean",
-          "description": "Specifies if there are more envelopes available"
+          "x-ms-summary": "Body",
+          "description": "Shows if there's more than 1,000 envelopes"
         }
       }
     },

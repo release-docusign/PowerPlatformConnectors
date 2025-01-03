@@ -4238,15 +4238,54 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
       uriBuilder.Path = uriBuilder.Path.Replace("/SearchListEnvelopes", "");
 
+      var orderByMapping = new Dictionary<string, string> { 
+      { "Action required", "action_required" },
+      { "Created", "created" },
+      { "Completed", "completed" },
+      { "Envelope name", "envelope_name" },
+      { "Expire", "expire" },
+      { "Last modified", "last_modified" },
+      { "Sent", "sent" },
+      { "Signer list", "signer_list" },
+      { "Status", "status" },
+      { "Subject", "subject" },
+      { "User name", "user_name" },
+      { "Status changed", "status_changed" }
+    };
+
+      var folerIDMapping = new Dictionary<string, string> {
+      { "Awaiting my signature", "awaiting_my_signature" },
+      { "Completed", "completed" },
+      { "Draft", "draft" },
+      { "Drafts", "drafts" },
+      { "Expiring soon", "expiring_soon" },
+      { "Inbox", "inbox" },
+      { "Out for signature", "out_for_signature" },
+      { "Recycle bin", "recyclebin" },
+      { "Sent items", "sent_items" },
+      { "Waiting for others", "waiting_for_others" }
+    };
+
+      var envelopeStatusMapping = new Dictionary<string, string> {
+      { "Any", "any" },
+      { "Created", "created" },
+      { "Sent", "sent" },
+      { "Delivered", "delivered" },
+      { "Signed", "signed" },
+      { "Completed", "completed" },
+      { "Declined", "declined" },
+      { "Voided", "voided" },
+      { "Deleted", "deleted" }
+    };
       query["include"] = "custom_fields, recipients, documents, folders";
       query["order"] = "desc";
-      
+
       query["status"] = string.IsNullOrEmpty(query.Get("envelopeStatus")) ? 
-        null : query.Get("envelopeStatus");
+        null : envelopeStatusMapping[query.Get("envelopeStatus")];
       query["folder_ids"] = string.IsNullOrEmpty(query.Get("folder_ids")) ? 
-        null : query.Get("folder_ids").ToString();
+        null : folerIDMapping[query.Get("folder_ids").ToString()];
        query["order_by"] = string.IsNullOrEmpty(query.Get("order_by")) ? 
-        "status_changed" : query.Get("order_by");
+        "status_changed" : orderByMapping[query.Get("order_by")];
       query["from_date"] = string.IsNullOrEmpty(query.Get("from_date")) ? 
         "2000-01-02T12:45Z" : query.Get("from_date");
       query["to_date"] = string.IsNullOrEmpty(query.Get("to_date")) ? 
