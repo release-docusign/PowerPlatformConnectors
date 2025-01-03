@@ -2014,7 +2014,7 @@
           {
             "name": "recipientEmailId",
             "x-ms-summary": "Recipient email ID",
-            "description": "This action lists envelopes based on recipient email id",
+            "description": "This action lists envelopes based on recipient email ID",
             "in": "query",
             "type": "string",
             "required": false
@@ -2108,16 +2108,16 @@
           },
           {
             "name": "top",
-            "x-ms-summary": "Top",
-            "description": "Envelopes to return",
+            "x-ms-summary": "Return Envelopes",
+            "description": "Enter how many envelopes to return (default is 10; maximum is 1,000)",
             "in": "query",
             "type": "integer",
             "format": "int32"
           },
           {
             "name": "skip",
-            "x-ms-summary": "Skip",
-            "description": "Envelopes to skip",
+            "x-ms-summary": "Skip Envelopes",
+            "description": "Enter how many envelopes to skip at the start",
             "in": "query",
             "type": "integer",
             "format": "int32"
@@ -6960,8 +6960,8 @@
         },
         "hasMoreResults": {
           "type": "boolean",
-          "x-ms-summary": "Body",
-          "description": "Shows if there's more than 1,000 envelopes"
+          "x-ms-summary": "More Envelope Results",
+          "description": "Shows if envelopes exceed the specified number in the "Return envelopes" field"
         }
       }
     },
