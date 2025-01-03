@@ -2135,7 +2135,7 @@
           {
             "name": "to_date",
             "x-ms-summary": "End date",
-            "description": "Enter start date-time in UTC format: 2017-05-02T01:44z.",
+            "description": "Enter end date-time in UTC format: 2017-05-02T01:44z.",
             "in": "query",
             "type": "string",
             "required": false,
