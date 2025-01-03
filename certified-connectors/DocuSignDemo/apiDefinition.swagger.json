@@ -6961,7 +6961,7 @@
         "hasMoreResults": {
           "type": "boolean",
           "x-ms-summary": "More Envelope Results",
-          "description": "Shows if envelopes exceed the specified number in the \"Return envelopes\" field"
+          "description": "Shows if envelopes exceed the specified number in the Return envelopes field"
         }
       }
     },
