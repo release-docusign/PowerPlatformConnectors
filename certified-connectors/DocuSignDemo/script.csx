@@ -1583,7 +1583,13 @@ public class Script : ScriptBase
         response["schema"]["properties"]["signerName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Signer or signing group name"
+          ["x-ms-summary"] = "* Signer"
+        };
+        response["schema"]["properties"]["signerEmail"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Signer email",
+          ["description"] = "Required for generating an embedded signing URL. Use host email if signer email is unknown."
         };
       }
       else if (recipientType.Equals("signers", StringComparison.OrdinalIgnoreCase))
@@ -4831,6 +4837,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       signers[0]["hostName"] = body["hostName"];
       signers[0]["hostEmail"] = body["hostEmail"];
       signers[0]["signerName"] = body["signerName"];
+      signers[0]["signerEmail"] = body["signerEmail"];
     }
     else if (recipientType.Equals("witnesses"))
     {
