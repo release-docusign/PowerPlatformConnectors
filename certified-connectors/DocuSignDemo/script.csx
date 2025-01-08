@@ -4672,14 +4672,20 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var phoneNumber = new JObject();
       phoneNumber["countryCode"] = query.Get("countryCode");
       phoneNumber["number"] = query.Get("phoneNumber");
+      if (body["email"] != null)
+      {
+        var additionalNotification = new JObject();
+        additionalNotification["secondaryDeliveryMethod"] = "SMS";
+        additionalNotification["phoneNumber"] = phoneNumber;
 
-      var additionalNotification = new JObject();
-      additionalNotification["secondaryDeliveryMethod"] = "SMS";
-      additionalNotification["phoneNumber"] = phoneNumber;
-
-      var additionalNotifications = new JArray();
-      additionalNotifications.Add(additionalNotification);
-      signers[0]["additionalNotifications"] = additionalNotifications;
+        var additionalNotifications = new JArray();
+        additionalNotifications.Add(additionalNotification);
+        signers[0]["additionalNotifications"] = additionalNotifications;
+      }
+      else
+      {
+        signers[0]["phoneNumber"] = phoneNumber;
+      }
     }
   }
 
@@ -4824,20 +4830,16 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     else
     {
       signers[0]["name"] = body["name"];
-      if (body["email"] == null) 
+      if (body["email"] == null && string.IsNullOrEmpty(query.Get("signingGroupId")) && string.IsNullOrEmpty(query.Get("phoneNumber"))) 
       {
-        if (string.IsNullOrEmpty(query.Get("signingGroupId")))
-        {
-          if (string.IsNullOrEmpty(query.Get("phoneNumber")))
-          {
-            return true;
-          }
-          signers[0]["email"] = "power_automate_dummy_recipient@dsxtr.com";
-        }
+        return true;
       }
       else 
       {
-        signers[0]["email"] = body["email"];
+        if (body["email"] != null)
+        {
+          signers[0]["email"] = body["email"];
+        }
       }
     }
     return false;
