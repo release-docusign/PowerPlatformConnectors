@@ -4570,6 +4570,38 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return accountServerBaseUri;
   }
 
+  private string GetPartnerIntegrationsBaseUri()
+  {
+    var host = this.Context.Request.RequestUri.Host.ToLower();
+    var pIBaseUri = host.Contains("demo") ?
+        "https://demo.services.docusign.net/partner-integrations/v1.0"
+      : host.Contains("stage") ?
+        "https://services.stage.docusign.net/partner-integrations/v1.0"
+      : "https://services.docusign.net/partner-integrations/v1.0";
+
+    return pIBaseUri;
+  }
+
+  private JObject TriggerMaestroWorkflowTransformation(JObject body)
+  {
+      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      var newBody = new JObject();
+      newBody["instanceName"] = query.Get("instanceName");
+      var inputVariables = new JArray();
+      foreach(var property in body)
+      {
+          var key = (string)property.Key;
+          var value = property.Value;
+          inputVariables.Add(new JObject
+          {
+              ["propertyName"] = key,
+              ["value"] = value
+          });
+      }
+      newBody["inputVariables"] = inputVariables;
+      return newBody;
+  }
+
   private void AddCoreRecipientParams(JArray signers, JObject body) 
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
@@ -5968,6 +6000,29 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
+    if( "TriggerMaestroFlow".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase) 
+        || "GetMaestroWorkflowDefinition".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)
+        || "GetMaestroWorkflowDefinitions".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+        
+        var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+        var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+        if("GetMaestroWorkflowDefinitions".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+        {
+          query["triggerType"] = "1" ;
+        }
+        var maestroAPIUrl = GetPartnerIntegrationsBaseUri() + uriBuilder.Path.Replace("/restapi/v2.1", "");
+        var newUriBilder = new UriBuilder(maestroAPIUrl);
+        newUriBilder.Query = query.ToString();
+        this.Context.Request.RequestUri = newUriBilder.Uri;
+    }
+
+    if( "TriggerMaestroFlow".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+        await this.TransformRequestJsonBody(this.TriggerMaestroWorkflowTransformation).ConfigureAwait(false);
+
+    }
+
     // update Accept Header
     this.Context.Request.Headers.Accept.Clear();
     var acceptHeaderValue = "application/json";
@@ -6045,6 +6100,40 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       }
       body["url"] = url;
       response.Content = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
+    }
+
+    if ("GetMaestroWorkflowDefinition".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+      var body = JObject.Parse(content);
+      var payload = body["payloadSchema"];
+      var itemProperties = new JObject();
+      foreach (var item in payload as JArray)
+      {
+        var propertyName = (string)item["propertyName"];
+        if (!propertyName.Equals("dacId") && !propertyName.Equals("id"))
+        {     
+          itemProperties.Add(propertyName, new JObject());
+          var type = (string)item["type"];
+          itemProperties[propertyName]["type"] = type == "Float" ? "number" : type.ToLower();
+        }
+      }
+      var newBody = new JObject
+      {
+        ["name"] = "dynamicSchema",
+        ["title"] = "dynamicSchema",
+        ["x-ms-permission"] = "read-write",
+        ["schema"] = new JObject
+          {
+            ["type"] = "array",
+            ["items"] = new JObject
+            {
+                ["type"] = "object",
+                ["properties"] = itemProperties,
+            }
+          }
+      };
+      response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
     }
 
     if ("GetWorkflowIds".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
