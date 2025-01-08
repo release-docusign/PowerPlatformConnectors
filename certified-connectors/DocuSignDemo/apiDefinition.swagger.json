@@ -4598,6 +4598,50 @@
         "x-ms-visibility": "important"
       }
     },
+    "/accounts/{accountId}/listConnect": {
+      "get": {
+        "tags": [
+          "DocuSign"
+        ],
+        "x-ms-summary": "List connect configurations",
+        "description": "List connect configurations.",
+        "operationId": "GetConnectConfigurations",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account id",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ListConnectResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "internal"
+      }
+    },
     "/accounts/{accountId}/signing_groups": {
       "get": {
         "tags": [
@@ -6243,7 +6287,18 @@
         "name": {
           "type": "string",
           "x-ms-summary": "Connect name",
-          "x-ms-visibility": "important"
+          "x-ms-visibility": "important",
+          "x-ms-dynamic-values": {
+            "operationId": "GetConnectConfigurations",
+            "parameters": {
+              "accountId": {
+                "parameter": "accountId"
+              }
+            },
+            "value-collection": "connectName",
+            "value-path": "connectName",
+            "value-title": "name"
+          }
         },
         "envelopeEvents": {
           "type": "string",
@@ -7525,6 +7580,19 @@
             "$ref": "#/definitions/SigningGroup"
           },
           "x-ms-summary": "Signing Groups"
+        }
+      }
+    },
+    "ListConnectResponse": {
+      "required": [
+        "connectName"
+      ],
+      "type": "object",
+      "properties": {
+        "connectName": {
+          "description": "The name of the Connect.",
+          "type": "string",
+          "x-ms-summary": "Connect Configuration Name"
         }
       }
     },
