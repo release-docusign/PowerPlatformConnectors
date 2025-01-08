@@ -4672,7 +4672,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var phoneNumber = new JObject();
       phoneNumber["countryCode"] = query.Get("countryCode");
       phoneNumber["number"] = query.Get("phoneNumber");
-      if (!string.IsNullOrEmpty(query.Get("email")))
+      if (body["email"] != null)
       {
         var additionalNotification = new JObject();
         additionalNotification["secondaryDeliveryMethod"] = "SMS";
@@ -4836,7 +4836,10 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       }
       else 
       {
-        signers[0]["email"] = body["email"];
+        if (body["email"] != null)
+        {
+          signers[0]["email"] = body["email"];
+        }
       }
     }
     return false;
