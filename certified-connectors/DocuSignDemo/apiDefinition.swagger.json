@@ -3850,7 +3850,7 @@
           {
             "name": "workflowId",
             "in": "query",
-            "description": "Select a verification workflow from the dropdown. IDV workflows with pen signature types must be selected here.",
+            "description": "IDV workflows with pen signature types must be selected here.",
             "x-ms-summary": "Verification workflow",
             "x-ms-visibility": "advanced",
             "type": "string",
