@@ -1589,7 +1589,7 @@ public class Script : ScriptBase
         {
           ["type"] = "string",
           ["x-ms-summary"] = "Signer email",
-          ["description"] = "Required for generating an embedded signing URL. Use host email if signer email is unknown."
+          ["description"] = "Use host email if signer email is unknown. Required for embedded signing."
         };
       }
       else if (recipientType.Equals("signers", StringComparison.OrdinalIgnoreCase))
@@ -3070,6 +3070,7 @@ public class Script : ScriptBase
                             ["signerEmail"] = new JObject
                             {
                               ["type"] = "string",
+                              ["description"] = "Use host email if signer email is unknown. Required for embedded signing.",
                               ["x-ms-summary"] = "- Signer Email"
                             },
                             ["signerName"] = new JObject
@@ -5298,12 +5299,25 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
             ["type"] = "string",
             ["x-ms-summary"] = roleName + " In Person Signer Name"
           };
+          itemProperties[roleName + ":::Name"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Host Name"
+          };
+          itemProperties[roleName + ":::Email"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Host Email"
+          };
         }
-        itemProperties[roleName + ":::Name"] = new JObject
+        else
         {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " Recipient Name"
-        };
+          itemProperties[roleName + ":::Name"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Recipient Name"
+          };
+        }
       }
 
       // SMS/Email fields
@@ -5348,11 +5362,14 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         }
         else
         {
-          itemProperties[roleName + ":::Email"] = new JObject
+          if (!string.Equals(recipientObj["recipientType"].ToString(), "inpersonsigner", StringComparison.OrdinalIgnoreCase))
           {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " Recipient Email"
-          };
+            itemProperties[roleName + ":::Email"] = new JObject
+            {
+              ["type"] = "string",
+              ["x-ms-summary"] = roleName + " Recipient Email"
+            };
+          }
         }
       }
 
