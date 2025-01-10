@@ -6003,7 +6003,7 @@
       }
     },
     "/build_number": {
-      "get": {
+      "put": {
         "tags": [
           "StaticResponse"
         ],
