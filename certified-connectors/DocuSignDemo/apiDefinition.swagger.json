@@ -3848,6 +3848,25 @@
             }
           },
           {
+            "name": "workflowId",
+            "in": "query",
+            "description": "IDV workflows with pen signature types must be selected here.",
+            "x-ms-summary": "Verification workflow",
+            "x-ms-visibility": "advanced",
+            "type": "string",
+            "x-ms-dynamic-values": {
+              "operationId": "GetAllWorkflowIDs",
+              "parameters": {
+                "accountId": {
+                  "parameter": "accountId"
+                }
+              },
+              "value-collection": "workFlowIds",
+              "value-path": "type",
+              "value-title": "name"
+            }
+          },
+          {
             "name": "additionalRecipientParams",
             "in": "body",
             "description": "Details for selected recipient type.",
@@ -4536,6 +4555,49 @@
             "type": "string"
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetWorkFlowIdsResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "internal"
+      }
+    },
+    "/accounts/{accountId}/all_identity_verification": {
+      "get": {
+        "tags":[
+          "DocuSign"
+        ],
+        "summary":"Get All Workflow Ids",
+        "description":"Get All workflow ids",
+        "operationId":"GetAllWorkflowIDs",
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account id",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          }],
         "responses": {
           "200": {
             "description": "OK",

@@ -1497,7 +1497,8 @@ public class Script : ScriptBase
               ["value-path"] = "type",
               ["value-title"] = "name",
             },
-          ["x-ms-summary"] = "* Workflow IDs"
+          ["description"] = "Select a verification workflow from the dropdown.",
+          ["x-ms-summary"] = "* Verification workflow (IDV workflows with signature types are not supported in this action)"
         };        
       }
       else if (verificationType.Equals("Access Code"))
@@ -1527,7 +1528,8 @@ public class Script : ScriptBase
               ["value-path"] = "type",
               ["value-title"] = "name",
             },
-          ["x-ms-summary"] = "* Workflow IDs"
+          ["description"] = "Select a verification workflow from the dropdown.",
+          ["x-ms-summary"] = "* Verification workflow (IDV workflows with signature types are not supported in this action)"
         };
       }
       else {
@@ -4687,6 +4689,15 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         signers[0]["phoneNumber"] = phoneNumber;
       }
     }
+
+    if (!string.IsNullOrEmpty(query.Get("workflowId")))
+    {
+      var identityVerification = new JObject
+      {
+        ["workflowId"] = query.Get("workflowId")
+      };
+      signers[0]["identityVerification"] = identityVerification;
+    }
   }
 
   private JArray GetFilteredEnvelopeDetailsForSalesCopilot(JArray filteredEnvelopes)
@@ -6022,7 +6033,13 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if( "TriggerMaestroFlow".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
         await this.TransformRequestJsonBody(this.TriggerMaestroWorkflowTransformation).ConfigureAwait(false);
+    }
 
+    if ("GetAllWorkflowIds".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      uriBuilder.Path = uriBuilder.Path.Replace("/all_identity_verification", "/identity_verification");
+      this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
     // update Accept Header
@@ -6139,6 +6156,27 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     }
 
     if ("GetWorkflowIds".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
+      var workflowsArray = new JArray();
+
+      foreach (var id in (body["identityVerification"] as JArray)) {
+        if (!string.Equals(id["defaultName"].ToString(), "DocuSign ID Verification for EU Qualified") &&
+            !string.Equals(id["defaultName"].ToString(), "DocuSign ID Verification for EU Advanced"))
+        {
+          var workflowObj = new JObject()
+          {
+            ["type"] = id["workflowId"],
+            ["name"] = id["defaultName"]
+          };
+          workflowsArray.Add(workflowObj);
+        }
+      }
+      body["workflowIds"] = workflowsArray;
+      response.Content = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
+    }
+
+    if ("GetAllWorkflowIds".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var workflowsArray = new JArray();
