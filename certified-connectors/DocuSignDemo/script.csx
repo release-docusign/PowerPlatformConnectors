@@ -1585,12 +1585,6 @@ public class Script : ScriptBase
           ["type"] = "string",
           ["x-ms-summary"] = "* Signer"
         };
-        response["schema"]["properties"]["signerEmail"] = new JObject
-        {
-          ["type"] = "string",
-          ["x-ms-summary"] = "Signer email",
-          ["description"] = "Use host email if signer email is unknown. Required for embedded signing."
-        };
       }
       else if (recipientType.Equals("signers", StringComparison.OrdinalIgnoreCase))
       {
@@ -3070,7 +3064,6 @@ public class Script : ScriptBase
                             ["signerEmail"] = new JObject
                             {
                               ["type"] = "string",
-                              ["description"] = "Use host email if signer email is unknown. Required for embedded signing.",
                               ["x-ms-summary"] = "- Signer Email"
                             },
                             ["signerName"] = new JObject
@@ -4838,7 +4831,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       signers[0]["hostName"] = body["hostName"];
       signers[0]["hostEmail"] = body["hostEmail"];
       signers[0]["signerName"] = body["signerName"];
-      signers[0]["signerEmail"] = body["signerEmail"];
     }
     else if (recipientType.Equals("witnesses"))
     {
@@ -5297,7 +5289,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
           itemProperties[roleName + ":::In Person Signer"] = new JObject
           {
             ["type"] = "string",
-            ["x-ms-summary"] = roleName + " In Person Signer Name"
+            ["x-ms-summary"] = roleName + " Signer Name"
           };
           itemProperties[roleName + ":::Name"] = new JObject
           {
