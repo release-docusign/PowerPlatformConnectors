@@ -1583,7 +1583,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["signerName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "* Signer or signing group name"
+          ["x-ms-summary"] = "* Signer"
         };
       }
       else if (recipientType.Equals("signers", StringComparison.OrdinalIgnoreCase))
@@ -5289,14 +5289,27 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
           itemProperties[roleName + ":::In Person Signer"] = new JObject
           {
             ["type"] = "string",
-            ["x-ms-summary"] = roleName + " In Person Signer Name"
+            ["x-ms-summary"] = roleName + " Signer Name"
+          };
+          itemProperties[roleName + ":::Name"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Host Name"
+          };
+          itemProperties[roleName + ":::Email"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Host Email"
           };
         }
-        itemProperties[roleName + ":::Name"] = new JObject
+        else
         {
-          ["type"] = "string",
-          ["x-ms-summary"] = roleName + " Recipient Name"
-        };
+          itemProperties[roleName + ":::Name"] = new JObject
+          {
+            ["type"] = "string",
+            ["x-ms-summary"] = roleName + " Recipient Name"
+          };
+        }
       }
 
       // SMS/Email fields
@@ -5341,11 +5354,14 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         }
         else
         {
-          itemProperties[roleName + ":::Email"] = new JObject
+          if (!string.Equals(recipientObj["recipientType"].ToString(), "inpersonsigner", StringComparison.OrdinalIgnoreCase))
           {
-            ["type"] = "string",
-            ["x-ms-summary"] = roleName + " Recipient Email"
-          };
+            itemProperties[roleName + ":::Email"] = new JObject
+            {
+              ["type"] = "string",
+              ["x-ms-summary"] = roleName + " Recipient Email"
+            };
+          }
         }
       }
 
