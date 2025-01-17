@@ -4365,8 +4365,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Add bulk send list",
-        "description": "Add bulk send list",
+        "summary": "Create bulk send list",
+        "description": "Create bulk send list",
         "operationId": "CreateBulkSendList",
         "consumes": [],
         "produces": [
@@ -4436,8 +4436,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Bulk send envelope",
-        "description": "Bulk send envelope",
+        "summary": "Bulk send envelope using template",
+        "description": "Bulk send envelope using template",
         "operationId": "BulkSend",
         "consumes": [],
         "produces": [
@@ -4465,9 +4465,9 @@
           {
             "name": "bulkSendListId",
             "in": "path",
-            "description": "Bulk send list ID",
+            "description": "Bulk send list GUID",
             "required": true,
-            "x-ms-summary": "Bulk send list ID",
+            "x-ms-summary": "Bulk send list GUID",
             "type": "string"
           },
           {
@@ -4475,8 +4475,8 @@
             "in": "query",
             "description": "Enter the envelope or template ID, or choose a template from the dropdown",
             "required": true,
-            "x-ms-summary": "Envelope or Template ID",
-            "x-ms-test-value": "insert template id",
+            "x-ms-summary": "Template ID",
+            "x-ms-test-value": "Enter the template ID, or choose a template from the dropdown",
             "x-ms-dynamic-values": {
               "operationId": "GetEnvelopeTemplates",
               "parameters": {
@@ -7895,9 +7895,9 @@
       "type": "object",
       "properties": {
         "listId": {
-          "description": "Bulk Send List Guid",
+          "description": "Bulk Send List GUID",
           "type": "string",
-          "x-ms-summary": "Bulk Send List Guid",
+          "x-ms-summary": "Bulk Send List GUID",
           "x-ms-visibility": "important"
         }
       }
