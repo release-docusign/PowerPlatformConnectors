@@ -2108,7 +2108,7 @@
           },
           {
             "name": "top",
-            "x-ms-summary": "Return Envelopes",
+            "x-ms-summary": "Return envelopes",
             "description": "Specify the number of envelopes to return (default is 10; maximum is 1,000)",
             "in": "query",
             "type": "integer",
@@ -2116,7 +2116,7 @@
           },
           {
             "name": "skip",
-            "x-ms-summary": "Skip Envelopes",
+            "x-ms-summary": "Skip envelopes",
             "description": "Specify the number of envelopes to skip from the start",
             "in": "query",
             "type": "integer",
