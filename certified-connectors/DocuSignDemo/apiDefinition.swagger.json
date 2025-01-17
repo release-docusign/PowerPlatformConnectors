@@ -2013,8 +2013,8 @@
           },
           {
             "name": "recipientEmailId",
-            "x-ms-summary": "Recipient email ID",
-            "description": "This action lists envelopes based on recipient email ID",
+            "x-ms-summary": "Recipient email",
+            "description": "Filters envelopes by recipient email",
             "in": "query",
             "type": "string",
             "required": false
@@ -2022,7 +2022,7 @@
           {
             "name": "envelopeTitle",
             "x-ms-summary": "Envelope subject",
-            "description": "This action lists envelopes based on email subject of the envelope",
+            "description": "Filters envelopes by envelope subject",
             "in": "query",
             "type": "string",
             "required": false
@@ -2038,7 +2038,7 @@
           {
             "name": "customFieldValue",
             "x-ms-summary": "Custom field value",
-            "description": "This action lists envelopes based on a value of its custom fields",
+            "description": "Filters by custom field value",
             "in": "query",
             "type": "string",
             "required": false
@@ -2066,7 +2066,7 @@
           {
             "name": "folder_ids",
             "x-ms-summary": "Folder",
-            "description": "This action lists envelopes based on various states of the envelope",
+            "description": "Filters envelopes by the selected folder",
             "enum": [
               "Awaiting my signature",
               "Completed",
@@ -2086,7 +2086,7 @@
           {
             "name": "order_by",
             "x-ms-summary": "Order by",
-            "description": "This action orders envelopes based on specific property",
+            "description": "Sorts envelopes in the selected order",
             "enum": [
               "Action required",
               "Created",
@@ -2109,7 +2109,7 @@
           {
             "name": "top",
             "x-ms-summary": "Return Envelopes",
-            "description": "Enter how many envelopes to return (default is 10; maximum is 1,000)",
+            "description": "Specify the number of envelopes to return (default is 10; maximum is 1,000)",
             "in": "query",
             "type": "integer",
             "format": "int32"
@@ -2117,7 +2117,7 @@
           {
             "name": "skip",
             "x-ms-summary": "Skip Envelopes",
-            "description": "Enter how many envelopes to skip at the start",
+            "description": "Specify the number of envelopes to skip from the start",
             "in": "query",
             "type": "integer",
             "format": "int32"
