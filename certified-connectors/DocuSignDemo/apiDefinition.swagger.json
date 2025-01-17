@@ -4473,7 +4473,7 @@
           {
             "name": "envelopeOrTemplateId",
             "in": "query",
-            "description": "Enter the envelope or template ID, or choose a template from the dropdown",
+            "description": "Enter the template ID, or choose a template from the dropdown",
             "required": true,
             "x-ms-summary": "Template ID",
             "x-ms-test-value": "Enter the template ID, or choose a template from the dropdown",
