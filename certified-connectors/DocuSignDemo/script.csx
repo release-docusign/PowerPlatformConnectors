@@ -1612,7 +1612,8 @@ public class Script : ScriptBase
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Signer email"
+          ["x-ms-summary"] = "Signer email",
+          ["description"] = "Signer email or SMS phone number is required"
         };
       }
       else if (recipientType.Equals("witnesses", StringComparison.OrdinalIgnoreCase))
