@@ -3816,7 +3816,7 @@
           {
             "name": "phoneNumber",
             "in": "query",
-            "description": " For SMS notifications, the phone number without the country code.",
+            "description": "Signer email or SMS phone required. Exclude country code for phone number.",
             "x-ms-summary": "SMS Phone Number",
             "x-ms-visibility": "advanced",
             "type": "integer"
@@ -4185,7 +4185,7 @@
           {
             "name": "phoneNumber",
             "in": "query",
-            "description": " For SMS notifications, the phone number without the country code.",
+            "description": "Signer email or SMS phone required. Exclude country code for phone number.",
             "x-ms-summary": "SMS Phone Number",
             "x-ms-visibility": "advanced",
             "type": "integer"
