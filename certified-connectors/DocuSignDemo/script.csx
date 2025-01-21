@@ -24,6 +24,10 @@ public class Script : ScriptBase
       {
         await this.UpdateResponse(response).ConfigureAwait(false);
       }
+      else
+      {
+        await this.UpdateErrorResponse(response).ConfigureAwait(false);
+      }
 
       return response;
     }
@@ -41,6 +45,18 @@ public class Script : ScriptBase
       }
       
       return response;
+    }
+  }
+
+  private async Task UpdateErrorResponse(HttpResponseMessage response)
+  {
+    if ("GetMaestroWorkflowDefinitions".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        if (response.StatusCode == HttpStatusCode.Unauthorized && content.Equals("Jwt payload is an invalid JSON"))
+        {
+          response.Content = new StringContent("You will need to reconnect to your Docusign account", Encoding.UTF8, "text/plain");
+        }
     }
   }
 
