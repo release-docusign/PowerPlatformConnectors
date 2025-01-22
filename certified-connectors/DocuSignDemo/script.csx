@@ -2947,6 +2947,24 @@ public class Script : ScriptBase
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Email"
                             },
+                            ["- phoneNumber"] = new JObject
+                            {
+                              ["type"] = "object",
+                              ["x-ms-summary"] = "- Phone Number",
+                              ["properties"] = new JObject
+                              {
+                                ["countryCode"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Country Code"
+                                },
+                                ["number"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Number"
+                                }
+                              }
+                            },
                             ["name"] = new JObject
                             {
                               ["type"] = "string",
@@ -2988,6 +3006,24 @@ public class Script : ScriptBase
                             {
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Email"
+                            },
+                            ["- phoneNumber"] = new JObject
+                            {
+                              ["type"] = "object",
+                              ["x-ms-summary"] = "- Phone Number",
+                              ["properties"] = new JObject
+                              {
+                                ["countryCode"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Country Code"
+                                },
+                                ["number"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Number"
+                                }
+                              }
                             },
                             ["name"] = new JObject
                             {
@@ -3240,6 +3276,24 @@ public class Script : ScriptBase
                             {
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Client User ID"
+                            },
+                            ["- phoneNumber"] = new JObject
+                            {
+                              ["type"] = "object",
+                              ["x-ms-summary"] = "- Phone Number",
+                              ["properties"] = new JObject
+                              {
+                                ["countryCode"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Country Code"
+                                },
+                                ["number"] = new JObject
+                                {
+                                  ["type"] = "string",
+                                  ["x-ms-summary"] = "- Number"
+                                }
+                              }
                             },
                             ["- recipientSignatureProviders"] = new JObject
                             {
