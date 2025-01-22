@@ -6948,8 +6948,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       itemProperties["emailBlurb"] = new JObject
       {
         ["type"] = "string",
-        ["x-ms-summary"] = "Email Body",
-        ["description"] = "Email Body"
+        ["x-ms-summary"] = "Email body",
+        ["description"] = "Email body"
       };
 
       // Generate a recipient role name to reicipient data object mapping
