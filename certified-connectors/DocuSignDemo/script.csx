@@ -1466,12 +1466,14 @@ public class Script : ScriptBase
         response["schema"]["properties"]["userName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Host Name"
+          ["x-ms-summary"] = "Host name",
+          ["description"] = "Host name needs to be sender name"
         };
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Host Email"
+          ["x-ms-summary"] = "Host email",
+          ["description"] = "Host email needs to be sender email"
         };
         response["schema"]["properties"]["recipientId"] = new JObject
         {
@@ -1481,7 +1483,7 @@ public class Script : ScriptBase
         response["schema"]["properties"]["returnURL"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Add Return URL"
+          ["x-ms-summary"] = "Add return URL"
         };
       }
       else if (returnUrl.Equals("Add A Different URL", StringComparison.OrdinalIgnoreCase) && isInPersonSigner.Equals("No", StringComparison.OrdinalIgnoreCase))
@@ -1495,22 +1497,22 @@ public class Script : ScriptBase
         response["schema"]["properties"]["userName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Signer Name"
+          ["x-ms-summary"] = "Signer name"
         };
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Signer Email"
+          ["x-ms-summary"] = "Signer email"
         };
         response["schema"]["properties"]["clientUserId"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Client User ID"
+          ["x-ms-summary"] = "Client user ID"
         };
         response["schema"]["properties"]["returnURL"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Add Return URL"
+          ["x-ms-summary"] = "Add return URL"
         };
       }
       else
@@ -1525,17 +1527,17 @@ public class Script : ScriptBase
         response["schema"]["properties"]["userName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Signer Name"
+          ["x-ms-summary"] = "Signer name"
         };
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Signer Email"
+          ["x-ms-summary"] = "Signer email"
         };
         response["schema"]["properties"]["clientUserId"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Client User ID"
+          ["x-ms-summary"] = "Client user ID"
         };
       }
       if (isInPersonSigner.Equals("Yes", StringComparison.OrdinalIgnoreCase)) {
@@ -1548,12 +1550,14 @@ public class Script : ScriptBase
         response["schema"]["properties"]["userName"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Host Name"
+          ["x-ms-summary"] = "Host name",
+          ["description"] = "Host name needs to be sender name"
         };
         response["schema"]["properties"]["email"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "Host Email"
+          ["x-ms-summary"] = "Host email",
+          ["description"] = "Host email needs to be sender email"
         };
         response["schema"]["properties"]["recipientId"] = new JObject
         {
