@@ -3112,7 +3112,7 @@
             "name": "signerName",
             "in": "query",
             "required": true,
-            "x-ms-summary": "Signer Name or Host Name",
+            "x-ms-summary": "Signer Name",
             "x-ms-test-value": "test name",
             "x-ms-visibility": "important",
             "type": "string"
@@ -3121,7 +3121,7 @@
             "name": "signerEmail",
             "in": "query",
             "required": true,
-            "x-ms-summary": "Signer Email or Host Email",
+            "x-ms-summary": "Signer Email",
             "x-ms-test-value": "test@email.com",
             "x-ms-visibility": "important",
             "type": "string"
@@ -3131,14 +3131,6 @@
             "in": "query",
             "description": "Required unless the signer is in-person. Leave blank for in-person signers",
             "x-ms-summary": "Client User ID",
-            "x-ms-visibility": "important",
-            "type": "string"
-          },
-          {
-            "name": "recipientId",
-            "in": "query",
-            "description": "This field is required for in-person signers",
-            "x-ms-summary": "Recipient ID",
             "x-ms-visibility": "important",
             "type": "string"
           },
@@ -3205,7 +3197,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-visibility": "important",
         "x-ms-no-generic-test": true
       }
