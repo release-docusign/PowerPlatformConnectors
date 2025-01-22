@@ -2656,7 +2656,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Account ID",
             "x-ms-visibility": "important",
             "required": true,
             "x-ms-summary": "Account",
@@ -2672,7 +2672,7 @@
           {
             "name": "templateId",
             "in": "query",
-            "description": "Template id",
+            "description": "Template ID",
             "required": true,
             "x-ms-summary": "Template",
             "x-ms-test-value": "insert template id",
@@ -2707,15 +2707,6 @@
             "description": "Email subject",
             "required": false,
             "x-ms-summary": "Email subject",
-            "type": "string",
-            "x-ms-visibility": "advanced"
-          },
-          {
-            "name": "emailBody",
-            "in": "query",
-            "description": "Email body",
-            "required": false,
-            "x-ms-summary": "Email body",
             "type": "string",
             "x-ms-visibility": "advanced"
           }

@@ -3863,7 +3863,7 @@ public class Script : ScriptBase
     {
       ["templateId"] = query.Get("templateId"),
       ["emailSubject"] = query.Get("emailSubject"),
-      ["emailBlurb"] = query.Get("emailBody")
+      ["emailBlurb"] = body["emailBlurb"]
     };
 
     Dictionary<string, JObject> recipientMapping = new Dictionary<string, JObject>();
@@ -3871,6 +3871,10 @@ public class Script : ScriptBase
     {
       var value = (string)property.Value;
       var key = (string)property.Key;
+      if (key.Equals("emailBlurb"))
+      {
+        continue;
+      }
       string[] keyArray = key.Split(new string[]{":::"}, StringSplitOptions.None);
       var roleName = keyArray[0];
       // custom fields parsing to match request body object from Docusign API
@@ -5265,7 +5269,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
   private void GenerateRecipientInformationFields(Dictionary<string, JObject> recipientData, JObject itemProperties)
   {
-    string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "ssnTabs", "textTabs", "zipTabs", "checkboxTabs"};
+    string[] editableTabs = new string[]{"emailTabs", "formulaTabs", "noteTabs", "ssnTabs", "textTabs", "zipTabs", "checkboxTabs", "numberTabs"};
 
     foreach (KeyValuePair<string, JObject> pair in recipientData)
     {
@@ -6939,6 +6943,14 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     {
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var itemProperties = new JObject();
+
+      // Add email body
+      itemProperties["emailBlurb"] = new JObject
+      {
+        ["type"] = "string",
+        ["x-ms-summary"] = "Email body",
+        ["description"] = "Email body"
+      };
 
       // Generate a recipient role name to reicipient data object mapping
       Dictionary<string, JObject> recipientData = GenerateRecipientsMappings(body);
