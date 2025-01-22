@@ -2709,15 +2709,6 @@
             "x-ms-summary": "Email subject",
             "type": "string",
             "x-ms-visibility": "advanced"
-          },
-          {
-            "name": "emailBody",
-            "in": "query",
-            "description": "Email body",
-            "required": false,
-            "x-ms-summary": "Email body",
-            "type": "string",
-            "x-ms-visibility": "advanced"
           }
         ],
         "responses": {
