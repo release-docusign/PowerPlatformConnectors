@@ -483,12 +483,12 @@
                   "tableName": {
                     "type": "string",
                     "x-ms-summary": ": Table Name",
-                    "description": "Enter the table name only if the field type is 'table row'"
+                    "description": "Required for 'Table Row'. Enter the table name."
                   },
                   "rowNumber": {
                     "type": "string",
                     "x-ms-summary": ": Table Row",
-                    "description": "Enter the table row number to place the field data"
+                    "description": "Required for 'Table Row'. Enter the row number"
                   }
                 }
               }
