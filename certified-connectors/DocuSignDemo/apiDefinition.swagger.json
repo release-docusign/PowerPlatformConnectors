@@ -3210,6 +3210,135 @@
         "x-ms-no-generic-test": true
       }
     },
+    "/accounts/{accountId}/envelopes/{envelopeId}/views/recipientV2": {
+      "post": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Generate Embedded Signing URL (V2)",
+        "description": "Generate Embedded Signing URL (V2)",
+        "operationId": "GenerateEmbeddedSigningURLV2",
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string",
+            "x-ms-visibility": "important"
+          },
+          {
+            "name": "envelopeId",
+            "in": "path",
+            "description": "Envelope ID",
+            "required": true,
+            "x-ms-summary": "Envelope",
+            "x-ms-test-value": "insert envelope id",
+            "type": "string",
+            "x-ms-visibility": "important"
+          },
+          {
+            "name": "isInPersonSigner",
+            "in": "query",
+            "required": true,
+            "x-ms-summary": "Is this an in-person signer?",
+            "type": "string",
+            "enum": [
+              "Yes",
+              "No"
+            ],
+            "x-ms-visibility": "important"
+          },
+          {
+            "name": "authenticationMethod",
+            "in": "query",
+            "description": "Authentication Method",
+            "required": true,
+            "x-ms-summary": "Authentication Method",
+            "x-ms-visibility": "important",
+            "type": "string",
+            "enum": [
+              "Biometric",
+              "Email",
+              "HTTPBasicAuth",
+              "Kerberos",
+              "KnowledgeBasedAuth",
+              "None",
+              "PaperDocuments",
+              "Password",
+              "RSASecureID",
+              "SingleSignOn_CASiteminder",
+              "SingleSignOn_InfoCard",
+              "SingleSignOn_MicrosoftActiveDirectory",
+              "SingleSignOn_Other",
+              "SingleSignOn_Passport",
+              "SingleSignOn_SAML",
+              "Smartcard",
+              "SSLMutualAuth",
+              "X509Certificate"
+            ],
+            "default": "None"
+          },
+          {
+            "name": "returnUrl",
+            "in": "query",
+            "description": "Return URL",
+            "required": true,
+            "x-ms-summary": "Return URL",
+            "x-ms-visibility": "important",
+            "type": "string",
+            "enum": [
+              "Default URL",
+              "Add a different URL"
+            ],
+            "default": "Default URL"
+          },
+          {
+            "name": "additionalURL",
+            "in": "body",
+            "required": true,
+            "description": "Additional added URL.",
+            "schema": {
+              "$ref": "#/definitions/DynamicSigningUrlFields"
+            },
+            "x-ms-summary": "Additional added URL",
+            "x-ms-visibility": "important"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/EmbeddedSigningResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "important",
+        "x-ms-no-generic-test": true
+      }
+    },
     "/accounts/{accountId}/envelopes/{envelopeId}/recipients": {
       "get": {
         "tags": [
@@ -5958,6 +6087,41 @@
         "x-ms-visibility": "internal"
       }
     },
+    "/embeddedSigning_schema_v2": {
+      "get": {
+        "tags": [
+          "StaticResponse"
+        ],
+        "description": "Get schema for return URL (V2).",
+        "operationId": "StaticResponseForEmbeddedSigningSchemaV2",
+        "parameters": [
+          {
+            "name": "returnUrl",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "x-ms-summary": "Return URL"
+          },
+          {
+            "name": "isInPersonSigner",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "x-ms-summary": "Is This an Person Signer?"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "internal"
+      }
+    },
     "/embeddedSender_schema": {
       "get": {
         "tags": [
@@ -6828,6 +6992,23 @@
         "parameters": {
           "returnUrl": {
             "parameter": "returnUrl"
+          }
+        },
+        "value-path": "Schema"
+      }
+    },
+    "DynamicSigningUrlFields": {
+      "description": "Addtional Return URL",
+      "type": "object",
+      "properties": {},
+      "x-ms-dynamic-schema": {
+        "operationId": "StaticResponseForEmbeddedSigningSchemaV2",
+        "parameters": {
+          "returnUrl": {
+            "parameter": "returnUrl"
+          },
+          "isInPersonSigner": {
+            "parameter": "isInPersonSigner"
           }
         },
         "value-path": "Schema"
