@@ -1445,6 +1445,129 @@ public class Script : ScriptBase
       }
     }
 
+    if (operationId.Equals("StaticResponseForEmbeddedSigningSchemaV2", StringComparison.OrdinalIgnoreCase))
+    {
+      var query = HttpUtility.ParseQueryString(context.Request.RequestUri.Query);
+      var returnUrl = query.Get("returnUrl");
+      var isInPersonSigner = query.Get("isInPersonSigner");
+
+      response["name"] = "dynamicSchema";
+      response["title"] = "dynamicSchema";
+      response["schema"] = null;
+
+      if (returnUrl.Equals("Add A Different URL", StringComparison.OrdinalIgnoreCase) && isInPersonSigner.Equals("Yes", StringComparison.OrdinalIgnoreCase))
+      {
+        response["schema"] = new JObject
+        {
+          ["type"] = "object",
+          ["properties"] = new JObject(),
+          ["required"] = new JArray("userName", "email", "recipientId", "returnURL")
+        };
+        response["schema"]["properties"]["userName"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Host name",
+          ["description"] = "Host name needs to be sender name"
+        };
+        response["schema"]["properties"]["email"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Host email",
+          ["description"] = "Host email needs to be sender email"
+        };
+        response["schema"]["properties"]["recipientId"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Recipient ID"
+        };
+        response["schema"]["properties"]["returnURL"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Add return URL"
+        };
+      }
+      else if (returnUrl.Equals("Add A Different URL", StringComparison.OrdinalIgnoreCase) && isInPersonSigner.Equals("No", StringComparison.OrdinalIgnoreCase))
+      {
+        response["schema"] = new JObject
+        {
+          ["type"] = "object",
+          ["properties"] = new JObject(),
+          ["required"] = new JArray("userName", "email", "clientUserId", "returnURL")
+        };
+        response["schema"]["properties"]["userName"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Signer name"
+        };
+        response["schema"]["properties"]["email"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Signer email"
+        };
+        response["schema"]["properties"]["clientUserId"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Client user ID"
+        };
+        response["schema"]["properties"]["returnURL"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Add return URL"
+        };
+      }
+      else
+      {
+        if (isInPersonSigner.Equals("No", StringComparison.OrdinalIgnoreCase)) {
+        response["schema"] = new JObject
+        {
+          ["type"] = "object",
+          ["properties"] = new JObject(),
+          ["required"] = new JArray("userName", "email", "clientUserId")
+        };
+        response["schema"]["properties"]["userName"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Signer name"
+        };
+        response["schema"]["properties"]["email"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Signer email"
+        };
+        response["schema"]["properties"]["clientUserId"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Client user ID"
+        };
+      }
+      if (isInPersonSigner.Equals("Yes", StringComparison.OrdinalIgnoreCase)) {
+        response["schema"] = new JObject
+        {
+          ["type"] = "object",
+          ["properties"] = new JObject(),
+          ["required"] = new JArray("userName", "email", "recipientId")
+        };
+        response["schema"]["properties"]["userName"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Host name",
+          ["description"] = "Host name needs to be sender name"
+        };
+        response["schema"]["properties"]["email"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Host email",
+          ["description"] = "Host email needs to be sender email"
+        };
+        response["schema"]["properties"]["recipientId"] = new JObject
+        {
+          ["type"] = "string",
+          ["x-ms-summary"] = "Recipient ID"
+        };
+      }
+      }
+    }
+
     if (operationId.Equals("StaticResponseForEmbeddedSenderSchema", StringComparison.OrdinalIgnoreCase))
     {
       var query = HttpUtility.ParseQueryString(context.Request.RequestUri.Query);
@@ -4401,6 +4524,29 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
+  private JObject GenerateEmbeddedSigningURLV2BodyTransformation (JObject body)
+  {
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+    
+    body["authenticationMethod"] = query.Get("authenticationMethod");
+    
+    var returnUrl = query.Get("returnUrl");
+    if (returnUrl.Equals("Default URL"))
+    {
+      body["returnUrl"] = "https://postsign.docusign.com/postsigning/en/finish-signing";
+    }
+    else if (returnUrl.Equals("Add A Different URL"))
+    {
+      body["returnUrl"] = body["returnURL"];
+    }
+
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+    uriBuilder.Path = uriBuilder.Path.Replace("/recipientV2", "/recipient");
+    this.Context.Request.RequestUri = uriBuilder.Uri;
+
+    return body;
+  }
+
   private JObject GenerateEmbeddedSenderURLBodyTransformation (JObject body)
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
@@ -5777,6 +5923,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if ("GenerateEmbeddedSigningURL".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.GenerateEmbeddedSigningURLBodyTransformation).ConfigureAwait(false);
+    }
+
+    if ("GenerateEmbeddedSigningURLV2".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      await this.TransformRequestJsonBody(this.GenerateEmbeddedSigningURLV2BodyTransformation).ConfigureAwait(false);
     }
 
     if ("GenerateEmbeddedSenderURL".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
