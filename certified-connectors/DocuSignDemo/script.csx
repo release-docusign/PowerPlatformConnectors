@@ -4724,6 +4724,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     JArray documentArray = (envelope["envelopeDocuments"] as JArray) ?? new JArray();
     var documentCount = documentArray.Count;
     string documentCountInNaturalLanguage = "";
+    JArray signersArray = (envelope["recipients"]["signers"] as JArray) ?? new JArray();
 
     if (documentCount == 3)
     {
@@ -4737,19 +4738,23 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if (envelope["status"].ToString().Equals("sent"))
     {
       descriptionNLP = envelope["sender"]["userName"] + " " +
-        envelope["status"] + " " +
-        envelope["envelopeDocuments"][0]["name"] +
-        documentCountInNaturalLanguage + " on " +
-        envelope["statusChangedDateTime"];
+      envelope["status"] + " " +
+      envelope["envelopeDocuments"][0]["name"] +
+      documentCountInNaturalLanguage + " on " +
+      envelope["statusChangedDateTime"];
+    }
+    else if(signersArray.Count > 0 )
+    {
+      descriptionNLP = envelope["recipients"]["signers"][0]["name"] +
+      recipientCountInNaturalLanguage +
+      envelope["status"] + " " +
+      envelope["envelopeDocuments"][0]["name"] +
+      documentCountInNaturalLanguage + " on " +
+      envelope["statusChangedDateTime"];
     }
     else
     {
-      descriptionNLP = envelope["recipients"]["signers"][0]["name"] +
-        recipientCountInNaturalLanguage +
-        envelope["status"] + " " +
-        envelope["envelopeDocuments"][0]["name"] +
-        documentCountInNaturalLanguage + " on " +
-        envelope["statusChangedDateTime"];
+      descriptionNLP = "No signer recipients found for this envelope. Only 'Signer' recipient types are supported in the current response.";
     }
 
     return descriptionNLP;
