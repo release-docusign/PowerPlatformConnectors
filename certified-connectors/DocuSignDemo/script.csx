@@ -3,6 +3,7 @@ public class Script : ScriptBase
   public override async Task<HttpResponseMessage> ExecuteAsync()
   {
     try
+
     {
       if ("WebhookResponse".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
       {
