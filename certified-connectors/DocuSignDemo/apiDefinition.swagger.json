@@ -7122,7 +7122,7 @@
         },
         "sender": {
           "minLength": 1,
-          "x-ms-summary": "Sender name",
+          "x-ms-summary": "Sender Name",
           "description": "Sender name",
           "type": "string"
         },
