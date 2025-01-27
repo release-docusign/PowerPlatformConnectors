@@ -2157,6 +2157,57 @@
         "x-ms-visibility": "important"
       }
     },
+    "/accounts/{accountId}/seals/GrabSealIDs": {
+      "get": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Grab electionic seals",
+        "description": "Grabs list of electronic seals",
+        "operationId": "GrabSealIDs",
+        "x-ms-no-generic-test": true,
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SealListResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "important"
+      }
+    },
     "/accounts/copilotAccount/envelopes/listEnvelopesForSalesCopilot": {
       "get": {
         "tags": [
@@ -7440,6 +7491,29 @@
           "type": "boolean",
           "x-ms-summary": "More Envelope Results",
           "description": "Shows if envelopes exceed the specified number in the Return envelopes field"
+        }
+      }
+    },
+    "SealListResponse": {
+      "type": "object",
+      "properties": {
+        "seals": {
+            "type": "array",
+              "items": {
+                "type": "object",
+                  "properties": {
+                    "sealName": {
+                      "type": "string",
+                      "x-ms-summary": "Seal Name ID",
+                      "description": "ID of the official Seal name"
+                    },
+                    "sealDisplayName": {
+                      "type": "string",
+                      "x-ms-summary": "Display Name",
+                      "description": "Display name of the seal"
+                    }
+                  }
+                }
         }
       }
     },

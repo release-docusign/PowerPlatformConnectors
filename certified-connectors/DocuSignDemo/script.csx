@@ -4432,6 +4432,16 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
+  private JObject GrabSealIDsTransformation(JObject body)
+  {
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+    uriBuilder.Path = uriBuilder.Path.Replace("/GrabSealIDs", "");
+
+    this.Context.Request.RequestUri = uriBuilder.Uri;
+    return body;
+  }
+
   private JObject SearchListEnvelopesTransformation(JObject body)
   { 
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
@@ -5926,6 +5936,10 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if(("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
     {
       await this.TransformRequestJsonBody(this.SearchListEnvelopesTransformation).ConfigureAwait(false);
+    }
+    if(("GrabSealIDs".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+    {
+      await this.TransformRequestJsonBody(this.GrabSealIDsTransformation).ConfigureAwait(false);
     }
 
     if ("SendEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
