@@ -1217,6 +1217,7 @@
       "post": {
         "summary": "Create envelope using composite templates",
         "operationId": "CompositeTemplates",
+        "description": "Create envelope using composite templates",
         "parameters": [
           {
             "name": "accountId",
@@ -1276,7 +1277,7 @@
           }
         ],
         "responses": {
-          "default": {
+          "200": {
             "description": "default",
             "schema": {
               "type": "object",
@@ -3103,6 +3104,7 @@
             "name": "signerName",
             "in": "query",
             "required": true,
+            "description": "Signer Name",
             "x-ms-summary": "Signer Name",
             "x-ms-test-value": "test name",
             "x-ms-visibility": "important",
@@ -3112,6 +3114,7 @@
             "name": "signerEmail",
             "in": "query",
             "required": true,
+            "description": "Signer Email",
             "x-ms-summary": "Signer Email",
             "x-ms-test-value": "test@email.com",
             "x-ms-visibility": "important",
@@ -3244,6 +3247,7 @@
           {
             "name": "isInPersonSigner",
             "in": "query",
+            "description": "Yes/No",
             "required": true,
             "x-ms-summary": "Is this an in-person signer?",
             "type": "string",
