@@ -4442,6 +4442,16 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
+  private JObject GrabSignatureNameListTransformation(JObject body)
+  {
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+    uriBuilder.Path = uriBuilder.Path.Replace("/grabSignatureNameList", "");
+
+    this.Context.Request.RequestUri = uriBuilder.Uri;
+    return body;
+  }
+
   private JObject SearchListEnvelopesTransformation(JObject body)
   { 
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
@@ -5940,6 +5950,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if(("GrabSealIDs".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
     {
       await this.TransformRequestJsonBody(this.GrabSealIDsTransformation).ConfigureAwait(false);
+    }
+
+    if(("grabSignatureNameList".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+    {
+      await this.TransformRequestJsonBody(this.GrabSignatureNameListTransformation).ConfigureAwait(false);
     }
 
     if ("SendEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))

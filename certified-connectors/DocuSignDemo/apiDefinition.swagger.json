@@ -2208,6 +2208,57 @@
         "x-ms-visibility": "important"
       }
     },
+    "/accounts/{accountId}/signatureProviders/grabSignatureNameList": {
+      "get": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Grab signature namess",
+        "description": "Grabs list of signature names",
+        "operationId": "grabSignatureNameList",
+        "x-ms-no-generic-test": true,
+        "consumes": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml",
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "description": "Account ID",
+            "required": true,
+            "x-ms-summary": "Account",
+            "x-ms-test-value": "insert account id",
+            "x-ms-dynamic-values": {
+              "operationId": "GetLoginAccounts",
+              "value-collection": "loginAccounts",
+              "value-path": "accountIdGuid",
+              "value-title": "name"
+            },
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SignatureNameListResponse"
+            }
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "important"
+      }
+    },
     "/accounts/copilotAccount/envelopes/listEnvelopesForSalesCopilot": {
       "get": {
         "tags": [
@@ -7511,6 +7562,34 @@
                       "type": "string",
                       "x-ms-summary": "Display Name",
                       "description": "Display name of the seal"
+                    }
+                  }
+                }
+        }
+      }
+    },
+    "SignatureNameListResponse": {
+      "type": "object",
+      "properties": {
+        "signatureProviders": {
+            "type": "array",
+              "items": {
+                "type": "object",
+                  "properties": {
+                    "signatureProviderId": {
+                      "type": "string",
+                      "x-ms-summary": "signatureProviderId",
+                      "description": "signatureProviderId"
+                    },
+                    "signatureProviderName": {
+                      "type": "string",
+                      "x-ms-summary": "signatureProviderName",
+                      "description": "signatureProviderName"
+                    },
+                    "signatureProviderDisplayName": {
+                      "type": "string",
+                      "x-ms-summary": "signatureProviderDisplayName",
+                      "description": "signatureProviderDisplayName"
                     }
                   }
                 }
