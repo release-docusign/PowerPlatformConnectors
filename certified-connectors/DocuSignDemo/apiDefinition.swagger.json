@@ -4511,7 +4511,7 @@
             "name": "name",
             "in": "query",
             "required": true,
-            "description": " ",
+            "description": "Bulk send list name",
             "x-ms-summary": "Bulk send list name",
             "type": "string"
           },
@@ -4582,7 +4582,7 @@
             "name": "bulkSendListId",
             "in": "path",
             "required": true,
-            "description": " ",
+            "description": "Bulk send list GUID",
             "x-ms-summary": "Bulk send list GUID",
             "type": "string"
           },
@@ -8064,7 +8064,7 @@
       "properties": {
         "listId": {
           "type": "string",
-          "description": " ",
+          "description": "Bulk send list guid",
           "x-ms-summary": "Bulk Send List guid",
           "x-ms-visibility": "important"
         }
