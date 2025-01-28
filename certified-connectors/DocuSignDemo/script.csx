@@ -5052,8 +5052,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var recipientType = query.Get("recipientType");
 
-    var missingInput = false;
-
     if (recipientType.Equals("inPersonSigners"))
     {
       signers[0]["hostName"] = body["hostName"];
