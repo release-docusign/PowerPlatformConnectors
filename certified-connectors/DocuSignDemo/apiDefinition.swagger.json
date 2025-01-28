@@ -1217,6 +1217,7 @@
       "post": {
         "summary": "Create envelope using composite templates",
         "operationId": "CompositeTemplates",
+        "description": "Create envelope using composite templates",
         "parameters": [
           {
             "name": "accountId",
@@ -1276,7 +1277,7 @@
           }
         ],
         "responses": {
-          "default": {
+          "200": {
             "description": "default",
             "schema": {
               "type": "object",
@@ -3103,6 +3104,7 @@
             "name": "signerName",
             "in": "query",
             "required": true,
+            "description": "Signer Name",
             "x-ms-summary": "Signer Name",
             "x-ms-test-value": "test name",
             "x-ms-visibility": "important",
@@ -3112,6 +3114,7 @@
             "name": "signerEmail",
             "in": "query",
             "required": true,
+            "description": "Signer Email",
             "x-ms-summary": "Signer Email",
             "x-ms-test-value": "test@email.com",
             "x-ms-visibility": "important",
@@ -3244,6 +3247,7 @@
           {
             "name": "isInPersonSigner",
             "in": "query",
+            "description": "Yes/No",
             "required": true,
             "x-ms-summary": "Is this an in-person signer?",
             "type": "string",
@@ -4506,9 +4510,9 @@
           {
             "name": "name",
             "in": "query",
-            "description": "Bulk Send List Name",
             "required": true,
-            "x-ms-summary": "Bulk Send List Name",
+            "description": "Bulk send list name",
+            "x-ms-summary": "Bulk send list name",
             "type": "string"
           },
           {
@@ -4577,8 +4581,8 @@
           {
             "name": "bulkSendListId",
             "in": "path",
-            "description": "Bulk send list GUID",
             "required": true,
+            "description": "Bulk send list GUID",
             "x-ms-summary": "Bulk send list GUID",
             "type": "string"
           },
@@ -7122,7 +7126,7 @@
         },
         "sender": {
           "minLength": 1,
-          "x-ms-summary": "Sender name",
+          "x-ms-summary": "Sender Name",
           "description": "Sender name",
           "type": "string"
         },
@@ -8059,9 +8063,9 @@
       "type": "object",
       "properties": {
         "listId": {
-          "description": "Bulk Send List GUID",
           "type": "string",
-          "x-ms-summary": "Bulk Send List GUID",
+          "description": "Bulk send list guid",
+          "x-ms-summary": "Bulk Send List guid",
           "x-ms-visibility": "important"
         }
       }
