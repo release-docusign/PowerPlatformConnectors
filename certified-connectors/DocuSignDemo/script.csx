@@ -6895,11 +6895,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
             case "recipientName":
             case "recipientEmailId":
               filteredEnvelopes = new JArray(envelopes.Where(envelope =>
-                envelope["recipients"].ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower())));
+                envelope["recipients"]?.ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower()) ?? false));
               break;
             case "envelopeTitle":
               filteredEnvelopes = new JArray(envelopes.Where(envelope =>
-                envelope["emailSubject"].ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower())));
+                envelope["emailSubject"]?.ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower()) ?? false));
               break;
             case "customFieldName":
             case "customFieldValue":
