@@ -5920,6 +5920,13 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       await this.TransformRequestJsonBody(this.CreateHookEnvelopeV3BodyTransformation).ConfigureAwait(false);
     }
 
+    if ("GetConnectConfigurations".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      uriBuilder.Path = uriBuilder.Path.Replace("listConnect", "connect");
+      this.Context.Request.RequestUri = uriBuilder.Uri;
+    }
+
     if ("CreateBlankEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.CreateBlankEnvelopeBodyTransformation).ConfigureAwait(false);
