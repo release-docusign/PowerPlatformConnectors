@@ -4823,6 +4823,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
   private JObject TriggerMaestroWorkflowTransformation(JObject body)
   {
+      this.Context.Request.Headers.Add("DocuSign-Maestro-Workflow-Origin", "PowerAutomate");
       var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
       var newBody = new JObject();
       newBody["instanceName"] = query.Get("instanceName");
