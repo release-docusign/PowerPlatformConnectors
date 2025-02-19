@@ -71,8 +71,8 @@
   "paths": {
     "/accounts/{accountId}/connect": {
       "post": {
-        "summary": "DEPRECATED: When an envelope status changes (Connect)",
-        "description": "Triggers a new flow when an envelope status changes.",
+        "summary": "DEPRECATED: When an envelope status changes (Connect) (deprecated)",
+        "description": "Triggers a new flow when an envelope status changes (deprecated).",
         "operationId": "CreateHookEnvelope",
         "parameters": [
           {
@@ -107,7 +107,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-trigger": "single",
         "x-ms-trigger-hint": "To see it work now, send an envelope.",
         "x-ms-visibility": "important",
@@ -122,8 +122,8 @@
     },
     "/accounts/{accountId}/connectV2": {
       "post": {
-        "summary": "DEPRECATED: When an envelope status changes (Connect) (V2)",
-        "description": "Triggers a new flow when an envelope status changes.",
+        "summary": "DEPRECATED: When an envelope status changes (Connect) (V2) (deprecated)",
+        "description": "Triggers a new flow when an envelope status changes (deprecated).",
         "operationId": "CreateHookEnvelopeV2",
         "parameters": [
           {
@@ -158,7 +158,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-trigger": "single",
         "x-ms-trigger-hint": "To see it work now, send an envelope.",
         "x-ms-visibility": "important",
@@ -506,8 +506,8 @@
     },
     "/accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}": {
       "get": {
-        "summary": "DEPRECATED: Get documents from envelope",
-        "description": "Get documents from envelope",
+        "summary": "DEPRECATED: Get documents from envelope (deprecated)",
+        "description": "Get documents from envelope (deprecated)",
         "operationId": "GetDocuments",
         "parameters": [
           {
@@ -564,7 +564,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-visibility": "advanced"
       }
     },
@@ -2339,8 +2339,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "DEPRECATED: Create envelope using template",
-        "description": "Create a new envelope using a specified template.",
+        "summary": "DEPRECATED: Create envelope using template (deprecated)",
+        "description": "Create a new envelope using a specified template (deprecated).",
         "operationId": "CreateEnvelopeFromTemplate",
         "x-ms-no-generic-test": true,
         "consumes": [
@@ -2427,7 +2427,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-visibility": "important"
       }
     },
@@ -2520,8 +2520,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "DEPRECATED: Create envelope using template with recipients",
-        "description": "Create a new envelope using a specified template and specify recipients.",
+        "summary": "DEPRECATED: Create envelope using template with recipients (deprecated)",
+        "description": "Create a new envelope using a specified template and specify recipients (deprecated).",
         "operationId": "SendEnvelope",
         "x-ms-no-generic-test": true,
         "consumes": [
@@ -2627,7 +2627,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-visibility": "important"
       }
     },
@@ -3416,8 +3416,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "DEPRECATED: Add recipient to an envelope",
-        "description": "Add recipient to an envelope.",
+        "summary": "DEPRECATED: Add recipient to an envelope (deprecated)",
+        "description": "Add recipient to an envelope (deprecated).",
         "operationId": "AddRecipientToEnvelope",
         "consumes": [
           "application/json",
@@ -3494,7 +3494,7 @@
             }
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-visibility": "advanced",
         "x-ms-no-generic-test": true
       },
