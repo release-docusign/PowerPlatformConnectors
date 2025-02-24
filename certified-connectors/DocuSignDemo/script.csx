@@ -5310,7 +5310,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
               {
                 roleName = columnName[0];
                 fieldName = columnName[1];
-                fieldName = fieldName.Replace(" ", "");
                 fieldName = char.ToLower(fieldName[0]) + fieldName.Substring(1);
                 JObject recipientObj;
                 if (recipientDataMap.ContainsKey(roleName))
