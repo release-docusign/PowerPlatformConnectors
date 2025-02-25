@@ -3678,9 +3678,9 @@
           {
             "name": "recipientId",
             "in": "query",
-            "description": "Recipinet Id",
+            "description": "Recipient ID",
             "required": false,
-            "x-ms-summary": "Recipient Id",
+            "x-ms-summary": "Recipient ID",
             "type": "string"
           }
         ],
