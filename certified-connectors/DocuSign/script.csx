@@ -6390,7 +6390,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       foreach (var item in payload as JArray)
       {
         var propertyName = (string)item["propertyName"];
-        if (!propertyName.Equals("dacId") && !propertyName.Equals("id"))
+        if (!propertyName.Equals("dacId") && !propertyName.Equals("id") && !propertyName.Equals("startDate"))
         {     
           itemProperties.Add(propertyName, new JObject());
           var type = (string)item["type"];
