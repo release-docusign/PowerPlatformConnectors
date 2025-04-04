@@ -7,9 +7,7 @@
             "identityProvider": "DocuSign",
             "clientId": "<<Please add your clientID here>>",
             "scopes": [
-              "Signature extended",
-              "aow_manage",
-              "account_product_read"
+              "all"
             ],
             "redirectMode": "Global",
             "redirectUrl": "https://global.consent.azure-apim.net/redirect",
@@ -39,4 +37,4 @@
       ],
       "publisher": "DocuSign, Inc."
     }
-  }
+  } 
