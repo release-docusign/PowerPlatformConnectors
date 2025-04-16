@@ -1208,8 +1208,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "DEPRECATED: Create envelope (deprecated)",
-        "description": "Create a new blank envelope (deprecated).",
+        "summary": "Create envelope",
+        "description": "Create a new blank envelope.",
         "operationId": "CreateBlankEnvelope",
         "x-ms-no-generic-test": true,
         "consumes": [
@@ -1278,8 +1278,8 @@
             }
           }
         },
-        "deprecated": false,
-        "x-ms-visibility": "important"
+        "deprecated": true,
+        "x-ms-visibility": "internal"
       }
     },
     "/accounts/{accountId}/envelopes/compositeTemplates": {
