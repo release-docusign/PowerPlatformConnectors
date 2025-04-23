@@ -5033,8 +5033,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
   private void getRecipientTypes(JArray recipientTypes, JObject recipients)
   {
-    // JObject recipients = envelope["recipients"] as JObject;
-
       if (recipients != null)
       {
           foreach (var recipientType in recipients.Properties())
