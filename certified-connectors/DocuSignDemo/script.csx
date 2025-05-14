@@ -6324,6 +6324,19 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
+    if ("GetEnvelopeTemplates".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      if (!string.IsNullOrEmpty(query.Get("searchText")))
+      {
+        query.Set("search_text", query.Get("searchText"));
+        uriBuilder.Query = query.ToString();
+      }
+
+      this.Context.Request.RequestUri = uriBuilder.Uri;
+    }
+
     if ("GetAccountCustomFields".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);

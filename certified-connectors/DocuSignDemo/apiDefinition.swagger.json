@@ -68,6 +68,81 @@
   "schemes": [
     "https"
   ],
+  "x-ms-modelContextProtocol": {
+    "servers": [
+      {
+        "serverId": "Docusign",
+        "summary": "The Docusign MCP server provides the ability to create, commit to and manage their agreements across the entire agreement lifecycle.",
+        "description": "The Docusign MCP server provides the ability to create, commit to and manage their agreements across the entire agreement lifecycle.",
+        "tags": [
+          "agentic"
+        ],
+        "tools": [
+          {
+            "name": "SendEnvelope",
+            "description": "Create a new envelope using a specified template and specify recipients",
+            "x-ms-route": "/accounts/{accountId}/envelopes",
+            "x-ms-verb": "POST",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "description": "Account ID",
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Envelope status",
+                  "type": "string"
+                },
+                "templateId": {
+                  "description": "Template ID",
+                  "type": "string"
+                },
+                "signers": {
+                  "description": "The signers of the document",
+                  "type": "object"
+                },
+                "emailSubject": {
+                  "description": "Email Subject",
+                  "type": "string"
+                },
+                "emailBody": {
+                  "description": "Email Body",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "GetEnvelopeTemplates",
+            "description": "List templates for a specific account",
+            "x-ms-route": "/accounts/{accountId}/templates",
+            "x-ms-verb": "GET",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "accountId": {
+                  "description": "Account ID",
+                  "type": "string"
+                },
+                "searchText": {
+                  "description": "Template Name",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "GetLoginAccounts",
+            "description": "Login to a specific account",
+            "x-ms-route": "/login_information",
+            "x-ms-verb": "GET",
+            "inputSchema": {}
+          }
+        ]
+      }
+    ]
+  },
   "paths": {
     "/accounts/{accountId}/connect": {
       "post": {
@@ -4881,6 +4956,13 @@
               "value-path": "accountIdGuid",
               "value-title": "name"
             },
+            "type": "string"
+          },
+          {
+            "name": "searchText",
+            "in": "query",
+            "description": "Search text for template name or description.",
+            "x-ms-summary": "Template name",
             "type": "string"
           }
         ],
