@@ -2159,7 +2159,8 @@
             ],
             "in": "query",
             "type": "string",
-            "required": false
+            "required": false,
+            "x-ms-visibility": "internal"
           },
           {
             "name": "order_by",
