@@ -69,119 +69,119 @@
     "https"
   ],
   "x-ms-modelContextProtocol": {
-  "servers": [
-    {
-      "serverId": "Docusign",
-      "summary": "Docusign MCP Server",
-      "description": "The Docusign MCP server provides the ability to create, commit to and manage agreements across the entire agreement lifecycle.",
-      "tags": [
-        "agentic"
-      ],
-      "tools": [
-        {
-          "name": "SendEnvelope",
-          "description": "Send a new Docusign envelope email using a specified template and specify the email message recipients",
-          "x-ms-route": "/accounts/{accountId}/envelopes",
-          "x-ms-verb": "POST",
-          "inputSchema": {
-            "type": "object",
-            "required": [
-              "accountId",
-              "templateId",
-              "signerName",
-              "signerEmail",
-              "emailSubject",
-              "emailBody"
-            ],
-            "properties": {
-              "accountId": {
-                "description": "The Docusign accountId. Retrieve this value calling the 'GetCurrentDocusignAccount' tool",
-                "type": "string",
-                "x-ms-location": "path",
-                "x-ms-path": "accountId"
-              },
-              "status": {
-                "description": "Envelope status. Possible values are 'Create' or 'Sent'. If specified ensure to pass 'Sent'",
-                "type": "string",
-                "x-ms-location": "query",
-                "x-ms-path": "status",
-                "x-ms-default": "Sent"
-              },
-              "templateId": {
-                "description": "The Docusign TemplateId. Call the tool 'GetEnvelopeTemplates' to get a list of the available Docusign templates.",
-                "type": "string",
-                "x-ms-location": "query",
-                "x-ms-path": "templateId"
-              },
-              "signerName": {
-                "description": "Name of the signer who will receive the email message",
-                "type": "string",
-                "x-ms-location": "body",
-                "x-ms-path": "signerName",
-                "x-ms-keyname": "Signer Name"
-              },
-              "signerEmail": {
-                "description": "Email address of signer who will receive the email message",
-                "type": "string",
-                "x-ms-location": "body",
-                "x-ms-path": "signerEmail",
-                "x-ms-keyname": "Signer Email"
-              },
-              "emailSubject": {
-                "description": "Email message subject",
-                "type": "string",
-                "x-ms-location": "query",
-                "x-ms-path": "emailSubject"
-              },
-              "emailBody": {
-                "description": "Email message body",
-                "type": "string",
-                "x-ms-location": "query",
-                "x-ms-path": "emailBody"
+    "servers": [
+      {
+        "serverId": "Docusign",
+        "summary": "Docusign MCP Server",
+        "description": "The Docusign MCP server provides the ability to create, commit to and manage agreements across the entire agreement lifecycle.",
+        "tags": [
+          "agentic"
+        ],
+        "tools": [
+          {
+            "name": "SendEnvelope",
+            "description": "Send a new Docusign envelope email using a specified template and specify the email message recipients",
+            "x-ms-route": "/accounts/{accountId}/envelopes",
+            "x-ms-verb": "POST",
+            "inputSchema": {
+              "type": "object",
+              "required": [
+                "accountId",
+                "templateId",
+                "signerName",
+                "signerEmail",
+                "emailSubject",
+                "emailBody"
+              ],
+              "properties": {
+                "accountId": {
+                  "description": "The Docusign accountId. Retrieve this value calling the 'GetCurrentDocusignAccount' tool",
+                  "type": "string",
+                  "x-ms-location": "path",
+                  "x-ms-path": "accountId"
+                },
+                "status": {
+                  "description": "Envelope status. Possible values are 'Create' or 'Sent'. If specified ensure to pass 'Sent'",
+                  "type": "string",
+                  "x-ms-location": "query",
+                  "x-ms-path": "status",
+                  "x-ms-default": "Sent"
+                },
+                "templateId": {
+                  "description": "The Docusign TemplateId. Call the tool 'GetEnvelopeTemplates' to get a list of the available Docusign templates.",
+                  "type": "string",
+                  "x-ms-location": "query",
+                  "x-ms-path": "templateId"
+                },
+                "signerName": {
+                  "description": "Name of the signer who will receive the email message",
+                  "type": "string",
+                  "x-ms-location": "body",
+                  "x-ms-path": "signerName",
+                  "x-ms-keyname": "Signer Name"
+                },
+                "signerEmail": {
+                  "description": "Email address of signer who will receive the email message",
+                  "type": "string",
+                  "x-ms-location": "body",
+                  "x-ms-path": "signerEmail",
+                  "x-ms-keyname": "Signer Email"
+                },
+                "emailSubject": {
+                  "description": "Email message subject",
+                  "type": "string",
+                  "x-ms-location": "query",
+                  "x-ms-path": "emailSubject"
+                },
+                "emailBody": {
+                  "description": "Email message body",
+                  "type": "string",
+                  "x-ms-location": "query",
+                  "x-ms-path": "emailBody"
+                }
               }
             }
-          }
-        },
-        {
-          "name": "GetEnvelopeTemplates",
-          "description": "List templates for a specific DocuSign account",
-          "x-ms-route": "/accounts/{accountId}/templates",
-          "x-ms-verb": "GET",
-          "inputSchema": {
-            "type": "object",
-            "required": [
-              "accountId"
-            ],
-            "properties": {
-              "accountId": {
-                "description": "The Docusign accountId. Retrieve this value calling the 'GetCurrentDocusignAccount' tool",
-                "type": "string",
-                "x-ms-location": "path",
-                "x-ms-path": "accountId"
-              },
-              "searchText": {
-                "description": "The parameter will be used as a search text filter to retrieve only envelope templates which have this string in their name.",
-                "type": "string",
-                "x-ms-location": "query",
-                "x-ms-path": "searchText"
+          },
+          {
+            "name": "GetEnvelopeTemplates",
+            "description": "List templates for a specific DocuSign account",
+            "x-ms-route": "/accounts/{accountId}/templates",
+            "x-ms-verb": "GET",
+            "inputSchema": {
+              "type": "object",
+              "required": [
+                "accountId"
+              ],
+              "properties": {
+                "accountId": {
+                  "description": "The Docusign accountId. Retrieve this value calling the 'GetCurrentDocusignAccount' tool",
+                  "type": "string",
+                  "x-ms-location": "path",
+                  "x-ms-path": "accountId"
+                },
+                "searchText": {
+                  "description": "The parameter will be used as a search text filter to retrieve only envelope templates which have this string in their name.",
+                  "type": "string",
+                  "x-ms-location": "query",
+                  "x-ms-path": "searchText"
+                }
               }
             }
+          },
+          {
+            "name": "GetCurrentDocusignAccount",
+            "description": "Retrieves the current Docusign account",
+            "x-ms-route": "/login_information",
+            "x-ms-verb": "GET",
+            "inputSchema": {
+              "type": "object",
+              "properties": {}
+            }
           }
-        },
-        {
-          "name": "GetCurrentDocusignAccount",
-          "description": "Retrieves the current Docusign account",
-          "x-ms-route": "/login_information",
-          "x-ms-verb": "GET",
-          "inputSchema": {
-            "type": "object",
-            "properties": {}
-          }
-        }
-      ]
-    }
-  ]
-},
+        ]
+      }
+    ]
+  },
   "paths": {
     "/accounts/{accountId}/connect": {
       "post": {
@@ -1712,13 +1712,7 @@
         },
         "x-ms-openai-data": {
           "openai-enabled": true
-<<<<<<< HEAD
-        },
-        "deprecated": true,
-        "x-ms-visibility": "internal"
-=======
         }
->>>>>>> dev
       }
     },
     "/accounts/salesCopilotAccount/envelopes/getRelatedRecords": {
@@ -1837,13 +1831,7 @@
         },
         "x-ms-openai-data": {
           "openai-enabled": true
-<<<<<<< HEAD
-        },
-        "deprecated": true,
-        "x-ms-visibility": "internal"
-=======
         }
->>>>>>> dev
       }
     },
     "/accounts/salesCopilotAccount/envelopes/getKeySales": {
@@ -1963,13 +1951,7 @@
         },
         "x-ms-openai-data": {
           "openai-enabled": true
-<<<<<<< HEAD
-        },
-        "deprecated": true,
-        "x-ms-visibility": "internal"
-=======
         }
->>>>>>> dev
       }
     },
     "/accounts/salesCopilotAccount/envelopes/getEmailSummary": {
@@ -2086,13 +2068,7 @@
         },
         "x-ms-openai-data": {
           "openai-enabled": true
-<<<<<<< HEAD
-        },
-        "deprecated": true,
-        "x-ms-visibility": "internal"
-=======
         }
->>>>>>> dev
       }
     },
     "/accounts/copilotAccount/envelopes/listEnvelopes": {
@@ -3019,13 +2995,8 @@
         "tags": [
           "DocuSign"
         ],
-<<<<<<< HEAD
         "summary": "DEPRECATED: Create envelope using template with recipients (deprecated)",
         "description": "Create a new envelope using a specified template and specify recipients (deprecated).",
-=======
-        "summary": "DEPRECATED: Create envelope using template with recipients",
-        "description": "Create a new envelope using a specified template and specify recipients.",
->>>>>>> dev
         "operationId": "SendEnvelope",
         "x-ms-no-generic-test": true,
         "consumes": [
@@ -3131,11 +3102,7 @@
             }
           }
         },
-<<<<<<< HEAD
         "deprecated": true,
-=======
-        "deprecated": false,
->>>>>>> dev
         "x-ms-visibility": "important"
       }
     },
@@ -4187,15 +4154,9 @@
           {
             "name": "recipientId",
             "in": "query",
-<<<<<<< HEAD
             "description": "Recipient ID",
             "required": false,
             "x-ms-summary": "Recipient ID",
-=======
-            "description": "Recipinet Id",
-            "required": false,
-            "x-ms-summary": "Recipient Id",
->>>>>>> dev
             "type": "string"
           }
         ],
@@ -5182,11 +5143,7 @@
         "x-ms-visibility": "important"
       }
     },
-<<<<<<< HEAD
     "/oauth/userinfo": {
-=======
-    "/login_information": {
->>>>>>> dev
       "get": {
         "tags": [
           "DocuSign"
@@ -5215,63 +5172,11 @@
     "/accounts/{accountId}/identity_verification": {
       "get": {
         "tags": [
-<<<<<<< HEAD
           "DocuSign"
         ],
         "summary": "Workflow Ids",
         "description": "Get workflow ids",
         "operationId": "GetWorkflowIDs",
-=======
-          "DocuSign"
-        ],
-        "summary": "Workflow Ids",
-        "description": "Get workflow ids",
-        "operationId": "GetWorkflowIDs",
-        "consumes": [],
-        "produces": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml"
-        ],
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account id",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account id",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/GetWorkFlowIdsResponse"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-visibility": "internal"
-      }
-    },
-    "/accounts/{accountId}/all_identity_verification": {
-      "get": {
-        "tags":[
-          "DocuSign"
-        ],
-        "summary":"Get All Workflow Ids",
-        "description":"Get All workflow ids",
-        "operationId":"GetAllWorkflowIDs",
->>>>>>> dev
         "consumes": [],
         "produces": [
           "application/json",
