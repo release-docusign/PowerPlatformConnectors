@@ -2650,6 +2650,7 @@
             "required": true,
             "x-ms-summary": "Account",
             "x-ms-test-value": "insert account id",
+            "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
               "value-collection": "loginAccounts",
@@ -3004,6 +3005,7 @@
             "required": true,
             "x-ms-summary": "Account",
             "x-ms-test-value": "insert account id",
+            "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
               "value-collection": "loginAccounts",
@@ -3765,9 +3767,9 @@
           {
             "name": "RemoveRecipientFromEnvelopeRecipientId",
             "in": "query",
-            "description": "Recipient id",
+            "description": "Recipient ID",
             "required": true,
-            "x-ms-summary": "Recipient",
+            "x-ms-summary": "Recipient ID",
             "x-ms-test-value": "insert recipient id",
             "x-ms-dynamic-values": {
               "operationId": "GetRecipientStatus",
@@ -4010,6 +4012,15 @@
             "type": "string"
           },
           {
+            "name": "recipientId",
+            "in": "query",
+            "description": "Recipient ID",
+            "x-ms-summary": "Recipient ID",
+            "x-ms-visibility": "advanced",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "embeddedRecipientStartURL",
             "in": "query",
             "description": "A sender-provided URL string for redirecting an embedded recipient.",
@@ -4238,8 +4249,8 @@
           {
             "name": "recipientId",
             "in": "query",
-            "description": "Recipient id",
-            "x-ms-summary": "Recipient id",
+            "description": "Recipient ID",
+            "x-ms-summary": "Recipient ID",
             "required": true,
             "type": "string"
           },
@@ -4336,9 +4347,9 @@
           {
             "name": "recipientId",
             "in": "query",
-            "description": "Recipient id",
+            "description": "Recipient ID",
             "required": true,
-            "x-ms-summary": "Recipient id",
+            "x-ms-summary": "Recipient ID",
             "type": "string"
           },
           {
@@ -5378,7 +5389,7 @@
                       "assignTabsToRecipientId": {
                         "type": "string",
                         "x-ms-summary": "Assign tabs to recipient",
-                        "description": "Recipient Id"
+                        "description": "Recipient ID"
                       }
                     }
                   },
@@ -5703,8 +5714,8 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Recipient id",
-            "x-ms-summary": "Recipient",
+            "description": "Recipient ID",
+            "x-ms-summary": "Recipient ID",
             "x-ms-test-value": "insert recipient id"
           },
           {
@@ -5787,9 +5798,9 @@
           {
             "name": "recipientId",
             "in": "path",
-            "description": "Recipient id",
+            "description": "Recipient ID",
             "required": true,
-            "x-ms-summary": "Recipient id",
+            "x-ms-summary": "Recipient ID",
             "type": "string"
           },
           {
@@ -5850,8 +5861,8 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Recipient id",
-            "x-ms-summary": "Recipient",
+            "description": "Recipient ID",
+            "x-ms-summary": "Recipient ID",
             "x-ms-test-value": "insert recipient id"
           },
           {
@@ -5943,9 +5954,9 @@
           {
             "name": "recipientId",
             "in": "path",
-            "description": "Recipient id",
+            "description": "Recipient ID",
             "required": true,
-            "x-ms-summary": "Recipient id",
+            "x-ms-summary": "Recipient ID",
             "type": "string"
           }
         ],
@@ -7897,7 +7908,7 @@
         "recipientId": {
           "description": "The id of the recipient.",
           "type": "string",
-          "x-ms-summary": "Recipient Id"
+          "x-ms-summary": "Recipient ID"
         },
         "prefill": {
           "description": "Indicates whether the tab is of prefill type.",
@@ -7942,7 +7953,7 @@
         "recipientId": {
           "description": "The id the recipient.",
           "type": "string",
-          "x-ms-summary": "Recipient Id",
+          "x-ms-summary": "Recipient ID",
           "x-ms-visibility": "important"
         },
         "name": {
@@ -7970,9 +7981,9 @@
           "x-ms-visibility": "important"
         },
         "recipientIdGuid": {
-          "description": "The recipient Guid.",
+          "description": "The recipient GUID.",
           "type": "string",
-          "x-ms-summary": "Recipient Guid",
+          "x-ms-summary": "Recipient GUID",
           "x-ms-visibility": "important"
         }
       }
