@@ -1415,7 +1415,7 @@ public class Script : ScriptBase
       response["schema"]["properties"]["Build Number"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "DS1008"
+          ["x-ms-summary"] = "DS1008.0.1"
       };
     }
 
@@ -6237,6 +6237,19 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
       query["include"] = "tabs";
       uriBuilder.Query = query.ToString();
+      this.Context.Request.RequestUri = uriBuilder.Uri;
+    }
+
+    if ("GetEnvelopeTemplates".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      if (!string.IsNullOrEmpty(query.Get("searchText")))
+      {
+        query.Set("search_text", query.Get("searchText"));
+        uriBuilder.Query = query.ToString();
+      }
+
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
