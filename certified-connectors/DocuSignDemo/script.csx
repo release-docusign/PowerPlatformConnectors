@@ -4879,7 +4879,10 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
   private JObject TriggerMaestroWorkflowTransformation(JObject body)
   {
+<<<<<<< HEAD
       this.Context.Request.Headers.Add("DocuSign-Maestro-Workflow-Origin", "PowerAutomate");
+=======
+>>>>>>> dev
       var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
       var newBody = new JObject();
       newBody["instanceName"] = query.Get("instanceName");
@@ -5061,9 +5064,12 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
       JArray documentNames = new JArray(
         (envelope["envelopeDocuments"] as JArray)?.Select(envelopeDocument => envelopeDocument["name"]));
+<<<<<<< HEAD
 
       JArray recipientTypes = new JArray();
       getRecipientTypes(recipientTypes, envelope["recipients"] as JObject);
+=======
+>>>>>>> dev
 
       filteredEnvelopesDetails.Add(new JObject()
       {
@@ -5073,8 +5079,12 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         ["statusDate"] = statusUpdateTimeInLocalTimeZone.ToString("h:mm tt, M/d/yy"),
         ["url"] = GetEnvelopeUrl(envelope),
         ["recipients"] = string.Join(", ", recipientNames),
+<<<<<<< HEAD
         ["documents"] = string.Join(", ", documentNames),
         ["recipientTypes"] = string.Join(", ", recipientTypes),
+=======
+        ["documents"] = string.Join(",", documentNames),
+>>>>>>> dev
         ["sender"] = envelope["sender"]?["userName"]?.ToString() ?? "Sender username empty",
         ["status"] = envelope["status"] != null ? textInfo.ToTitleCase(envelope["status"].ToString()) : "Unknown status",
         ["dateSent"] = envelope["sentDateTime"]?.ToString() ?? "No sent date"
@@ -5372,8 +5382,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
             var fieldValues = lines[index].Split(',');
             var roleName = "";
             var fieldName = "";
+<<<<<<< HEAD
             var tabLabelName = "";
 
+=======
+>>>>>>> dev
             for (var index2 = 0; index2 < fieldValues.Length; index2++)
             {
               var columnName = parsedHeaders[index2];
@@ -5387,7 +5400,10 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
               {
                 roleName = columnName[0];
                 fieldName = columnName[1];
+<<<<<<< HEAD
                 tabLabelName = columnName[1];
+=======
+>>>>>>> dev
                 fieldName = fieldName.Replace(" ", "");
                 fieldName = char.ToLower(fieldName[0]) + fieldName.Substring(1);
                 JObject recipientObj;
@@ -5424,7 +5440,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
                   }
                   ((JArray)recipientObj["tabs"]).Add(new JObject()
                   {
+<<<<<<< HEAD
                       ["tabLabel"] = tabLabelName,
+=======
+                      ["tabLabel"] = fieldName,
+>>>>>>> dev
                       ["initialValue"] = value
                   });
                 }
@@ -6004,11 +6024,14 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       await this.TransformRequestJsonBody(this.CreateBlankEnvelopeBodyTransformation).ConfigureAwait(false);
     }
 
+<<<<<<< HEAD
      if ("CreateBlankEnvelopeV2".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.CreateBlankEnvelopeBodyTransformationV2).ConfigureAwait(false);
     }
 
+=======
+>>>>>>> dev
     if ("CompositeTemplates".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.CompositeTemplatesBodyTransformation).ConfigureAwait(false);
@@ -6324,6 +6347,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
+<<<<<<< HEAD
     if ("GetEnvelopeTemplates".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
@@ -6337,6 +6361,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 
+=======
+>>>>>>> dev
     if ("GetAccountCustomFields".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
