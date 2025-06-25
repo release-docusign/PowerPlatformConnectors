@@ -171,6 +171,54 @@
         }
       }
     },
+    "/Management/v2/organizations/{organizationId}/connect": {
+      "post": {
+        "summary": "orgranizaiton level trigger",
+        "description": "Triggers a new flow when an envelope status changes.",
+        "operationId": "CreateOrgHookEnvelope",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "description": "organizationId",
+            "required": true,
+            "x-ms-summary": "org id",
+            "x-ms-test-value": "insert org id",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WebhookRequestV3"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "default",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "This Account lacks sufficient permissions. Connect not enabled for account."
+          }
+        },
+        "deprecated": false,
+        "x-ms-trigger": "single",
+        "x-ms-trigger-hint": "To see it work now, send an envelope.",
+        "x-ms-visibility": "important",
+        "x-ms-no-generic-test": true
+      },
+      "x-ms-notification-content": {
+        "description": "Details for Webhook",
+        "schema": {
+          "$ref": "#/definitions/WebhookEnvelopeResponseV2"
+        }
+      }
+    },
     "/accounts/{accountId}/connectV3": {
       "post": {
         "summary": "When an envelope status changes (Connect) (V3)",
