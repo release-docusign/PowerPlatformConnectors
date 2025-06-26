@@ -1338,6 +1338,20 @@
             ]
           },
           {
+            "name": "merge_roles_on_draft",
+            "in": "query",
+            "description": "Merge roles and delete empty recipients",
+            "required": false,
+            "x-ms-summary": "Merge roles and delete empty recipients",
+            "type": "string",
+            "enum": [
+              "false",
+              "true"
+            ],
+            "default": "false",
+            "x-ms-visibility": "advanced"
+          },
+          {
             "name": "body",
             "in": "body",
             "required": false,
@@ -2784,6 +2798,20 @@
               "$ref": "#/definitions/DynamicRecipients"
             },
             "x-ms-summary": "Recipients"
+          },
+          {
+            "name": "merge_roles_on_draft",
+            "in": "query",
+            "description": "Merge roles and delete empty recipients",
+            "required": false,
+            "x-ms-summary": "Merge roles and delete empty recipients",
+            "type": "string",
+            "enum": [
+              "false",
+              "true"
+            ],
+            "default": "false",
+            "x-ms-visibility": "advanced"
           },
           {
             "name": "emailSubject",
