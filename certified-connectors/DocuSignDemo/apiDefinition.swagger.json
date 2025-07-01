@@ -613,6 +613,31 @@
               "Combined without COC : Get all documents as single pdf",
               "Portfolio : Get envelope documents as a PDF Portfolio"
             ]
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "choose language",
+            "required": false,
+            "x-ms-summary": "language",
+            "x-ms-test-value": "Select language",
+            "type": "string",
+            "enum": [
+              "Chinese Simplified",
+              "Chinese Traditional",
+              "Dutch",
+              "English",
+              "French",
+              "German",
+              "Italian",
+              "Japanese",
+              "Korean",
+              "Portuguese",
+              "Portuguese (Brazil)",
+              "Russian",
+              "Spanish"
+            ],
+            "default": "English"
           }
         ],
         "responses": {
