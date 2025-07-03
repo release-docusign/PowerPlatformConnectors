@@ -577,9 +577,9 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Enter or select account ID.",
             "required": true,
-            "x-ms-summary": "Account",
+            "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
@@ -592,16 +592,16 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": "",
             "required": true,
-            "x-ms-summary": "Envelope",
-            "x-ms-test-value": "insert envelope id",
+            "x-ms-summary": "Envelope ID",
+            "x-ms-test-value": "Enter or select envelope ID.",
             "type": "string"
           },
           {
             "name": "documentId",
             "in": "path",
-            "description": "Enter 'string(document ID)' to get a single document, or select a format",
+            "description": "Enter \"string(document ID)\" to get a single document, or select a format.",
             "x-ms-summary": "Output format",
             "required": true,
             "x-ms-test-value": "insert document id",
@@ -617,9 +617,9 @@
           {
             "name": "language",
             "in": "query",
-            "description": "choose language",
+            "description": "Select language",
             "required": false,
-            "x-ms-summary": "language",
+            "x-ms-summary": "Language",
             "x-ms-test-value": "Select language",
             "type": "string",
             "enum": [
@@ -1370,10 +1370,10 @@
             "x-ms-summary": "Merge roles and delete empty recipients",
             "type": "string",
             "enum": [
-              "false",
-              "true"
+              "False",
+              "True"
             ],
-            "default": "false",
+            "default": "False",
             "x-ms-visibility": "advanced"
           },
           {
@@ -2832,10 +2832,10 @@
             "x-ms-summary": "Merge roles and delete empty recipients",
             "type": "string",
             "enum": [
-              "false",
-              "true"
+              "False",
+              "True"
             ],
-            "default": "false",
+            "default": "False",
             "x-ms-visibility": "advanced"
           },
           {
