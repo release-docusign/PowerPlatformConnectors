@@ -2202,8 +2202,7 @@
             ],
             "in": "query",
             "type": "string",
-            "required": false,
-            "x-ms-visibility": "internal"
+            "required": false
           },
           {
             "name": "order_by",
@@ -2989,8 +2988,8 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "Get envelope custom field info",
-        "description": "Get envelope custom field info.",
+        "summary": "Get custom field info from envelope",
+        "description": "Get custom field info from envelope",
         "operationId": "GetEnvelopeCustomField",
         "consumes": [
           "application/json",
