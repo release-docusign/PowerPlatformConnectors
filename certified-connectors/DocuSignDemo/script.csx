@@ -3999,6 +3999,56 @@ public class Script : ScriptBase
     this.Context.Request.RequestUri = uriBuilder.Uri;
     return body;
   }
+
+  private JObject CreateOrgHookEnvelopeBodyTransformation(JObject original)
+  {
+    var body = new JObject();
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+
+    var uriLogicApps = original["urlToPublishTo"]?.ToString();
+    var uriLogicAppsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(uriLogicApps ?? string.Empty));
+    var notificationProxyUri = this.Context.CreateNotificationUri($"/webhook_response?logicAppsUri={uriLogicAppsBase64}");
+    body["allUsers"] = "true";
+    body["allowEnvelopePublish"] = "true";
+    body["includeDocumentFields"] = "true";
+    body["requiresAcknowledgement"] = "true";
+    body["urlToPublishTo"] = notificationProxyUri.AbsoluteUri;
+    body["name"] = original["name"]?.ToString();
+    body["events"] = original["events"] ?? new JArray();
+    body["configurationType"] = "custom";
+    body["deliveryMode"] = "sim";
+
+    string eventData = @"[
+      'tabs',
+      'custom_fields',
+      'recipients',
+      'document_fields'
+    ]";
+
+    JArray includeData = JArray.Parse(eventData);
+    body["eventData"] = new JObject
+    {
+      ["version"] = "restv2.1",
+      ["format"] = "json",
+      ["includeData"] = includeData
+    };
+
+    var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
+    // var url = urll.Replace("/{accountId}", "");
+    // var newURLL = new UriBuilder(urll);
+    // var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/{accountId}", "");
+    var newURL = new UriBuilder(url);
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+
+    newURL.Query = query.ToString();
+
+    this.Context.Request.RequestUri = newURL.Uri;
+    //   if (true)
+    // {
+    // throw new ConnectorException(HttpStatusCode.BadRequest, this.Context.Request.RequestUri.ToString());
+    // }
+    return body;
+  }
   
   private JObject CreateHookEnvelopeV3BodyTransformation(JObject original)
   {
@@ -6178,6 +6228,11 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     if ("CreateHookEnvelopeV4".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.CreateHookEnvelopeV4BodyTransformation).ConfigureAwait(false);
+    }
+
+    if ("CreateOrgHookEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      await this.TransformRequestJsonBody(this.CreateOrgHookEnvelopeBodyTransformation).ConfigureAwait(false);
     }
 
     if ("CreateBlankEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
