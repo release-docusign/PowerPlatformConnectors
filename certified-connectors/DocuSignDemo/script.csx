@@ -5158,21 +5158,28 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
   {
     foreach (var doc in docGenFormfields)
     {
-      foreach(var field in (doc["docGenFormFieldList"] as JArray) ?? new JArray())
+      var docGenFormFieldList = doc["docGenFormFieldList"] as JArray;
+      if (docGenFormFieldList == null)
+          continue;
+
+      foreach( var field in docGenFormFieldList)
       {
         formFields.Add(new JObject()
         {
-          ["name"] =  field["name"],
-          ["type"] =  field["type"],
+          ["name"] = field["name"],
+          ["type"] = field["type"],
           ["value"] = field["value"],
-          ["label"] =  field["label"],
-          ["documentId"] =  doc["documentId"]
+          ["label"] = field["label"],
+          ["documentId"] = doc["documentId"]
         });
 
-        if (field["type"].ToString().Equals("TableRow"))
+        if (field["type"] != null && field["type"].ToString().Equals("TableRow", StringComparison.OrdinalIgnoreCase))
         {
-          JArray rowValues = (field["rowValues"] as JArray) ?? new JArray();
-          formFields = GetFormFields(rowValues, formFields);
+          var rowValues = field["rowValues"] as JArray;
+          if (rowValues != null)
+          {
+            formFields = GetFormFields(rowValues, formFields);
+          }
         }
       }
     }
