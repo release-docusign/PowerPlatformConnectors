@@ -3065,6 +3065,11 @@ public class Script : ScriptBase
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Recipient ID"
                             },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
+                            },
                             ["email"] = new JObject
                             {
                               ["type"] = "string",
@@ -3124,6 +3129,11 @@ public class Script : ScriptBase
                             {
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
                             },
                             ["email"] = new JObject
                             {
@@ -3185,6 +3195,11 @@ public class Script : ScriptBase
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Recipient ID"
                             },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
+                            },
                             ["email"] = new JObject
                             {
                               ["type"] = "string",
@@ -3226,6 +3241,11 @@ public class Script : ScriptBase
                             {
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
                             },
                             ["hostEmail"] = new JObject
                             {
@@ -3280,6 +3300,11 @@ public class Script : ScriptBase
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Recipient ID"
                             },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
+                            },
                             ["email"] = new JObject
                             {
                               ["type"] = "string",
@@ -3321,6 +3346,11 @@ public class Script : ScriptBase
                             {
                               ["type"] = "string",
                               ["x-ms-summary"] = "- Recipient ID"
+                            },
+                            ["signingGroupId"] = new JObject
+                            {
+                              ["type"] = "string",
+                              ["x-ms-summary"] = "- Signing Group ID"
                             },
                             ["email"] = new JObject
                             {
