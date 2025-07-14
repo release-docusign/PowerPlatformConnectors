@@ -4000,6 +4000,23 @@ public class Script : ScriptBase
     return body;
   }
 
+  private JObject GetOrganizationsBodyTransformation(JObject original)
+  {
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+
+    var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
+    // var url = urll.Replace("/{accountId}", "");
+    // var newURLL = new UriBuilder(urll);
+    // var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/{accountId}", "");
+    var newURL = new UriBuilder(url);
+    var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+
+    newURL.Query = query.ToString();
+
+    this.Context.Request.RequestUri = newURL.Uri;
+    return original;
+  }
+
   private JObject CreateOrgHookEnvelopeBodyTransformation(JObject original)
   {
     var body = new JObject();
@@ -6234,6 +6251,12 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     {
       await this.TransformRequestJsonBody(this.CreateOrgHookEnvelopeBodyTransformation).ConfigureAwait(false);
     }
+
+    if ("GetOrganizations".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      await this.TransformRequestJsonBody(this.GetOrganizationsBodyTransformation).ConfigureAwait(false);
+    }
+
 
     if ("CreateBlankEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {

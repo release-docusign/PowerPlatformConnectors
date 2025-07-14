@@ -184,8 +184,14 @@
             "required": true,
             "x-ms-summary": "Organization ID",
             "x-ms-test-value": "insert organization id",
-            "type": "string",
-            "x-ms-visibility": "important"
+            "x-ms-visibility": "important",
+            "x-ms-dynamic-values": {
+              "operationId": "GetOrganizations",
+              "value-collection": "organizations",
+              "value-path": "id",
+              "value-title": "name"
+            },
+            "type": "string"
           },
           {
             "name": "body",
@@ -4983,6 +4989,44 @@
         "x-ms-visibility": "important"
       }
     },
+    "/Management/v2/organizations": {
+      "get": {
+        "tags": [
+          "DocuSign"
+        ],
+        "summary": "Get organizations",
+        "description": "Get organizations",
+        "operationId": "GetOrganizations",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": true,
+            "description": "Organization Admin",
+            "x-ms-summary": "Organization Admin",
+            "type": "string",
+            "x-ms-visibility": "internal",
+            "default": "org_admin"
+          }
+        ],
+        "consumes": [],
+        "produces": [
+          "application/json",
+          "text/json",
+          "application/xml",
+          "text/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetOrganizationsResponse"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/oauth/userinfo": {
       "get": {
         "tags": [
@@ -8281,6 +8325,20 @@
         }
       }
     },
+    "GetOrganizationsResponse": {
+      "type": "object",
+      "properties": {
+        "organizations": {
+          "description": "list of organizations",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/organization"
+          },
+          "x-ms-summary": "organizations",
+          "x-ms-visibility": "advanced"
+        }
+      }
+    },
     "GetLoginAccountsResponse": {
       "type": "object",
       "properties": {
@@ -8305,6 +8363,23 @@
             "$ref": "#/definitions/WorkflowID"
           },
           "x-ms-summary": "Workflow IDs",
+          "x-ms-visibility": "advanced"
+        }
+      }
+    },
+    "organization": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The id of the organization.",
+          "type": "string",
+          "x-ms-summary": "Organization Id",
+          "x-ms-visibility": "advanced"
+        },
+        "name": {
+          "description": "The name of the organization.",
+          "type": "string",
+          "x-ms-summary": "Name",
           "x-ms-visibility": "advanced"
         }
       }
