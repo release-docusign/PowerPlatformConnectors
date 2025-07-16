@@ -5024,7 +5024,9 @@
             }
           }
         },
-        "deprecated": false
+        "deprecated": false,
+        "x-ms-no-generic-test": true,
+        "x-ms-visibility": "internal"
       }
     },
     "/oauth/userinfo": {

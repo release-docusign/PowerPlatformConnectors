@@ -4000,20 +4000,18 @@ public class Script : ScriptBase
     return body;
   }
 
-  private JObject GetOrganizationsBodyTransformation(JObject original)
+  private JObject  GetOrganizationsBodyTransformation(JObject original)
   {
     var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
 
-    var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
-    // var url = urll.Replace("/{accountId}", "");
-    // var newURLL = new UriBuilder(urll);
-    // var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/{accountId}", "");
+    var url = UpdateRequestUriToDocusignApi() + uriBuilder.Path.Replace("/restapi/v2.1", "");
+
     var newURL = new UriBuilder(url);
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
 
     newURL.Query = query.ToString();
-
     this.Context.Request.RequestUri = newURL.Uri;
+
     return original;
   }
 
@@ -4050,21 +4048,53 @@ public class Script : ScriptBase
       ["includeData"] = includeData
     };
 
-    var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
-    // var url = urll.Replace("/{accountId}", "");
-    // var newURLL = new UriBuilder(urll);
-    // var url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/{accountId}", "");
+    var url = UpdateRequestUriToDocusignApi() + uriBuilder.Path.Replace("/restapi/v2.1", "");
+
     var newURL = new UriBuilder(url);
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
 
     newURL.Query = query.ToString();
-
     this.Context.Request.RequestUri = newURL.Uri;
+
     //   if (true)
     // {
     // throw new ConnectorException(HttpStatusCode.BadRequest, this.Context.Request.RequestUri.ToString());
     // }
     return body;
+  }
+  
+  
+
+  private String UpdateRequestUriToDocusignApi()
+  {
+
+    var host = this.Context.Request.RequestUri.Host.ToLower();
+    var apiBaseUri = host.Contains("demo") ?
+        "https://api-d.docusign.net"
+      : host.Contains("stage") ?
+        "https://api-s.docusign.net"
+      : "https://api.docusign.net";
+
+    return apiBaseUri;
+    // var url = "";
+    // if (uriBuilder.Path.Contains("demo"))
+    // {
+    //   url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
+    // }
+    // else if (uriBuilder.Path.Contains("stage"))
+    // {
+    //   url = "https://api-s.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
+    // }
+    // else
+    // {
+    //   url = "https://api.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
+    // }
+
+    // var newURL = new UriBuilder(url);
+    // var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+
+    // newURL.Query = query.ToString();
+    // this.Context.Request.RequestUri = newURL.Uri;
   }
   
   private JObject CreateHookEnvelopeV3BodyTransformation(JObject original)
