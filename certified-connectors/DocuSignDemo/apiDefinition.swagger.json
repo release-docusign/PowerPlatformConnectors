@@ -267,10 +267,10 @@
             "description": "This Account lacks sufficient permissions. Connect not enabled for account."
           }
         },
-        "deprecated": false,
+        "deprecated": true,
         "x-ms-trigger": "single",
         "x-ms-trigger-hint": "To see it work now, send an envelope.",
-        "x-ms-visibility": "important",
+        "x-ms-visibility": "internal",
         "x-ms-no-generic-test": true
       },
       "x-ms-notification-content": {
