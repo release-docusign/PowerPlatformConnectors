@@ -5389,10 +5389,15 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
+
   private JObject BulkSendBodyTransformation(JObject body)
   {
+    throw new ConnectorException(HttpStatusCode.BadRequest, body["rawOutput"].ToString());
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
+      
     var name = query.Get("name");
+  
+
     JObject newBody = ParseCSV(body);
     newBody["name"] = name;
     return newBody;
@@ -5403,114 +5408,119 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     var input = inputBody.GetValue("csv").ToString();
     var body = new JObject();
     var result = new JObject();
+
+    throw new ConnectorException(HttpStatusCode.OK, "Got passed somehow");
+    
     try
     {
-        var lines = input.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-        var headerLine = lines[0];
-        var headerItems = headerLine.Split(',');
-        var parsedHeaders = new string[headerItems.Length][];
-        string[] recipientFields = { "accessCode", "clientUserId", "deliveryMethod", "email", "embeddedRecipientStartURL", "hostEmail", "hostName", "idCheckConfigurationName", "name", "note", "recipientId", "roleName", "signerName", "signingGroupId" };
-        // This map contains each copy of recipients. The key here would be the role name and the value is the recipient request object that gets added as request body
-        Dictionary<string, JObject> recipientDataMap = new Dictionary<string, JObject>();
-        body["recipients"] = new JArray();
-        result["bulkCopies"] = new JArray();
-        var recipientObject = new JObject();
-        for (int i = 0; i < headerItems.Length; i++)
-        {
-            parsedHeaders[i] = headerItems[i].Split(new string[] { "::" }, StringSplitOptions.None);
-        }
-        // Iterate over the other lines (index at 1 to skip header line)
-        for (var index = 1; index < lines.Length; index++)
-        {
-            var fieldValues = lines[index].Split(',');
-            var roleName = "";
-            var fieldName = "";
-            var tabLabelName = "";
+      var lines = input.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+      var headerLine = lines[0];
+      var headerItems = headerLine.Split(',');
+      var parsedHeaders = new string[headerItems.Length][];
+      string[] recipientFields = { "accessCode", "clientUserId", "deliveryMethod", "email", "embeddedRecipientStartURL", "hostEmail", "hostName", "idCheckConfigurationName", "name", "note", "recipientId", "roleName", "signerName", "signingGroupId" };
+      // This map contains each copy of recipients. The key here would be the role name and the value is the recipient request object that gets added as request body
+      Dictionary<string, JObject> recipientDataMap = new Dictionary<string, JObject>();
+      body["recipients"] = new JArray();
+      result["bulkCopies"] = new JArray();
+      var recipientObject = new JObject();
+      for (int i = 0; i < headerItems.Length; i++)
+      {
+        parsedHeaders[i] = headerItems[i].Split(new string[] { "::" }, StringSplitOptions.None);
+      }
 
-            for (var index2 = 0; index2 < fieldValues.Length; index2++)
+      // Iterate over the other lines (index at 1 to skip header line)
+      for (var index = 1; index < lines.Length; index++)
+      {
+        var fieldValues = lines[index].Split(',');
+        var roleName = "";
+        var fieldName = "";
+        var tabLabelName = "";
+
+        for (var index2 = 0; index2 < fieldValues.Length; index2++)
+        {
+          var columnName = parsedHeaders[index2];
+          var value = fieldValues[index2];
+          if (string.IsNullOrEmpty(value))
+          {
+            continue;
+          }
+
+          // recipient info
+          if (columnName.Length > 1)
+          {
+            roleName = columnName[0];
+            fieldName = columnName[1];
+            tabLabelName = columnName[1];
+            fieldName = fieldName.Replace(" ", "");
+            fieldName = char.ToLower(fieldName[0]) + fieldName.Substring(1);
+            JObject recipientObj;
+            if (recipientDataMap.ContainsKey(roleName))
             {
-              var columnName = parsedHeaders[index2];
-              var value = fieldValues[index2];
-              if (string.IsNullOrEmpty(value))
-              {
-                  continue;
-              }
-              // recipient info
-              if (columnName.Length > 1)
-              {
-                roleName = columnName[0];
-                fieldName = columnName[1];
-                tabLabelName = columnName[1];
-                fieldName = fieldName.Replace(" ", "");
-                fieldName = char.ToLower(fieldName[0]) + fieldName.Substring(1);
-                JObject recipientObj;
-                if (recipientDataMap.ContainsKey(roleName))
-                {
-                  recipientObj = recipientDataMap[roleName];
-                }
-                else
-                {
-                  recipientDataMap[roleName] = new JObject();
-                  recipientObj = recipientDataMap[roleName];
-                  recipientObj["roleName"] = roleName;
-                }
-                if (recipientFields.Contains(fieldName))
-                {
-                    recipientObj[fieldName] = value;
-                    continue;
-                }
-                if (fieldName.Equals("emailSubject", StringComparison.OrdinalIgnoreCase) ||
-                fieldName.Equals("emailBody", StringComparison.OrdinalIgnoreCase) ||
-                fieldName.Equals("language", StringComparison.OrdinalIgnoreCase))
-                {
-                  if (!recipientObj.ContainsKey("emailNotification"))
-                  {
-                    recipientObj["emailNotification"] = new JObject();
-                  }
-                  recipientObj["emailNotification"][fieldName] = value;
-                }
-                else
-                {
-                  if (!recipientObj.ContainsKey("tabs"))
-                  {
-                      recipientObj["tabs"] = new JArray();
-                  }
-                  ((JArray)recipientObj["tabs"]).Add(new JObject()
-                  {
-                      ["tabLabel"] = tabLabelName,
-                      ["initialValue"] = value
-                  });
-                }
-              }
-              else
-              {
-                  // custom fields info
-                  if (!body.ContainsKey("customFields"))
-                  {
-                    body["customFields"] = new JArray();
-                  }
-                  ((JArray) body["customFields"]).Add(new JObject()
-                  {
-                    ["name"] = columnName[0],
-                    ["value"] = value
-                  });
-              }
+              recipientObj = recipientDataMap[roleName];
             }
-            foreach (KeyValuePair<string, JObject> pair in recipientDataMap)
+            else
             {
-              var recipientObj = pair.Value;
-              ((JArray)body["recipients"]).Add(recipientObj.DeepClone());
+              recipientDataMap[roleName] = new JObject();
+              recipientObj = recipientDataMap[roleName];
+              recipientObj["roleName"] = roleName;
             }
-            recipientDataMap = new Dictionary<string, JObject>();
-            ((JArray)result["bulkCopies"]).Add(body.DeepClone());
-            body["recipients"] = new JArray();
-            body["customFields"] = new JArray();
-            recipientDataMap = new Dictionary<string, JObject>(); 
+            if (recipientFields.Contains(fieldName))
+            {
+              recipientObj[fieldName] = value;
+              continue;
+            }
+            if (fieldName.Equals("emailSubject", StringComparison.OrdinalIgnoreCase) ||
+            fieldName.Equals("emailBody", StringComparison.OrdinalIgnoreCase) ||
+            fieldName.Equals("language", StringComparison.OrdinalIgnoreCase))
+            {
+              if (!recipientObj.ContainsKey("emailNotification"))
+              {
+                recipientObj["emailNotification"] = new JObject();
+              }
+              recipientObj["emailNotification"][fieldName] = value;
+            }
+            else
+            {
+              if (!recipientObj.ContainsKey("tabs"))
+              {
+                recipientObj["tabs"] = new JArray();
+              }
+              ((JArray)recipientObj["tabs"]).Add(new JObject()
+              {
+                ["tabLabel"] = tabLabelName,
+                ["initialValue"] = value
+              });
+            }
+          }
+          else
+          {
+            // custom fields info
+            if (!body.ContainsKey("customFields"))
+            {
+              body["customFields"] = new JArray();
+            }
+              ((JArray)body["customFields"]).Add(new JObject()
+              {
+                ["name"] = columnName[0],
+                ["value"] = value
+              });
+          }
         }
+        foreach (KeyValuePair<string, JObject> pair in recipientDataMap)
+        {
+          var recipientObj = pair.Value;
+          ((JArray)body["recipients"]).Add(recipientObj.DeepClone());
+        }
+        recipientDataMap = new Dictionary<string, JObject>();
+        ((JArray)result["bulkCopies"]).Add(body.DeepClone());
+        body["recipients"] = new JArray();
+        body["customFields"] = new JArray();
+        recipientDataMap = new Dictionary<string, JObject>();
+      }
     }
     catch (JsonReaderException ex)
     {
-        throw new ConnectorException(HttpStatusCode.BadRequest, "Please refer to Docusign documentations and follow CSV file guidelines. Unable to parse the request body", ex);
+      throw new ConnectorException(HttpStatusCode.BadRequest, "Please refer to Docusign documentations and follow CSV file guidelines. Unable to parse the request body", ex);
     }
     return result;
   }
@@ -7061,7 +7071,58 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       response.Content = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
     }
 
-    if (("ListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)) ||
+    if ("GetDocGenTemplateTabs".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
+      var newBody = new JObject();
+      var docGenFormFields = new JArray();
+
+      if (body["documents"] != null)
+      {
+        foreach (var document in body["documents"])
+        {
+          if (document["docGenFormFields"] != null)
+          {
+            foreach (var field in document["docGenFormFields"])
+            {
+              var newField = new JObject();
+              newField["documentId"] = document["documentId"];
+              newField["documentName"] = document["name"];
+              newField["label"] = field["label"];
+              newField["type"] = field["type"];
+              newField["required"] = field["required"];
+              newField["name"] = field["name"];
+
+              // Add optional fields if they exist
+              if (field["description"] != null)
+                newField["description"] = field["description"];
+              if (field["options"] != null)
+                newField["options"] = field["options"];
+              if (field["rowValues"] != null)
+                newField["rowValues"] = field["rowValues"];
+
+              docGenFormFields.Add(newField);
+            }
+          }
+        }
+      }
+
+        // Create the response structure
+      newBody = new JObject
+      {
+        ["fields"] = docGenFormFields,
+        ["totalCount"] = docGenFormFields.Count,
+        ["docGenFormFields"] = docGenFormFields
+      };
+
+      // Convert to string and set response with explicit headers
+      // var jsonString = newBody.ToString();
+      // response.Content = new StringContent(jsonString);
+      // response.Content.Headers.Clear();
+     response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
+    }
+
+    if (("ListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)) || 
     ("SalesCopilotListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)) ||
     ("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
     {
