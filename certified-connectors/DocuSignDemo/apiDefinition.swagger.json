@@ -555,7 +555,7 @@
                 "schema": {
                   "type": "object",
                   "title": "DocGen Template Fields",
-                  "x-ms-summary": "Template Field Data",
+                  "x-ms-summary": "TemplateFieldData",
                   "description": "Document generation form fields from the template"
                 }
           }
