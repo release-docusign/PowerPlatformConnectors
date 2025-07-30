@@ -4507,7 +4507,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
-    uriBuilder.Path = uriBuilder.Path.Replace("/EnvelopeIDs", "");
+    uriBuilder.Path = uriBuilder.Path.Replace("/envelopeId", "");
     uriBuilder.Query = query.ToString();
     this.Context.Request.RequestUri = uriBuilder.Uri;
     return body;

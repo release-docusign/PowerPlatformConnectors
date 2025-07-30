@@ -2278,12 +2278,12 @@
         "x-ms-visibility": "important"
       }
     },
-    "/accounts/{accountId}/envelopes/EnvelopeIDs": {
+    "/accounts/{accountId}/envelopes/envelopeId": {
       "get": {
         "tags": [
           "DocuSign"
         ],
-        "summary": "List envelopess",
+        "summary": "List envelope IDs",
         "description": "This is an internal action that grabs all list of envelope IDs for a given account.",
         "operationId": "listEnvelopeIds",
         "x-ms-no-generic-test": true,
