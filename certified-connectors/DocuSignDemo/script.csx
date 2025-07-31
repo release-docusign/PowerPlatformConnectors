@@ -6699,39 +6699,53 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     {
       var body = ParseContentAsJObject(await response.Content.ReadAsStringAsync().ConfigureAwait(false), false);
       var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-      var tabLabel = query.Get("tabLabel");
+      // if tablabels contain a "+" instead of a space from the UI
+      var tabLabel = Uri.UnescapeDataString(query.Get("tabLabel")).Replace("+", " "); 
       var newBody = new JObject();
 
-      foreach(JProperty tabTypes in body.Properties())
-      {
-        foreach(var tab in tabTypes.Value)
-        {
-          if(tab["tabType"].ToString().Equals("radiogroup"))
-          {
-            newBody["value"] = tab["value"] ?? tab["value"];
-            newBody["documentId"] = tab["documentId"] ?? tab["documentId"];
-            newBody["tabType"] = tab["tabType"];
-            newBody["recipientId"] = tab["recipientId"];
-          }
+      bool found = false;
 
-          if(tab["tabLabel"] != null && (tab["tabLabel"].ToString()).Equals(tabLabel.ToString()))
+      foreach (JProperty tabTypes in body.Properties())
+      {
+        foreach (var tab in tabTypes.Value)
+        {
+        
+          if (tab["tabLabel"] != null && (tab["tabLabel"].ToString()).Equals(tabLabel.ToString()))
           {
-            newBody["name"] = tab["name"] ?? tab["name"];
+            newBody["name"] = tab["name"];
             newBody["tabLabel"] = tab["tabLabel"];
-            newBody["value"] = tab["value"] ?? tab["value"];
-            newBody["documentId"] = tab["documentId"] ?? tab["documentId"];
+            newBody["value"] = tab["value"];
+            newBody["documentId"] = tab["documentId"];
             newBody["tabId"] = tab["tabId"];
-            newBody["tabType"] = tab["tabType"];
+            newBody["tabType"] = tabTypes.Name;
             newBody["recipientId"] = tab["recipientId"];
+            found = true;
+            break;
+          }
+          
+          // Radio Tab group handling 
+          if (tabTypes.Name.Equals("radioGroupTabs") && tab["groupName"] != null && 
+              (tab["groupName"].ToString()).Equals(tabLabel.ToString()))
+          {
+            newBody["name"] = tab["groupName"];
+            // Groupname in place of tabLabel for radio groups
+            newBody["tabLabel"] = tab["groupName"];
+            newBody["value"] = tab["value"];
+            newBody["documentId"] = tab["documentId"];
+            newBody["tabId"] = tab["tabId"] ?? GetSelectedRadioTabId(tab);
+            newBody["tabType"] = tabTypes.Name;
+            newBody["recipientId"] = tab["recipientId"];
+            found = true;
             break;
           }
         }
+        if (found) break;
       }
 
-      if (newBody["tabType"] == null)
-      {
-        throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Could not find the Tab Type for the specified recipient");
-      }
+        if (!found) 
+        {
+          throw new ConnectorException(HttpStatusCode.BadRequest, "ValidationFailure: Could not find the Tab Type specified recipient");
+        }
 
       response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
     }
@@ -7585,6 +7599,22 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       }
     }
   }
+  
+private string GetSelectedRadioTabId(JToken radioGroup)
+{
+  var radios = radioGroup["radios"] as JArray;
+  if (radios != null)
+  {
+    foreach (var radio in radios)
+    {
+      if (radio["selected"] != null && radio["selected"].ToString().Equals("true", StringComparison.OrdinalIgnoreCase))
+      {
+        return radio["tabId"]?.ToString();
+      }
+    }
+  }
+  return null;
+}
 
   public class ConnectorException : Exception
   {
@@ -7618,7 +7648,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         error.AppendLine($"Inner exception {level}: {inner.Message}");
         inner = inner.InnerException;
       }
-         
+
       error.AppendLine($"Stack trace: {this.StackTrace}");
       return error.ToString();
     }
