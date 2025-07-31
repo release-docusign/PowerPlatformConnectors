@@ -4728,18 +4728,9 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
   {
     var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
     var verificationType = query.Get("verificationType");
-    var recipientTypeMap = new Dictionary<string, string>() {
-      {"agent", "agents"},
-      {"editor", "editors"},
-      {"inpersonsigner", "inPersonSigners"},
-      {"certifieddelivery", "certifiedDeliveries"},
-      {"signer", "signers"},
-      {"carboncopy", "carbonCopies"},
-      {"intermediary", "intermediaries"},
-      {"witness", "witnesses"}
-    };
 
-    var recipientType = recipientTypeMap[query.Get("recipientType")];
+
+    var recipientType = query.Get("recipientType");
     var recipientId = query.Get("recipientId");
 
     var recipient = new JObject();
