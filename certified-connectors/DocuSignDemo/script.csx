@@ -5501,12 +5501,14 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
             if (labelToFieldNameMap.TryGetValue(docGenFieldLabel, out string matchingFieldName))
             {
-              ((JArray)body["docGenFormFields"]).Add(new JObject
+              var docGenField = new JObject
               {
                 ["name"] = matchingFieldName,
                 ["value"] = value
-              });
-            }
+              };
+              
+              ((JArray)body["docGenFormFields"]).Add(docGenField);
+          }
             continue;
           }
 
@@ -7969,8 +7971,7 @@ public static JObject GetOrCreateFieldInRow(JObject rowObject, string childField
     var fieldObject = new JObject
     {
         ["name"] = childFieldName,
-        ["value"] = rowValue,
-        ["rowValues"] = null
+        ["value"] = rowValue
     };
     
     docGenFormFieldList.Add(fieldObject);
