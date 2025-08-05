@@ -7706,6 +7706,91 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     }
   }
 
+  public static void processDocGenFields(JObject inputBody, Dictionary<string, string> fieldNameToLabelMap, Dictionary<string, string> labelToFieldNameMap, Dictionary<string, List<string>> tableToChildFieldsMap)
+{
+  // Grab docgen fields from template
+    if (inputBody["rawOutput"]?["fields"] == null) return;
+
+    foreach (var field in inputBody["rawOutput"]["fields"])
+    {
+      // Save all labels to their names in a table to grab later
+        ProcessFieldMapping(field, fieldNameToLabelMap, labelToFieldNameMap);
+        
+        if (field["rowValues"] != null)
+        {
+          // Map docgen table fields -> table name
+            ProcessTableRowValues(field, fieldNameToLabelMap, labelToFieldNameMap, tableToChildFieldsMap);
+        }
+    }
+}
+
+public static void ProcessFieldMapping(JToken field, Dictionary<string, string> fieldNameToLabelMap, Dictionary<string, string> labelToFieldNameMap)
+{
+    if (field["name"] == null || field["label"] == null) return;
+
+    var fieldName = field["name"].ToString();
+    var fieldLabel = field["label"].ToString();
+
+    if (!fieldNameToLabelMap.ContainsKey(fieldName))
+    {
+        fieldNameToLabelMap[fieldName] = fieldLabel;
+        labelToFieldNameMap[fieldLabel] = fieldName;
+    }
+}
+
+public static void ProcessTableRowValues(JToken field, Dictionary<string, string> fieldNameToLabelMap, Dictionary<string, string> labelToFieldNameMap, Dictionary<string, List<string>> tableToChildFieldsMap)
+{
+    var parentTableName = field["name"]?.ToString();
+    var parentTableLabel = field["label"]?.ToString();
+
+    if (string.IsNullOrEmpty(parentTableName)) return;
+
+    if (!tableToChildFieldsMap.ContainsKey(parentTableName))
+    {
+        tableToChildFieldsMap[parentTableName] = new List<string>();
+    }
+
+    foreach (var rowValue in field["rowValues"])
+    {
+        if (rowValue["docGenFormFieldList"] != null)
+        {
+            foreach (var nestedField in rowValue["docGenFormFieldList"])
+            {
+                ProcessNestedFieldMapping(nestedField, parentTableName, parentTableLabel, fieldNameToLabelMap, labelToFieldNameMap, tableToChildFieldsMap);
+            }
+        }
+    }
+}
+
+public static void ProcessNestedFieldMapping(JToken nestedField, string parentTableName, string parentTableLabel, Dictionary<string, string> fieldNameToLabelMap, Dictionary<string, string> labelToFieldNameMap, Dictionary<string, List<string>> tableToChildFieldsMap)
+{
+    if (nestedField["name"] == null || nestedField["label"] == null) return;
+
+    var nestedFieldName = nestedField["name"].ToString();
+    var nestedFieldLabel = nestedField["label"].ToString();
+
+    // map tablename and fieldnames just like the csv will process
+    var compositeFieldKey = $"{parentTableName}|{nestedFieldName}";
+    var compositeLabelKey = $"{parentTableLabel}|{nestedFieldLabel}";
+
+    //map docgen fields with backwards compatibility
+    fieldNameToLabelMap[compositeFieldKey] = compositeLabelKey;
+    labelToFieldNameMap[compositeLabelKey] = compositeFieldKey;
+
+    // also save child rows to tthe fieldNameLabelMap to find the "name" value
+    if (!fieldNameToLabelMap.ContainsKey(nestedFieldName))
+    {
+        fieldNameToLabelMap[nestedFieldName] = nestedFieldLabel;
+        labelToFieldNameMap[nestedFieldLabel] = nestedFieldName;
+    }
+
+    // add child table fields to their parent table
+    if (!tableToChildFieldsMap[parentTableName].Contains(nestedFieldName))
+    {
+        tableToChildFieldsMap[parentTableName].Add(nestedFieldName);
+    }
+}
+
   public class ConnectorException : Exception
   {
     public ConnectorException(
