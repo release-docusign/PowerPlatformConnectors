@@ -7789,6 +7789,125 @@ public static void ProcessNestedFieldMapping(JToken nestedField, string parentTa
     {
         tableToChildFieldsMap[parentTableName].Add(nestedFieldName);
     }
+  }
+
+public static void ProcessDynamicTableField(string[] columnName, string value, JObject body, 
+    Dictionary<string, string> labelToFieldNameMap, 
+    Dictionary<string, List<string>> tableToChildFieldsMap)
+{
+  // example of this variable = "table1|first name"
+    var dynamicTablePart = columnName[1]; 
+    var tableParts = dynamicTablePart.Split('|');
+
+    if (tableParts.Length != 2) return;
+
+    var tableName = tableParts[0].Trim();
+    var fieldLabel = tableParts[1].Trim();
+
+
+    // Make sure field name exists
+    if (!TryGetFieldNames(tableName, fieldLabel, labelToFieldNameMap, out string tableFieldName, out string childFieldName))
+      return;
+    // Make sure table and field name are mapped together
+    if (!IsValidTableField(tableFieldName, childFieldName, tableToChildFieldsMap))
+        return;
+
+    var tableObject = GetOrCreateTableObject(body, tableFieldName);
+    ProcessTableRowValues(tableObject, childFieldName, value);
+}
+
+public static bool TryGetFieldNames(string tableName, string fieldLabel, 
+    Dictionary<string, string> labelToFieldNameMap, 
+    out string tableFieldName, out string childFieldName)
+{
+    tableFieldName = null;
+    childFieldName = null;
+
+    if (!labelToFieldNameMap.TryGetValue(tableName, out tableFieldName))
+        return false;
+
+    if (!labelToFieldNameMap.TryGetValue(fieldLabel, out childFieldName))
+        return false;
+
+    return true;
+}
+
+public static bool IsValidTableField(string tableFieldName, string childFieldName, 
+    Dictionary<string, List<string>> tableToChildFieldsMap)
+{
+    return tableToChildFieldsMap.ContainsKey(tableFieldName) &&
+           tableToChildFieldsMap[tableFieldName].Contains(childFieldName);
+}
+
+public static JObject GetOrCreateTableObject(JObject body, string tableFieldName)
+{
+    var docGenFormFields = (JArray)body["docGenFormFields"];
+    
+    foreach (var existingField in docGenFormFields)
+    {
+        if (existingField["name"]?.ToString() == tableFieldName)
+            return (JObject)existingField;
+    }
+
+    var tableObject = new JObject
+    {
+        ["name"] = tableFieldName,
+        ["value"] = null,
+        ["rowValues"] = new JArray()
+    };
+    
+    docGenFormFields.Add(tableObject);
+    return tableObject;
+}
+
+public static void ProcessTableRowValues(JObject tableObject, string childFieldName, string value)
+{
+    var rowValues = value.Split('|');
+    var rowValuesArray = (JArray)tableObject["rowValues"];
+
+    for (int rowIndex = 0; rowIndex < rowValues.Length; rowIndex++)
+    {
+        var rowValue = rowValues[rowIndex].Trim();
+        var rowObject = EnsureRowExists(rowValuesArray, rowIndex);
+        var fieldObject = GetOrCreateFieldInRow(rowObject, childFieldName, rowValue);
+    }
+}
+
+public static JObject EnsureRowExists(JArray rowValuesArray, int rowIndex)
+{
+    while (rowIndex >= rowValuesArray.Count)
+    {
+        rowValuesArray.Add(new JObject
+        {
+            ["docGenFormFieldList"] = new JArray()
+        });
+    }
+    
+    return (JObject)rowValuesArray[rowIndex];
+}
+
+public static JObject GetOrCreateFieldInRow(JObject rowObject, string childFieldName, string rowValue)
+{
+    var docGenFormFieldList = (JArray)rowObject["docGenFormFieldList"];
+    
+    foreach (var existingFieldInRow in docGenFormFieldList)
+    {
+        if (existingFieldInRow["name"]?.ToString() == childFieldName)
+        {
+            existingFieldInRow["value"] = rowValue;
+            return (JObject)existingFieldInRow;
+        }
+    }
+
+    var fieldObject = new JObject
+    {
+        ["name"] = childFieldName,
+        ["value"] = rowValue,
+        ["rowValues"] = null
+    };
+    
+    docGenFormFieldList.Add(fieldObject);
+    return fieldObject;
 }
 
   public class ConnectorException : Exception
