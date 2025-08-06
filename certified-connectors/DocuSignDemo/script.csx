@@ -6730,32 +6730,32 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       {
         foreach (var tab in tabTypes.Value)
         {
-        
+
           if (tab["tabLabel"] != null && (tab["tabLabel"].ToString()).Equals(tabLabel.ToString()))
           {
-            newBody["name"] = tab["name"];
+            newBody["name"] = tab["name"] ?? null;
             newBody["tabLabel"] = tab["tabLabel"];
-            newBody["value"] = tab["value"];
-            newBody["documentId"] = tab["documentId"];
-            newBody["tabId"] = tab["tabId"];
+            newBody["value"] = tab["value"] ?? null;
+            newBody["documentId"] = tab["documentId"] ?? null;
+            newBody["tabId"] = tab["tabId"] ?? null;
             newBody["tabType"] = tabTypes.Name;
-            newBody["recipientId"] = tab["recipientId"];
+            newBody["recipientId"] = tab["recipientId"] ?? null;
+            newBody["selected"] = tab["selected"] ?? null;
             found = true;
             break;
           }
-          
-          // Radio Tab group handling 
-          if (tabTypes.Name.Equals("radioGroupTabs") && tab["groupName"] != null && 
-              (tab["groupName"].ToString()).Equals(tabLabel.ToString()))
+
+          // Handle radioGroupTabs with groupName
+          if (tabTypes.Name.Equals("radioGroupTabs") && tab["groupName"] != null && (tab["groupName"].ToString()).Equals(tabLabel.ToString()))
           {
             newBody["name"] = tab["groupName"];
-            // Groupname in place of tabLabel for radio groups
-            newBody["tabLabel"] = tab["groupName"];
-            newBody["value"] = tab["value"];
-            newBody["documentId"] = tab["documentId"];
-            newBody["tabId"] = tab["tabId"] ?? GetSelectedRadioTabId(tab);
+            newBody["tabLabel"] = tab["tabLabel"] ?? null;
+            newBody["value"] = tab["value"] ?? null;
+            newBody["documentId"] = tab["documentId"] ?? null;
+            newBody["tabId"] = tab["tabId"] ?? null;
             newBody["tabType"] = tabTypes.Name;
-            newBody["recipientId"] = tab["recipientId"];
+            newBody["recipientId"] = tab["recipientId"] ?? null;
+            
             found = true;
             break;
           }
@@ -7620,22 +7620,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       }
     }
   }
-  
-private string GetSelectedRadioTabId(JToken radioGroup)
-{
-  var radios = radioGroup["radios"] as JArray;
-  if (radios != null)
-  {
-    foreach (var radio in radios)
-    {
-      if (radio["selected"] != null && radio["selected"].ToString().Equals("true", StringComparison.OrdinalIgnoreCase))
-      {
-        return radio["tabId"]?.ToString();
-      }
-    }
-  }
-  return null;
-}
 
   public class ConnectorException : Exception
   {
