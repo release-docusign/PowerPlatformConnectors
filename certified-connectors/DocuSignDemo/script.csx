@@ -7176,7 +7176,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         }
       }
 
-        // Create the response structure
       newBody = new JObject
       {
         ["fields"] = docGenFormFields,
