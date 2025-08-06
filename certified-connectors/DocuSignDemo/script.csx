@@ -4056,10 +4056,6 @@ public class Script : ScriptBase
     newURL.Query = query.ToString();
     this.Context.Request.RequestUri = newURL.Uri;
 
-    //   if (true)
-    // {
-    // throw new ConnectorException(HttpStatusCode.BadRequest, this.Context.Request.RequestUri.ToString());
-    // }
     return body;
   }
   
@@ -4073,28 +4069,11 @@ public class Script : ScriptBase
         "https://api-d.docusign.net"
       : host.Contains("stage") ?
         "https://api-s.docusign.net"
+      : host.Contains(".mil") ?
+        "https://api.docusign.mil"
       : "https://api.docusign.net";
 
     return apiBaseUri;
-    // var url = "";
-    // if (uriBuilder.Path.Contains("demo"))
-    // {
-    //   url = "https://api-d.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
-    // }
-    // else if (uriBuilder.Path.Contains("stage"))
-    // {
-    //   url = "https://api-s.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
-    // }
-    // else
-    // {
-    //   url = "https://api.docusign.net" + uriBuilder.Path.Replace("/restapi/v2.1", "");
-    // }
-
-    // var newURL = new UriBuilder(url);
-    // var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-
-    // newURL.Query = query.ToString();
-    // this.Context.Request.RequestUri = newURL.Uri;
   }
   
   private JObject CreateHookEnvelopeV3BodyTransformation(JObject original)
