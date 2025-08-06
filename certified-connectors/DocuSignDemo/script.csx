@@ -7184,10 +7184,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         ["docGenFormFields"] = docGenFormFields
       };
 
-      // Convert to string and set response with explicit headers
-      // var jsonString = newBody.ToString();
-      // response.Content = new StringContent(jsonString);
-      // response.Content.Headers.Clear();
      response.Content = new StringContent(newBody.ToString(), Encoding.UTF8, "application/json");
     }
 
