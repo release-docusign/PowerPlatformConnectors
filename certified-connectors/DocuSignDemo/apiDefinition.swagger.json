@@ -506,8 +506,8 @@
     },
     "/accounts/{accountId}/templates/{templateId}": {
       "get": {
-        "summary": "Get document generation form fields from template",
-        "description": "Get document generation form fields from template",
+        "summary": "Get document generation form fields from template (bulk send templates only)",
+        "description": "Get document generation form fields from template (bulk send templates only)",
         "operationId": "GetDocGenTemplateTabs",
         "parameters": [
           {
