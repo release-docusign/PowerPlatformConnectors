@@ -9140,14 +9140,14 @@
       "authorizationUrl": "https://account-d.docusign.com/oauth/auth",
       "tokenUrl": "https://account-d.docusign.com/oauth/token",
       "scopes": {
-        "signature extended aow_manage account_product_read connect_org config_write_api": "signature extended aow_manage account_product_read connect_org config_write_api"
+        "signature extended aow_manage account_product_read connect_org_config_write_api organization_read": "signature extended aow_manage account_product_read connect_org_config_write_api organization_read"
       }
     }
   },
   "security": [
     {
       "oauth2": [
-        "signature extended aow_manage account_product_read connect_org config_write_api"
+        "signature extended aow_manage account_product_read connect_org_config_write_api organization_read"
       ]
     }
   ],
