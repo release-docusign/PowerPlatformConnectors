@@ -5134,7 +5134,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       var phoneNumber = new JObject();
       phoneNumber["countryCode"] = query.Get("countryCode");
       phoneNumber["number"] = query.Get("phoneNumber");
-      if (body["email"] != null)
+      if (!string.IsNullOrEmpty(body["email"]))
       {
         var additionalNotification = new JObject();
         additionalNotification["secondaryDeliveryMethod"] = "SMS";
