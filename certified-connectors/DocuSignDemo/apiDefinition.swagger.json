@@ -5519,9 +5519,9 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Enter or select an account ID.",
             "required": true,
-            "x-ms-summary": "Account",
+            "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
@@ -5536,8 +5536,8 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Envelope id",
-            "x-ms-summary": "Envelope",
+            "description": " ",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id"
           },
           {
