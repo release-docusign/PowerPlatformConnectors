@@ -2984,7 +2984,7 @@
             }
           }
         },
-        "deprecated": true,
+        "deprecated": false,
         "x-ms-visibility": "important"
       }
     },
