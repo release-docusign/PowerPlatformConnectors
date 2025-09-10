@@ -4125,9 +4125,9 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Enter or select an account ID.",
             "required": true,
-            "x-ms-summary": "Account",
+            "x-ms-summary": "Account ID",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
               "value-collection": "loginAccounts",
@@ -4139,9 +4139,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "type": "string"
           },
           {
@@ -4149,7 +4149,7 @@
             "in": "query",
             "required": true,
             "type": "string",
-            "description": "Recipient type",
+            "description": "",
             "x-ms-summary": "Recipient type",
             "x-ms-dynamic-values": {
               "operationId": "StaticResponseForRecipientTypes",
