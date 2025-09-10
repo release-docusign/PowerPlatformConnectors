@@ -4381,7 +4381,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select and account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -4429,8 +4429,8 @@
             "in": "query",
             "required": true,
             "type": "string",
-            "description": "Verification Type",
-            "x-ms-summary": "Verification Type",
+            "description": "Verification type",
+            "x-ms-summary": "Verification type",
             "enum": [
               "None",
               "Access Code",
