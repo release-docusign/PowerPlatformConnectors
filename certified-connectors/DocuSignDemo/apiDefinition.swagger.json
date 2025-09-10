@@ -2811,9 +2811,9 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account id",
+            "description": "Enter or select an account ID.",
             "required": true,
-            "x-ms-summary": "Account",
+            "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
@@ -2827,9 +2827,9 @@
           {
             "name": "templateId",
             "in": "query",
-            "description": "Template id",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID ",
             "x-ms-test-value": "insert template id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
@@ -2848,7 +2848,7 @@
           {
             "name": "status",
             "in": "query",
-            "description": "Envelope status",
+            "description": " ",
             "required": true,
             "x-ms-summary": "Envelope status",
             "x-ms-test-value": "Created",
