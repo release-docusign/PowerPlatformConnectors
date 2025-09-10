@@ -764,7 +764,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "",
+            "description": "Enter or select envelope ID.",
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "Enter or select envelope ID.",
@@ -9133,8 +9133,22 @@
       "operationId": "GetLoginAccounts"
     }
   },
-    "securityDefinitions": {
-      "oauth2": {
+  "x-ms-connector-metadata": [
+    {
+      "propertyName": "Website",
+      "propertyValue": "https://www.docusign.com"
+    },
+    {
+      "propertyName": "Privacy policy",
+      "propertyValue": "https://www.docusign.com/company/privacy-policy"
+    },
+    {
+      "propertyName": "Categories",
+      "propertyValue": "Content and Files;Productivity"
+    }
+  ],
+  "securityDefinitions": {
+    "oauth2": {
       "type": "oauth2",
       "flow": "accessCode",
       "authorizationUrl": "https://account-d.docusign.com/oauth/auth",
@@ -9149,20 +9163,6 @@
       "oauth2": [
         "signature extended aow_manage account_product_read connect_org_config_write_api organization_read"
       ]
-    }
-  ],
-  "x-ms-connector-metadata": [
-    {
-      "propertyName": "Website",
-      "propertyValue": "https://www.docusign.com"
-    },
-    {
-      "propertyName": "Privacy policy",
-      "propertyValue": "https://www.docusign.com/company/privacy-policy"
-    },
-    {
-      "propertyName": "Categories",
-      "propertyValue": "Content and Files;Productivity"
     }
   ]
 }
