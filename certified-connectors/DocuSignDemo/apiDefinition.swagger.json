@@ -485,9 +485,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           }
@@ -544,9 +544,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope ID",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -700,9 +700,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -764,7 +764,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Enter or select envelope ID.",
+            "description": " ",
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "Enter or select envelope ID.",
@@ -862,9 +862,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -913,9 +913,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           }
@@ -959,9 +959,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -1038,9 +1038,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -1104,9 +1104,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -1235,9 +1235,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -3135,9 +3135,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           }
@@ -3196,9 +3196,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -3274,9 +3274,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -3367,9 +3367,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -3466,9 +3466,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope ID",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelop IDe",
             "x-ms-test-value": "insert envelope id",
             "type": "string",
             "x-ms-visibility": "important"
@@ -3610,9 +3610,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope ID",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string",
             "x-ms-visibility": "important"
@@ -3733,7 +3733,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope ID",
+            "description": " ",
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
@@ -3903,9 +3903,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "x-ms-dynamic-values": {
               "operationId": "GetFolderEnvelopeList",
@@ -3994,9 +3994,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -4501,9 +4501,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "type": "string"
           },
           {
@@ -4747,7 +4747,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope ID",
+            "description": " ",
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
@@ -5476,9 +5476,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "x-ms-dynamic-values": {
               "operationId": "GetFolderEnvelopeList",
@@ -5713,9 +5713,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           }
@@ -5756,9 +5756,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -5908,8 +5908,8 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Envelope id",
-            "x-ms-summary": "Envelope",
+            "description": " ",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id"
           },
           {
@@ -5992,9 +5992,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
@@ -6055,8 +6055,8 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Envelope id",
-            "x-ms-summary": "Envelope",
+            "description": " ",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id"
           },
           {
@@ -6148,9 +6148,9 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": "Envelope id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Envelope",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string"
           },
