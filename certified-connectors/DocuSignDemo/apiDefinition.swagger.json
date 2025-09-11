@@ -1168,7 +1168,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -1220,7 +1220,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -2848,7 +2848,7 @@
           {
             "name": "status",
             "in": "query",
-            "description": " ",
+            "description": "Envelope status",
             "required": true,
             "x-ms-summary": "Envelope status",
             "x-ms-test-value": "Created",
@@ -3468,7 +3468,7 @@
             "in": "path",
             "description": " ",
             "required": true,
-            "x-ms-summary": "Envelop IDe",
+            "x-ms-summary": "Envelop ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string",
             "x-ms-visibility": "important"
