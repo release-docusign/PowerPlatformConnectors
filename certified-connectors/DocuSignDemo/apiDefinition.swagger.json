@@ -639,9 +639,9 @@
           {
             "name": "templateId",
             "in": "path",
-            "description": "Template id",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-dynamic-values": {
               "operationId": "GetEnvelopeTemplates",
@@ -1183,9 +1183,9 @@
           {
             "name": "templateId",
             "in": "path",
-            "description": "Template id",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "type": "string"
           },
@@ -2731,9 +2731,9 @@
           {
             "name": "templateId",
             "in": "query",
-            "description": "Template id",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
@@ -2829,7 +2829,7 @@
             "in": "query",
             "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template ID ",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
@@ -2928,9 +2928,9 @@
           {
             "name": "templateId",
             "in": "query",
-            "description": "Template id",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
@@ -3030,9 +3030,9 @@
           {
             "name": "templateId",
             "in": "query",
-            "description": "Template ID",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
@@ -4756,9 +4756,9 @@
           {
             "name": "templateId",
             "in": "query",
-            "description": "Template",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-dynamic-values": {
               "operationId": "GetEnvelopeTemplates",
@@ -5647,9 +5647,9 @@
           {
             "name": "templateId",
             "in": "path",
-            "description": "Template id",
+            "description": "Enter or select a template ID.",
             "required": true,
-            "x-ms-summary": "Template",
+            "x-ms-summary": "Template ID",
             "x-ms-test-value": "insert template id",
             "x-ms-visibility": "important",
             "x-ms-dynamic-values": {
