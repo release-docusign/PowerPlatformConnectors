@@ -1047,9 +1047,9 @@
           {
             "name": "documentId",
             "in": "path",
-            "description": "Document id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Document id",
+            "x-ms-summary": "Document ID",
             "x-ms-test-value": "insert document id",
             "type": "string"
           }
@@ -1113,9 +1113,9 @@
           {
             "name": "documentId",
             "in": "path",
-            "description": "Document id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Document id",
+            "x-ms-summary": "Document ID",
             "x-ms-test-value": "insert document id",
             "type": "string"
           },
@@ -1192,9 +1192,9 @@
           {
             "name": "documentId",
             "in": "path",
-            "description": "Document id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Document id",
+            "x-ms-summary": "Document ID",
             "x-ms-test-value": "insert document id",
             "type": "string"
           }
@@ -1244,9 +1244,9 @@
           {
             "name": "documentId",
             "in": "path",
-            "description": "Document id",
+            "description": " ",
             "required": true,
-            "x-ms-summary": "Document id",
+            "x-ms-summary": "Document ID",
             "x-ms-test-value": "insert document id",
             "type": "string"
           }
@@ -3883,7 +3883,7 @@
           {
             "name": "folderId",
             "in": "query",
-            "description": "Folder id",
+            "description": "Folder ID",
             "required": true,
             "x-ms-summary": "Folder",
             "x-ms-test-value": "insert folder id",
