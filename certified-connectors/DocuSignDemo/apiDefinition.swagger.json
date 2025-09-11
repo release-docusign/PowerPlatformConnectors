@@ -749,7 +749,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -944,7 +944,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select an account Id.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -1357,7 +1357,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -1489,7 +1489,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -3468,7 +3468,7 @@
             "in": "path",
             "description": " ",
             "required": true,
-            "x-ms-summary": "Envelop ID",
+            "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
             "type": "string",
             "x-ms-visibility": "important"
@@ -3718,7 +3718,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Account ID",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
