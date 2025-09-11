@@ -1284,7 +1284,7 @@
             "in": "path",
             "description": "Account id",
             "required": true,
-            "x-ms-summary": "Account ",
+            "x-ms-summary": "Account",
             "x-ms-test-value": "insert account id",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
