@@ -2716,7 +2716,7 @@
           {
             "name": "accountId",
             "in": "path",
-            "description": "Enter or select account ID.",
+            "description": "Enter or select an account ID.",
             "required": true,
             "x-ms-summary": "Account ID",
             "x-ms-test-value": "insert account id",
@@ -4149,7 +4149,7 @@
             "in": "query",
             "required": true,
             "type": "string",
-            "description": "",
+            "description": " ",
             "x-ms-summary": "Recipient type",
             "x-ms-dynamic-values": {
               "operationId": "StaticResponseForRecipientTypes",
