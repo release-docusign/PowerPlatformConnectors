@@ -3737,20 +3737,8 @@
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
-            "x-ms-dynamic-values": {
-              "operationId": "listEnvelopeIds",
-              "parameters": {
-                "accountId": {
-                  "parameter": "accountId"
-                },
-                "from_date":  "2000-01-02T12:45Z"
-
-              },
-              "value-collection": "envelopes",
-              "value-path": "envelopeId",
-              "value-title": "emailSubject"
-            },
-            "type": "string"
+            "type": "string",
+            "x-ms-visibility": "important"
           }
         ],
         "responses": {
