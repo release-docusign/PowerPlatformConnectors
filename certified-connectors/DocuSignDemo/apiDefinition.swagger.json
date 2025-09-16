@@ -7847,12 +7847,6 @@
           "description": "Sender name",
           "type": "string"
         },
-        "recipientTypes": {
-          "minLength": 1,
-          "x-ms-summary": "Recipient Types",
-          "description": "Recipient type of the signers",
-          "type": "string"
-        },
         "status": {
           "minLength": 1,
           "x-ms-summary": "Status",
