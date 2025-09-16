@@ -791,14 +791,14 @@
             "in": "query",
             "description": "Select language",
             "required": false,
-            "x-ms-summary": "Language",
+            "x-ms-summary": "Certificate of Completion language (Optional)",
             "x-ms-test-value": "Select language",
             "type": "string",
             "enum": [
               "Chinese Simplified",
               "Chinese Traditional",
               "Dutch",
-              "English",
+              "English (Default)",
               "French",
               "German",
               "Italian",
@@ -809,7 +809,7 @@
               "Russian",
               "Spanish"
             ],
-            "default": "English"
+            "default": "English (Default)"
           }
         ],
         "responses": {
