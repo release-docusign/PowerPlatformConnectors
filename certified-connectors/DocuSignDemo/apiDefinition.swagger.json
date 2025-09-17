@@ -180,7 +180,7 @@
           {
             "name": "organizationId",
             "in": "path",
-            "description": "Organization ID",
+            "description": "Enter or select an organization ID.",
             "required": true,
             "x-ms-summary": "Organization ID",
             "x-ms-test-value": "insert organization id",
