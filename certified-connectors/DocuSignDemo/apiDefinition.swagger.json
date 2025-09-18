@@ -1136,7 +1136,7 @@
                   "tabId": {
                     "type": "string",
                     "x-ms-summary": "ID",
-                    "description": "ID"
+                    "description": " "
                   },
                   "value": {
                     "type": "string",
@@ -3737,8 +3737,7 @@
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
-            "type": "string",
-            "x-ms-visibility": "important"
+            "type": "string"
           }
         ],
         "responses": {
@@ -6079,7 +6078,7 @@
                   "tabId": {
                     "type": "string",
                     "x-ms-summary": "ID",
-                    "description": "ID"
+                    "description": " "
                   },
                   "value": {
                     "type": "string",
