@@ -6676,7 +6676,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         { "Chinese Simplified", "zh_CN" },
         { "Chinese Traditional", "zh_TW" },
         { "Dutch", "nl" },
-        { "English (Default)", "en" },
+        { "English (default)", "en" },
         { "French", "fr" },
         { "German", "de" },
         { "Italian", "it" },
