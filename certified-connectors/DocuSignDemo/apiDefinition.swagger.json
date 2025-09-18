@@ -1136,7 +1136,7 @@
                   "tabId": {
                     "type": "string",
                     "x-ms-summary": "ID",
-                    "description": " "
+                    "description": "ID"
                   },
                   "value": {
                     "type": "string",
@@ -6078,7 +6078,7 @@
                   "tabId": {
                     "type": "string",
                     "x-ms-summary": "ID",
-                    "description": " "
+                    "description": "ID"
                   },
                   "value": {
                     "type": "string",
