@@ -700,7 +700,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": " ",
+            "description": "Enter an envelope ID.",
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
@@ -5463,7 +5463,7 @@
           {
             "name": "envelopeId",
             "in": "path",
-            "description": " ",
+            "description": "Enter an envelope ID.",
             "required": true,
             "x-ms-summary": "Envelope ID",
             "x-ms-test-value": "insert envelope id",
