@@ -222,7 +222,7 @@
       "x-ms-notification-content": {
         "description": "Details for Webhook",
         "schema": {
-          "$ref": "#/definitions/WebhookEnvelopeResponseV2"
+          "$ref": "#/definitions/WebhookOrganizationResponse"
         }
       }
     },
@@ -6920,14 +6920,15 @@
     "WebhookOrganizationResponse": {
       "type": "object",
       "properties": {
-        "organizationId": {
-          "type": "string",
-          "description": "The organization ID.",
-          "x-ms-summary": "Organization ID"
-        },
         "data": {
           "type": "object",
           "properties": {
+            "organizationId": {
+              "type": "string",
+              "description": "The organization ID.",
+              "x-ms-summary": "Organization ID",
+              "x-ms-visibility": "important"
+            },
             "envelopeSummary": {
               "type": "object",
               "properties": {
