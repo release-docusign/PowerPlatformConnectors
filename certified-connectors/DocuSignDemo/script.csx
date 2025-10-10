@@ -6834,7 +6834,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         {     
           itemProperties.Add(propertyName, new JObject());
           var type = (string)item["type"];
-          itemProperties[propertyName]["type"] = type == "Float" ? "number" : type.ToLower();
+          itemProperties[propertyName]["type"] = type == "Float" ? "number" : type == "Email" ? "string" : type.ToLower();
         }
       }
       var newBody = new JObject
