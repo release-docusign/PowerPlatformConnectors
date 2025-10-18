@@ -2337,6 +2337,14 @@
             "required": false
           },
           {
+            "name": "search_text",
+            "in": "query",
+            "description": "Enter one keyword to find matches in envelope subjects, recipients, and custom fields.",
+            "required": false,
+            "x-ms-summary": "Search word",
+            "type": "string"
+          },
+          {
             "name": "envelopeStatus",
             "x-ms-summary": "Envelope status",
             "description": "This action lists envelopes based on status of the envelope",

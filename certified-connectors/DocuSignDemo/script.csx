@@ -4713,6 +4713,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
       query["status"] = string.IsNullOrEmpty(query.Get("envelopeStatus")) ? 
         null : envelopeStatusMapping[query.Get("envelopeStatus")];
+      query["search_text"] = string.IsNullOrEmpty(query.Get("search_text")) ? 
+        null : query.Get("search_text");
       query["folder_ids"] = string.IsNullOrEmpty(query.Get("folder_ids")) ? 
         null : folderIDMapping[query.Get("folder_ids").ToString()];
        query["order_by"] = string.IsNullOrEmpty(query.Get("order_by")) ? 
@@ -7395,47 +7397,42 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         {"customFieldName", customFieldName},
         {"customFieldValue", customFieldValue}
       };
-
-      foreach (var filter in envelopeFilterMap.Keys)
+      // TODO: update comments 
+      // Single-pass filtering: check all filters at once
+      filteredEnvelopes = new JArray(envelopes.Where(envelope =>
       {
-        if (envelopeFilterMap[filter] != null)
+        // Check recipient filters
+        if ((envelopeFilterMap["recipientName"] != null || envelopeFilterMap["recipientEmailId"] != null))
         {
-          switch (filter)
-          {
-            case "recipientName":
-            case "recipientEmailId":
-              filteredEnvelopes = new JArray(envelopes.Where(envelope =>
-                envelope["recipients"]?.ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower()) ?? false));
-              break;
-            case "envelopeTitle":
-              filteredEnvelopes = new JArray(envelopes.Where(envelope =>
-                envelope["emailSubject"]?.ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower()) ?? false));
-              break;
-            case "customFieldName":
-            case "customFieldValue":
-              filteredEnvelopes = new JArray(envelopes.Where(envelope =>
-              {
-                var customFields = envelope["customFields"] as JToken;
-                return customFields?.ToString().ToLower().Contains(envelopeFilterMap[filter].ToString().ToLower()) ?? false;
-              }));
-              break;
-            default:
-              break;
-          }
-
-          if (filteredEnvelopes.Count > 0)
-          {
-            envelopes.Clear();
-            envelopes = new JArray(filteredEnvelopes);
-            filteredEnvelopes.Clear();
-          }
-          else
-          {
-            envelopes.Clear();
-            break;
-          }
+          var recipientsStr = envelope["recipients"]?.ToString().ToLower() ?? "";
+          if (envelopeFilterMap["recipientName"] != null && !recipientsStr.Contains(envelopeFilterMap["recipientName"].ToString().ToLower()))
+            return false;
+          if (envelopeFilterMap["recipientEmailId"] != null && !recipientsStr.Contains(envelopeFilterMap["recipientEmailId"].ToString().ToLower()))
+            return false;
         }
-      }
+
+        // Check envelope title filter
+        if (envelopeFilterMap["envelopeTitle"] != null)
+        {
+          var subject = envelope["emailSubject"]?.ToString().ToLower() ?? "";
+          if (!subject.Contains(envelopeFilterMap["envelopeTitle"].ToString().ToLower()))
+            return false;
+        }
+
+        // Check custom field filters
+        if (envelopeFilterMap["customFieldName"] != null || envelopeFilterMap["customFieldValue"] != null)
+        {
+          var customFieldsStr = envelope["customFields"]?.ToString().ToLower() ?? "";
+          if (envelopeFilterMap["customFieldName"] != null && !customFieldsStr.Contains(envelopeFilterMap["customFieldName"].ToString().ToLower()))
+            return false;
+          if (envelopeFilterMap["customFieldValue"] != null && !customFieldsStr.Contains(envelopeFilterMap["customFieldValue"].ToString().ToLower()))
+            return false;
+        }
+
+        return true;
+      }));
+
+      envelopes = filteredEnvelopes;
 
       filteredEnvelopesDetails = this.Context.OperationId.Contains("SalesCopilot") ?
         GetFilteredEnvelopeDetailsForSalesCopilot(envelopes) :
