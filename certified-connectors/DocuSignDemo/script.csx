@@ -7397,8 +7397,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         {"customFieldName", customFieldName},
         {"customFieldValue", customFieldValue}
       };
-      // TODO: update comments 
-      // Single-pass filtering: check all filters at once
       filteredEnvelopes = new JArray(envelopes.Where(envelope =>
       {
         // Check recipient filters

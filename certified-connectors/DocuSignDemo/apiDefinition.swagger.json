@@ -7194,7 +7194,12 @@
               "notary-session-terminated",
               "notary-session-signer-locked",
               "notary-session-signer-unlocked",
-              "notary-session-authentication-failed"
+              "notary-session-authentication-failed",
+              "agreement-created",
+              "agreement-updated",
+              "agreement-deleted",
+              "agreement-reviewed-completed",
+              "agreement-extracted-reviewed"
             ]
           },
           "x-ms-visibility": "important"
