@@ -1,3 +1,5 @@
+using System.Net;
+
 public class Script : ScriptBase
 {
   public override async Task<HttpResponseMessage> ExecuteAsync()
@@ -52,11 +54,35 @@ public class Script : ScriptBase
   {
     if ("GetMaestroWorkflowDefinitions".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
-        var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        if (response.StatusCode == HttpStatusCode.Unauthorized && content.Equals("Jwt payload is an invalid JSON"))
-        {
-          response.Content = new StringContent("You will need to reconnect to your Docusign account", Encoding.UTF8, "text/plain");
-        }
+      var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+      if (response.StatusCode == HttpStatusCode.Unauthorized && content.Equals("Jwt payload is an invalid JSON"))
+      {
+        response.Content = new StringContent("You will need to reconnect to your Docusign account", Encoding.UTF8, "text/plain");
+      }
+    }
+    else if ("GetOrganizations".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+      if (response.StatusCode == HttpStatusCode.Unauthorized && content.Contains("INVALID_SCOPES"))
+      {
+        response.Content = new StringContent("You will need to reconnect to your Docusign account and provide consent to access organization data.", Encoding.UTF8, "text/plain");
+      }
+      else if (response.StatusCode == HttpStatusCode.BadRequest && content.Contains("Organization Connect is not enabled"))
+      {
+        response.Content = new StringContent("Your Docusign account is not enabled for organization management. Please contact Docusign support to enable this feature.", Encoding.UTF8, "text/plain");
+      }
+    }
+    else if ("CreateOrgHookEnvelope".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+      if (response.StatusCode == HttpStatusCode.BadRequest && content.Contains("Organization Connect is not enabled"))
+      {
+        response.Content = new StringContent("Your Docusign account is not enabled for organization management. Please contact Docusign support to enable this feature.", Encoding.UTF8, "text/plain");
+      }
+      else if (response.StatusCode == HttpStatusCode.BadRequest && content.Contains("exceeding"))
+      {
+        response.Content = new StringContent("Your Docusign organization is exceeding its configuration limits. Please contact Docusign support for assistance.", Encoding.UTF8, "text/plain");
+      }
     }
   }
 
