@@ -1,5 +1,3 @@
-using System.Net;
-
 public class Script : ScriptBase
 {
   public override async Task<HttpResponseMessage> ExecuteAsync()
@@ -6297,6 +6295,12 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     {
       var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
       uriBuilder.Path = uriBuilder.Path.Replace("connectV3", "connect");
+      this.Context.Request.RequestUri = uriBuilder.Uri;
+    }
+    if("DeleteHookV4".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+      uriBuilder.Path = uriBuilder.Path.Replace("connectV4", "connect");
       this.Context.Request.RequestUri = uriBuilder.Uri;
     }
 

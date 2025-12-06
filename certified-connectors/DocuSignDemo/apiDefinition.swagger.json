@@ -226,6 +226,35 @@
         }
       }
     },
+    "/Management/v2/organizations/{organizationId}/connect/{connectId}": {
+      "delete": {
+        "summary": "Delete organization hook",
+        "description": "Delete an organization hook.",
+        "operationId": "DeleteOrgHook",
+        "parameters": [
+          {
+            "name": "organizationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "connectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "internal",
+        "x-ms-no-generic-test": true
+      }
+    },
 
     "/accounts/{accountId}/connectV4": {
       "post": {
@@ -399,6 +428,35 @@
         "summary": "Delete hook (V3)",
         "description": "Delete a hook.",
         "operationId": "DeleteHookV3",
+        "parameters": [
+          {
+            "name": "accountId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "connectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "deprecated": false,
+        "x-ms-visibility": "internal",
+        "x-ms-no-generic-test": true
+      }
+    },
+    "/accounts/{accountId}/connectV4/{connectId}": {
+      "delete": {
+        "summary": "Delete hook (V4)",
+        "description": "Delete a hook.",
+        "operationId": "DeleteHookV4",
         "parameters": [
           {
             "name": "accountId",
