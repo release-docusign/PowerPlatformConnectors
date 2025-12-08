@@ -649,6 +649,11 @@
                     "x-ms-summary": "Value",
                     "description": "Enter the field data"
                   },
+                    "label": {
+                    "type": "string",
+                    "x-ms-summary": "Label",
+                    "description": "Required for 'Table Row'. Enter the label of the docgen field."
+                  },
                   "tableName": {
                     "type": "string",
                     "x-ms-summary": ": Table Name",
@@ -658,11 +663,6 @@
                     "type": "string",
                     "x-ms-summary": ": Table Row",
                     "description": "Required for 'Table Row'. Enter the row number"
-                  },
-                    "label": {
-                    "type": "string",
-                    "x-ms-summary": "Label",
-                    "description": "Required for 'Table Row'. Enter the table label."
                   }
                 }
               }
