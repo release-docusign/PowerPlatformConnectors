@@ -658,6 +658,11 @@
                     "type": "string",
                     "x-ms-summary": ": Table Row",
                     "description": "Required for 'Table Row'. Enter the row number"
+                  },
+                    "label": {
+                    "type": "string",
+                    "x-ms-summary": "Label",
+                    "description": "Required for 'Table Row'. Enter the table label."
                   }
                 }
               }

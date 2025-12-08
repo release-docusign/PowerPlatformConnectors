@@ -5328,7 +5328,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
         docGenFormFieldList.Add(new JObject
         {
           ["name"] = column["name"],
-          ["value"] = column["value"]
+          ["value"] = column["value"],
+          ["label"] = column["label"]
         });
       }
 
