@@ -7227,6 +7227,7 @@
               "envelope-discard",
               "envelope-purge",
               "envelope-removed",
+              "envelope-reminder-sent",
               "envelope-resent",
               "envelope-voided",
               "envelope-sent",
@@ -7234,7 +7235,7 @@
               "recipient-autoresponded",
               "recipient-completed",
               "recipient-declined",
-              "recipient-delegated",
+              "recipient-delegate",
               "recipient-delivered",
               "recipient-finish-later",
               "recipient-reassign",
@@ -7253,16 +7254,14 @@
               "identity-verification-completed",
               "identity-verification-pending",
               "extension-executed",
-              "notary-session-completed",
-              "notary-session-terminated",
               "notary-session-signer-locked",
               "notary-session-signer-unlocked",
-              "notary-session-authentication-failed",
+              "notary-session-terminated",
               "agreement-created",
               "agreement-updated",
               "agreement-deleted",
-              "agreement-reviewed-completed",
-              "agreement-extracted-reviewed"
+              "agreement-reviews-completed",
+              "agreement-extractions-reviewed"
             ]
           },
           "x-ms-visibility": "important"
