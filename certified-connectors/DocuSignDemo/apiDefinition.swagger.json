@@ -1608,7 +1608,7 @@
               "False",
               "True"
             ],
-            "default": "False",
+            "default": "True",
             "x-ms-visibility": "advanced"
           },
           {
