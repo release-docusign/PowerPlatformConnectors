@@ -63,7 +63,7 @@
       "url": "https://support.docusign.com"
     }
   },
-  "host": "www.docusign.net",
+  "host": "demo.docusign.net",
   "basePath": "/restapi/v2.1",
   "schemes": [
     "https"
