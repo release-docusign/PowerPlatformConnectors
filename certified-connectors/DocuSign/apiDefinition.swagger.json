@@ -3610,10 +3610,10 @@
             "x-ms-visibility": "important",
             "type": "string",
             "enum": [
-              "Default URL",
+              "Default URL (Not compatible with iframes)",
               "Add a different URL"
             ],
-            "default": "Default URL"
+            "default": "Default URL (Not compatible with iframes)"
           },
           {
             "name": "additionalURL",

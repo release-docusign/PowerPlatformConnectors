@@ -4851,8 +4851,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     body["authenticationMethod"] = query.Get("authenticationMethod");
     
     var returnUrl = query.Get("returnUrl");
-    if (returnUrl.Equals("Default URL (Not compatible with iframes)"))
-    {
+if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.Equals("Default URL")) 
+{  
       body["returnUrl"] = "https://postsign.docusign.com/postsigning/en/finish-signing";
     }
     else if (returnUrl.Equals("Add A Different URL"))
