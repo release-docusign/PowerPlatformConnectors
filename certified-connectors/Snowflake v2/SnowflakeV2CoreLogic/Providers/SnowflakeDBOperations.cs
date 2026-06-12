@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
 #nullable enable
@@ -19,6 +19,7 @@ namespace SnowflakeV2CoreLogic.Providers
     using SnowflakeV2CoreLogic;
     using SnowflakeV2CoreLogic.Exceptions;
     using SnowflakeV2CoreLogic.Models;
+    using SnowflakeV2CoreLogic.Models.ConnectorModels;
     using SnowflakeV2CoreLogic.Models.SnowflakeAPIModels;
     using SnowflakeV2CoreLogic.Utilities;
 
@@ -39,20 +40,21 @@ namespace SnowflakeV2CoreLogic.Providers
         }
 
         public async Task<SnowflakeTableData?> GetTableMetadataAsync(
-            string tableName)
+            string tableName,
+            string endpoint)
         {
             SnowflakeTableData? metadataResponse = null;
 
             using (var latencyLogger = new LatencyLogger(Constants.GetObjectAsync, logger))
             {
-                var metadataStatement = $"SELECT * FROM information_schema.columns where TABLE_NAME=?";
+                var metadataStatement = $"SELECT * FROM information_schema.columns WHERE TABLE_NAME=? AND TABLE_SCHEMA=CURRENT_SCHEMA()";
 
                 // Add request bindings
                 SnowflakeRequestBindings metaDataBindings = new SnowflakeRequestBindings();
                 metaDataBindings.AddTextBinding(1, tableName);
 
                 // Fetch the metadata
-                metadataResponse = await snowflakeClient.CallAPIAsync(httpClient, metadataStatement, metaDataBindings).ConfigureAwait(true);
+                metadataResponse = await snowflakeClient.CallAPIAsync(httpClient, metadataStatement, $"{endpoint} - GetTableMetadata", metaDataBindings, null, null, false).ConfigureAwait(true);
             }
 
             return metadataResponse;
@@ -60,24 +62,25 @@ namespace SnowflakeV2CoreLogic.Providers
 
         public async Task<SnowflakeTableData?> GetPrimaryKeyAsync(
             string tableName,
+            string endpoint,
             SnowflakeConnectionParameters? connectionParameters = null)
         {
             SnowflakeTableData? primaryKeyResponse = null;
             using (var latencyLogger = new LatencyLogger(Constants.GetObjectAsync, logger))
             {
-                var primaryKeyStatement = $"WITH t AS (select get_ddl(?,?) tbl_ddl), t1 AS (SELECT POSITION('primary key (', tbl_ddl) + 13 pos, SUBSTR(tbl_ddl, pos, POSITION(')', tbl_ddl, pos) - pos ) str FROM t) SELECT x.value column_name, x.index ordinal_position FROM t1, LATERAL SPLIT_TO_TABLE(t1.str, ',') x;";
+                var primaryKeyStatement = $"SHOW PRIMARY KEYS IN IDENTIFIER(?);";
                 var primaryKeyBindings = new SnowflakeRequestBindings();
-                primaryKeyBindings.AddTextBinding(1, "TABLE");
-                primaryKeyBindings.AddTextBinding(2, tableName);
+                primaryKeyBindings.AddTextBinding(1, tableName);
 
-                primaryKeyResponse = await snowflakeClient.CallAPIAsync(httpClient, primaryKeyStatement, primaryKeyBindings, connectionParameters).ConfigureAwait(true);
+                primaryKeyResponse = await snowflakeClient.CallAPIAsync(httpClient, primaryKeyStatement, $"{endpoint} - GetPrimaryKey", primaryKeyBindings, connectionParameters, null, false).ConfigureAwait(true);
             }
 
             return primaryKeyResponse;
         }
 
         public async Task<SnowflakeTableData?> GetTablesForSchemaAsync(
-            SnowflakeConnectionParameters connectionParameters)
+            SnowflakeConnectionParameters connectionParameters,
+            string endpoint)
         {
             SnowflakeTableData? snowflakeTableData = null;
 
@@ -90,7 +93,35 @@ namespace SnowflakeV2CoreLogic.Providers
                 stmtBindings.AddTextBinding(1, connectionParameters.Schema);
 
                 // Fetch the metadata
-                snowflakeTableData = await snowflakeClient.CallAPIAsync(httpClient, sqlCommand, stmtBindings).ConfigureAwait(true);
+                snowflakeTableData = await snowflakeClient.CallAPIAsync(httpClient, sqlCommand, $"{endpoint} - GetTablesForSchema", stmtBindings, null, null, false).ConfigureAwait(true);
+            }
+
+            return snowflakeTableData;
+        }
+
+        public async Task<SnowflakeTableData?> FetchPartitionAsync(
+            string statementHandle,
+            int partition,
+            SnowflakeConnectionParameters connectionParameters)
+        {
+            SnowflakeTableData? snowflakeTableData = null;
+
+            using (var latencyLogger = new LatencyLogger("FetchPartitionAsync", logger))
+            {
+                string validatedServer = connectionParameters.Server.EnsureValidSnowflakeUrl("Server");
+                var headerParameters = new HeaderParameters { Instance = validatedServer };
+
+                // Snowflake only returns resultSetMetaData with partition 0.
+                // Fetch partition 0 (for metadata) and the target partition (for data) in parallel.
+                var metadataTask = snowflakeClient.GetResultsAsync(
+                    httpClient, statementHandle, headerParameters, new QueryParameters { Partition = 0 });
+                var dataTask = snowflakeClient.GetResultsAsync(
+                    httpClient, statementHandle, headerParameters, new QueryParameters { Partition = partition });
+
+                await Task.WhenAll(metadataTask, dataTask).ConfigureAwait(true);
+
+                snowflakeTableData = SnowflakeTableData.FromPartitionResponse(
+                    metadataTask.Result.ResultSetMetaData, dataTask.Result);
             }
 
             return snowflakeTableData;
@@ -98,6 +129,7 @@ namespace SnowflakeV2CoreLogic.Providers
 
         public async Task<SnowflakeTableData?> ListAllItemsAsync(
             string table,
+            string endpoint,
             ODataQueryOptions? options = null,
             SnowflakeConnectionParameters? connectionParameters = null)
         {
@@ -130,7 +162,7 @@ namespace SnowflakeV2CoreLogic.Providers
                 orderBy = options.OrderBy != null ? options.OrderBy.RawValue : null;
                 top = queryOptions.IsTopSet ? queryOptions.Top.ToString() : Constants.DefaultNumberOfRowsToReturn.ToString();
                 skip = queryOptions.Skip.ToString();
-                filter = ConvertODataFilterToSql(options);
+                filter = ConvertODataFilterToSql(options, connectionParameters?.UseCaseInsensitiveFilters ?? false);
             }
 
             using (var latencyLogger = new LatencyLogger(Constants.ListAllItemsAsync, logger))
@@ -194,18 +226,18 @@ namespace SnowflakeV2CoreLogic.Providers
                 stmtBindings.AddTextBinding(1, table);
 
                 // Fetch the metadata
-                snowflakeTableData = await snowflakeClient.CallAPIAsync(httpClient, stmt, stmtBindings, connectionParameters).ConfigureAwait(true);
+                snowflakeTableData = await snowflakeClient.CallAPIAsync(httpClient, stmt, $"{endpoint} - ListAllItems", stmtBindings, connectionParameters, null, false).ConfigureAwait(true);
             }
 
             return snowflakeTableData;
         }
 
-        public string ConvertODataFilterToSql(ODataQueryOptions options)
+        public string ConvertODataFilterToSql(ODataQueryOptions options, bool useCaseInsensitiveFilters = false)
         {
             if (options?.Filter != null)
             {
                 var filterClause = options.Filter.FilterClause;
-                var sqlConverter = new ODataToSqlParser();
+                var sqlConverter = new ODataToSqlParser(useCaseInsensitiveFilters);
                 return sqlConverter.ParseFilterToSql(filterClause);
             }
 
@@ -217,6 +249,7 @@ namespace SnowflakeV2CoreLogic.Providers
             string tableName,
             string? fieldToQuery,
             string itemId,
+            string endpoint,
             SnowflakeConnectionParameters? connectionParameters = null)
         {
             SnowflakeTableData? data = null;
@@ -234,7 +267,7 @@ namespace SnowflakeV2CoreLogic.Providers
                 queryBindings.AddTextBinding(1, itemId);
 
                 // Fetch the metadata
-                data = await snowflakeClient.CallAPIAsync(httpClient, query, queryBindings, connectionParameters).ConfigureAwait(true);
+                data = await snowflakeClient.CallAPIAsync(httpClient, query, $"{endpoint} - GetItemFromTable", queryBindings, connectionParameters, null, false).ConfigureAwait(true);
             }
 
             return data;
@@ -243,6 +276,7 @@ namespace SnowflakeV2CoreLogic.Providers
         public async Task<SnowflakeTableData?> InsertRecordAsync(
             string table,
             Item dataToInsert,
+            string endpoint,
             SnowflakeConnectionParameters? connectionParameters = null)
         {
             SnowflakeTableData? data = null;
@@ -278,7 +312,7 @@ namespace SnowflakeV2CoreLogic.Providers
                 }
 
                 // Fetch the metadata
-                data = await snowflakeClient.CallAPIAsync(httpClient, query, queryBindings, connectionParameters).ConfigureAwait(true);
+                data = await snowflakeClient.CallAPIAsync(httpClient, query, $"{endpoint} - InsertRecord", queryBindings, connectionParameters, null, false).ConfigureAwait(true);
             }
 
             return data;
@@ -289,7 +323,8 @@ namespace SnowflakeV2CoreLogic.Providers
             string? primaryKeyColumn,
             string id,
             Item item,
-            SnowflakeConnectionParameters connectionParameters)
+            SnowflakeConnectionParameters connectionParameters,
+            string endpoint)
         {
             SnowflakeTableData? data = null;
             var sqlUpdateString = new StringBuilder();
@@ -328,7 +363,7 @@ namespace SnowflakeV2CoreLogic.Providers
                 var query = $"UPDATE {table} SET {sqlUpdateString} WHERE {primaryKeyColumn} = ?";
 
                 // Fetch the metadata
-                data = await snowflakeClient.CallAPIAsync(httpClient, query, queryBindings, connectionParameters).ConfigureAwait(true);
+                data = await snowflakeClient.CallAPIAsync(httpClient, query, $"{endpoint} - UpdateItem", queryBindings, connectionParameters, null, false).ConfigureAwait(true);
             }
 
             return data;
@@ -338,7 +373,8 @@ namespace SnowflakeV2CoreLogic.Providers
             string table,
             string? primaryKeyColumn,
             string id,
-            SnowflakeConnectionParameters connectionParameters)
+            SnowflakeConnectionParameters connectionParameters,
+            string endpoint)
         {
             SnowflakeTableData? data = null;
 
@@ -351,7 +387,7 @@ namespace SnowflakeV2CoreLogic.Providers
                 queryBindings.AddBinding(1, id);
 
                 // Fetch the metadata
-                data = await snowflakeClient.CallAPIAsync(httpClient, query, queryBindings, connectionParameters).ConfigureAwait(true);
+                data = await snowflakeClient.CallAPIAsync(httpClient, query, $"{endpoint} - DeleteItem", queryBindings, connectionParameters, null, false).ConfigureAwait(true);
             }
 
             return data;
@@ -360,7 +396,8 @@ namespace SnowflakeV2CoreLogic.Providers
         internal async Task<SnowflakeTableData> GetNumberOfRecordsAvailableInTableAsync(
             string table,
             ODataQueryOptions options,
-            SnowflakeConnectionParameters connectionParameters)
+            SnowflakeConnectionParameters connectionParameters,
+            string endpoint)
         {
             var query = "SELECT COUNT(*) FROM " + table;
 
@@ -384,18 +421,17 @@ namespace SnowflakeV2CoreLogic.Providers
                 string filterText = string.Empty;
                 if (options.Filter != null)
                 {
-                    filterText = ConvertODataFilterToSql(options);
+                    filterText = ConvertODataFilterToSql(options, connectionParameters?.UseCaseInsensitiveFilters ?? false);
                     query = $"SELECT COUNT(*) FROM {table} WHERE {filterText}";
                 }   
             }
 
             SnowflakeRequestBindings queryBindings = new SnowflakeRequestBindings();
-            var data = await snowflakeClient.CallAPIAsync(httpClient, query, queryBindings, connectionParameters).ConfigureAwait(true);
+            var data = await snowflakeClient.CallAPIAsync(httpClient, query, $"{endpoint} - GetRecordCount", queryBindings, connectionParameters, null, false).ConfigureAwait(true);
             return data;
         }
 
-        internal async Task<SnowflakeTableData> GetInformationScehmaAsync(
-            SnowflakeConnectionParameters connectionParameters)
+        internal async Task<SnowflakeTableData> GetInformationSchemaAsync(SnowflakeConnectionParameters connectionParameters, string endpoint)
         {
             string role = connectionParameters.Role;
             string warehouse = connectionParameters.Warehouse;
@@ -406,7 +442,7 @@ namespace SnowflakeV2CoreLogic.Providers
             {
                 var queryWithoutValidation = $"SELECT * FROM information_schema.columns";
                 SnowflakeRequestBindings queryBindings = new SnowflakeRequestBindings();
-                var dataWithoutValidation = await snowflakeClient.CallAPIAsync(httpClient, queryWithoutValidation).ConfigureAwait(true);
+                var dataWithoutValidation = await snowflakeClient.CallAPIAsync(httpClient, queryWithoutValidation, $"{endpoint} - GetInformationSchemaNoValidation", queryBindings, null, null, false).ConfigureAwait(true);
                 return dataWithoutValidation;
             }
 
@@ -415,7 +451,7 @@ namespace SnowflakeV2CoreLogic.Providers
             {
                 MULTI_STATEMENT_COUNT = 5,
             };
-            var dataWithValidation = await snowflakeClient.CallAPIAsync(httpClient, queryWithSnowflakeConfigValidation, null, null, requestParameters, true).ConfigureAwait(true);
+            var dataWithValidation = await snowflakeClient.CallAPIAsync(httpClient, queryWithSnowflakeConfigValidation, $"{endpoint} - GetInformationSchemaValidation", null, null, requestParameters, true).ConfigureAwait(true);
             return dataWithValidation;
         }
     }
