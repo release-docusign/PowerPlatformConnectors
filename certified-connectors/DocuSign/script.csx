@@ -4898,6 +4898,16 @@ if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.E
 
 
     var recipientType = query.Get("recipientType");
+    var recipientTypeMap = new Dictionary<string, string>() {
+      {"agent", "agents"},
+      {"editor", "editors"},
+      {"inpersonsigner", "inPersonSigners"},
+      {"certifieddelivery", "certifiedDeliveries"},
+      {"signer", "signers"},
+      {"carboncopy", "carbonCopies"},
+      {"intermediary", "intermediaries"},
+      {"witness", "witnesses"}
+    };
     var recipientId = query.Get("recipientId");
 
     var recipient = new JObject();
@@ -4962,7 +4972,9 @@ if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.E
     
     recipient["recipientId"] = recipientId;
     recipientArray.Add(recipient);
-    body[recipientType] = recipientArray;
+    body[!string.IsNullOrEmpty(recipientType) && recipientTypeMap.ContainsKey(recipientType) 
+    ? recipientTypeMap[recipientType] :
+     recipientType] = recipientArray;
 
     var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
     uriBuilder.Path = uriBuilder.Path.Replace("/recipients/addRecipientV2", "/recipients");
