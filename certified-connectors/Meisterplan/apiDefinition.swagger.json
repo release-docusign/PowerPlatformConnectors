@@ -5993,54 +5993,6 @@
         }
       }
     },
-    "/v1/sprints/{sprintId}": {
-      "get": {
-        "tags": [
-          "Sprints"
-        ],
-        "summary": "Get Sprint by ID",
-        "description": "Returns the individual sprint specified by the given ID.",
-        "operationId": "GetSprintById",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "sprintId",
-            "description": "Internal Meisterplan identifier",
-            "required": true,
-            "type": "string",
-            "x-ms-summary": "Sprint Id",
-            "x-ms-url-encoding": "single",
-            "x-example": "UUID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/SprintResponse"
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "429": {
-            "description": "Too Many Requests"
-          }
-        }
-      }
-    },
     "/v1/scenarios": {
       "get": {
         "tags": [
