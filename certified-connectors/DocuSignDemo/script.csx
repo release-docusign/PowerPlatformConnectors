@@ -4763,71 +4763,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
-  private JObject SearchListEnvelopesTransformation(JObject body)
-  { 
-      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
-      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-      uriBuilder.Path = uriBuilder.Path.Replace("/SearchListEnvelopes", "");
-
-      var orderByMapping = new Dictionary<string, string> { 
-      { "Action required", "action_required" },
-      { "Created", "created" },
-      { "Completed", "completed" },
-      { "Envelope name", "envelope_name" },
-      { "Expire", "expire" },
-      { "Last modified", "last_modified" },
-      { "Sent", "sent" },
-      { "Signer list", "signer_list" },
-      { "Status", "status" },
-      { "Subject", "subject" },
-      { "User name", "user_name" },
-      { "Status changed", "status_changed" }
-    };
-
-      var folderIDMapping = new Dictionary<string, string> {
-      { "Awaiting my signature", "awaiting_my_signature" },
-      { "Completed", "completed" },
-      { "Draft", "draft" },
-      { "Drafts", "drafts" },
-      { "Expiring soon", "expiring_soon" },
-      { "Inbox", "inbox" },
-      { "Out for signature", "out_for_signature" },
-      { "Recycle bin", "recyclebin" },
-      { "Sent items", "sent_items" },
-      { "Waiting for others", "waiting_for_others" }
-    };
-
-      var envelopeStatusMapping = new Dictionary<string, string> {
-      { "Any", "any" },
-      { "Created", "created" },
-      { "Sent", "sent" },
-      { "Delivered", "delivered" },
-      { "Signed", "signed" },
-      { "Completed", "completed" },
-      { "Declined", "declined" },
-      { "Voided", "voided" },
-      { "Deleted", "deleted" }
-    };
-      query["include"] = "custom_fields, recipients, documents, folders";
-      query["order"] = "desc";
-
-      query["status"] = string.IsNullOrEmpty(query.Get("envelopeStatus")) ? 
-        null : envelopeStatusMapping[query.Get("envelopeStatus")];
-      query["folder_ids"] = string.IsNullOrEmpty(query.Get("folder_ids")) ? 
-        null : folderIDMapping[query.Get("folder_ids").ToString()];
-       query["order_by"] = string.IsNullOrEmpty(query.Get("order_by")) ? 
-        "status_changed" : orderByMapping[query.Get("order_by")];
-      query["from_date"] = string.IsNullOrEmpty(query.Get("from_date")) ? 
-        "2000-01-02T12:45Z" : query.Get("from_date");
-      query["to_date"] = string.IsNullOrEmpty(query.Get("to_date")) ? 
-        DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : query.Get("to_date");
-
-      uriBuilder.Query = query.ToString();
-      this.Context.Request.RequestUri = uriBuilder.Uri;
-
-    return body;
-  }
-
   private JObject AddRecipientToEnvelopeBodyTransformation(JObject body)
   {
       var signers = body["signers"] as JArray;
@@ -4916,7 +4851,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     body["authenticationMethod"] = query.Get("authenticationMethod");
     
     var returnUrl = query.Get("returnUrl");
-    if (returnUrl.Equals("Default URL (Not compatible with iframes)"))
+    if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.Equals("Default URL"))
     {
       body["returnUrl"] = "https://postsign.docusign.com/postsigning/en/finish-signing";
     }
@@ -4963,6 +4898,18 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
 
 
     var recipientType = query.Get("recipientType");
+
+    var recipientTypeMap = new Dictionary<string, string>() {
+      {"agent", "agents"},
+      {"editor", "editors"},
+      {"inpersonsigner", "inPersonSigners"},
+      {"certifieddelivery", "certifiedDeliveries"},
+      {"signer", "signers"},
+      {"carboncopy", "carbonCopies"},
+      {"intermediary", "intermediaries"},
+      {"witness", "witnesses"}
+    };
+
     var recipientId = query.Get("recipientId");
 
     var recipient = new JObject();
@@ -5027,7 +4974,10 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     
     recipient["recipientId"] = recipientId;
     recipientArray.Add(recipient);
-    body[recipientType] = recipientArray;
+
+    body[!string.IsNullOrEmpty(recipientType) && recipientTypeMap.ContainsKey(recipientType) 
+    ? recipientTypeMap[recipientType] :
+     recipientType] = recipientArray;
 
     var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
     uriBuilder.Path = uriBuilder.Path.Replace("/recipients/addRecipientV2", "/recipients");
@@ -6486,7 +6436,7 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
       await this.TransformRequestJsonBody(this.listEnvelopeIdsBodyTransformation).ConfigureAwait(false);
     }
     
-    if (("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+    if ("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.SearchListEnvelopesTransformation).ConfigureAwait(false);
     }
