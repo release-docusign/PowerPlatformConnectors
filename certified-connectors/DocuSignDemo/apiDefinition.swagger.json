@@ -7343,12 +7343,12 @@
                         "x-ms-summary": "Document ID",
                         "x-ms-visibility": "important"
                       },
-                      "documentGuid": {
+                      "documentIdGuid": {
                         "type": "string",
                         "x-ms-summary": "Document Guid",
                         "x-ms-visibility": "important"
                       },
-                      "documentName": {
+                      "name": {
                         "type": "string",
                         "x-ms-summary": "Document Name",
                         "x-ms-visibility": "important"
