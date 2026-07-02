@@ -3785,6 +3785,88 @@ public class Script : ScriptBase
       var envelopeSummary = body["data"]["envelopeSummary"];
       var customFields = envelopeSummary["customFields"];
       var parsedCustomFields = new JObject();
+
+      if (customFields is JObject)
+      {
+        var textCustomFields = customFields["textCustomFields"];
+        ParseCustomFields(textCustomFields, parsedCustomFields);
+
+        var listCustomFields = customFields["listCustomFields"];
+        ParseCustomFields(listCustomFields, parsedCustomFields);
+      }
+
+      body["data"]["envelopeSummary"]["customFields"] = parsedCustomFields;
+
+      // tab code
+      var recipientStatuses = envelopeSummary["recipients"];
+      if (recipientStatuses is JObject)
+      {
+        foreach (var recipient in recipientStatuses["signers"] ?? new JArray())
+        {
+          var tabs = recipient["tabs"];
+          if (tabs is JObject)
+          {
+            var newTabs = new JObject();
+
+            string[] tabTypes = { "textTabs", "fullNameTabs", "dateSignedTabs", "companyTabs", "titleTabs", "numberTabs",
+              "ssnTabs", "dateTabs", "zipTabs", "emailTabs", "noteTabs", "listTabs", "firstNameTabs", "lastNameTabs", "emailAddressTabs",
+              "formulaTabs", "checkboxTabs", "radioGroupTabs" };
+            foreach (var tabType in tabTypes)
+            {
+              var tabStatusArray = tabs[tabType];
+              foreach (var tab in tabStatusArray as JArray ?? new JArray())
+              {
+                if (tab is JObject)
+                {
+                  if (tabType.Equals("checkboxTabs"))
+                  {
+                    if (newTabs[(string)tab["tabLabel"]] == null)
+                    {
+                      newTabs.Add((string)tab["tabLabel"], (string)tab["selected"]);
+                    }
+                  }
+
+                  var tabValue = (string)tab["value"];
+                  if (tabType.Equals("radioGroupTabs") && !string.IsNullOrWhiteSpace(tabValue))
+                  {
+                    var tabGroupName = (string)tab["groupName"];
+                    if (newTabs[tabGroupName] == null)
+                    {
+                      newTabs.Add(tabGroupName, (string)tab["value"]);
+                    }
+                  }
+
+                  var tabLabel = (string)tab["tabLabel"];
+                  if (!string.IsNullOrWhiteSpace(tabLabel) && !string.IsNullOrWhiteSpace(tabValue))
+                  {
+                    if (newTabs[tabLabel] == null)
+                    {
+                      newTabs.Add(tabLabel, tabValue);
+                    }
+                  }
+                }
+              }
+            }
+            
+            recipient["tabs"] = newTabs;
+          }
+        }
+      }
+    }
+
+    return body.ToString();
+  }
+
+     private static string TransformWebhookNotificationBody2(string content)
+  {
+    JObject body = ParseContentAsJObject(content, true);
+
+    // customfield code
+    if (body["data"] is JObject && body["data"]["envelopeSummary"] is JObject)
+    {
+      var envelopeSummary = body["data"]["envelopeSummary"];
+      var customFields = envelopeSummary["customFields"];
+      var parsedCustomFields = new JObject();
       var envelopeDocuments = new JArray();
 
       if (customFields is JObject)
@@ -3905,6 +3987,10 @@ public class Script : ScriptBase
       var jsonContent = JsonConvert.SerializeXmlNode(doc);
       notificationContent = TransformWebhookNotificationBodyDeprecated(jsonContent);
     }
+    else if ("WebhookResponse2".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
+    {
+      notificationContent = TransformWebhookNotificationBody2(content);
+    }
     else
     {
       notificationContent = TransformWebhookNotificationBody(content);
@@ -3996,7 +4082,7 @@ public class Script : ScriptBase
 
     var uriLogicApps = original["urlToPublishTo"]?.ToString();
     var uriLogicAppsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(uriLogicApps ?? string.Empty));
-    var notificationProxyUri = this.Context.CreateNotificationUri($"/webhook_response?logicAppsUri={uriLogicAppsBase64}");
+    var notificationProxyUri = this.Context.CreateNotificationUri($"/webhook_response2?logicAppsUri={uriLogicAppsBase64}");
 
     body["allUsers"] = "true";
     body["allowEnvelopePublish"] = "true";
@@ -4132,16 +4218,9 @@ public class Script : ScriptBase
     body["configurationType"] = "custom";
     body["deliveryMode"] = "sim";
 
-    if (!uriBuilder.Path.Contains(this.Context.Request.Headers.GetValues("AccountId").FirstOrDefault()))
-    {
-      throw new ConnectorException(HttpStatusCode.BadRequest, "User is not an account administrator. Please contact DocuSign account admin");
-    }
-
     string eventData = @"[
       'tabs',
-      'custom_fields',
-      'recipients',
-      'document_fields'
+      'custom_fields'
     ]";
 
     JArray includeData = JArray.Parse(eventData);
