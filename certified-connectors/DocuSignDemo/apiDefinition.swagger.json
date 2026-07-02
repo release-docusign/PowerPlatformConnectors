@@ -503,28 +503,6 @@
         "x-ms-no-generic-test": true
       }
     },
-    "/webhook_response2": {
-      "post": {
-        "operationId": "WebhookResponse2",
-        "parameters": [
-          {
-            "name": "logicAppsUri",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "deprecated": false,
-        "security": [],
-        "x-ms-visibility": "internal",
-        "x-ms-no-generic-test": true
-      }
-    },
     "/accounts/{accountId}/envelopes/{envelopeId}/docGenFormFields": {
       "get": {
         "tags": [
@@ -7190,12 +7168,12 @@
                         "x-ms-summary": "Document ID",
                         "x-ms-visibility": "important"
                       },
-                      "documentGuid": {
+                      "documentIdGuid": {
                         "type": "string",
                         "x-ms-summary": "Document Guid",
                         "x-ms-visibility": "important"
                       },
-                      "documentName": {
+                      "name": {
                         "type": "string",
                         "x-ms-summary": "Document Name",
                         "x-ms-visibility": "important"
@@ -9520,6 +9498,24 @@
     {
       "propertyName": "Categories",
       "propertyValue": "Content and Files;Productivity"
+    }
+    ],
+    "securityDefinitions": {
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://account-d.docusign.com/oauth/auth",
+      "tokenUrl": "https://account-d.docusign.com/oauth/token",
+      "scopes": {
+        "signature extended aow_manage account_product_read connect_org_config_write_api organization_read": "signature extended aow_manage account_product_read connect_org_config_write_api organization_read"
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2": [
+        "signature extended aow_manage account_product_read connect_org_config_write_api organization_read"
+      ]
     }
   ]
 }
