@@ -1439,7 +1439,7 @@ public class Script : ScriptBase
       response["schema"]["properties"]["Build Number"] = new JObject
         {
           ["type"] = "string",
-          ["x-ms-summary"] = "DS1009.0.5"
+          ["x-ms-summary"] = "DS1009.0.6"
       };
     }
 
@@ -3785,7 +3785,6 @@ public class Script : ScriptBase
       var envelopeSummary = body["data"]["envelopeSummary"];
       var customFields = envelopeSummary["customFields"];
       var parsedCustomFields = new JObject();
-      var envelopeDocuments = new JArray();
 
       if (customFields is JObject)
       {
@@ -3797,19 +3796,6 @@ public class Script : ScriptBase
       }
 
       body["data"]["envelopeSummary"]["customFields"] = parsedCustomFields;
-
-      // documents code
-      foreach (var envelopeDocument in envelopeSummary["envelopeDocuments"] ?? new JArray())
-      {
-        envelopeDocuments.Add(new JObject()
-        {
-          ["documentId"] = envelopeDocument["documentId"],
-          ["documentGuid"] = envelopeDocument["documentIdGuid"],
-          ["documentName"] = envelopeDocument["name"]
-        });
-      }
-
-      body["data"]["envelopeSummary"]["envelopeDocuments"] = envelopeDocuments;
 
       // tab code
       var recipientStatuses = envelopeSummary["recipients"];
@@ -3934,16 +3920,11 @@ public class Script : ScriptBase
   private JObject CreateHookEnvelopeV2BodyTransformation(JObject original)
   {
     var body = new JObject();
-    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
+    
 
     var uriLogicApps = original["urlToPublishTo"]?.ToString();
     var uriLogicAppsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(uriLogicApps ?? string.Empty));
     var notificationProxyUri = this.Context.CreateNotificationUri($"/webhook_response?logicAppsUri={uriLogicAppsBase64}");
-
-    if (!uriBuilder.Path.Contains(this.Context.Request.Headers.GetValues("AccountId").FirstOrDefault()))
-    {
-      throw new ConnectorException(HttpStatusCode.BadRequest, "User is not an account administrator. Please contact DocuSign account admin");
-    }
 
     // TODO: This map is added for backward compatibility. This will be removed once old events are deprecated
     var envelopeEventMap = new Dictionary<string, string>() {
@@ -3983,7 +3964,7 @@ public class Script : ScriptBase
       ["format"] = "json",
       ["includeData"] = includeData
     };
-
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
     uriBuilder.Path = uriBuilder.Path.Replace("connectV2", "connect");
     this.Context.Request.RequestUri = uriBuilder.Uri;
     return body;
@@ -3992,7 +3973,6 @@ public class Script : ScriptBase
     private JObject CreateHookEnvelopeV4BodyTransformation(JObject original)
   {
     var body = new JObject();
-    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
 
     var uriLogicApps = original["urlToPublishTo"]?.ToString();
     var uriLogicAppsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(uriLogicApps ?? string.Empty));
@@ -4008,10 +3988,6 @@ public class Script : ScriptBase
     body["configurationType"] = "custom";
     body["deliveryMode"] = "sim";
 
-    if (!uriBuilder.Path.Contains(this.Context.Request.Headers.GetValues("AccountId").FirstOrDefault()))
-    {
-      throw new ConnectorException(HttpStatusCode.BadRequest, "User is not an account administrator. Please contact DocuSign account admin");
-    }
 
     string eventData = @"[
       'tabs',
@@ -4027,6 +4003,7 @@ public class Script : ScriptBase
       ["format"] = "json",
       ["includeData"] = includeData
     };
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
 
     uriBuilder.Path = uriBuilder.Path.Replace("connectV4", "connect");
     this.Context.Request.RequestUri = uriBuilder.Uri;
@@ -4112,7 +4089,6 @@ public class Script : ScriptBase
   private JObject CreateHookEnvelopeV3BodyTransformation(JObject original)
   {
     var body = new JObject();
-    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
 
     var uriLogicApps = original["urlToPublishTo"]?.ToString();
     var uriLogicAppsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(uriLogicApps ?? string.Empty));
@@ -4132,16 +4108,10 @@ public class Script : ScriptBase
     body["configurationType"] = "custom";
     body["deliveryMode"] = "sim";
 
-    if (!uriBuilder.Path.Contains(this.Context.Request.Headers.GetValues("AccountId").FirstOrDefault()))
-    {
-      throw new ConnectorException(HttpStatusCode.BadRequest, "User is not an account administrator. Please contact DocuSign account admin");
-    }
-
     string eventData = @"[
       'tabs',
       'custom_fields',
-      'recipients',
-      'document_fields'
+      'recipients'
     ]";
 
     JArray includeData = JArray.Parse(eventData);
@@ -4152,6 +4122,7 @@ public class Script : ScriptBase
       ["includeData"] = includeData
     };
 
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
     uriBuilder.Path = uriBuilder.Path.Replace("connectV3", "connect");
     this.Context.Request.RequestUri = uriBuilder.Uri;
     return body;
@@ -4160,16 +4131,11 @@ public class Script : ScriptBase
   private JObject CreateHookEnvelopeBodyTransformation(JObject original)
   {
     var body = new JObject();
-    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
 
     var uriLogicApps = original["urlToPublishTo"]?.ToString();
     var uriLogicAppsBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(uriLogicApps ?? string.Empty));
     var notificationProxyUri = this.Context.CreateNotificationUri($"/webhook_response?logicAppsUri={uriLogicAppsBase64}");
 
-    if (!uriBuilder.Path.Contains(this.Context.Request.Headers.GetValues("AccountId").FirstOrDefault()))
-    {
-      throw new ConnectorException(HttpStatusCode.BadRequest, "User is not an account administrator. Please contact DocuSign account admin");
-    }
 
     body["allUsers"] = "true";
     body["allowEnvelopePublish"] = "true";
@@ -4182,6 +4148,7 @@ public class Script : ScriptBase
     body["envelopeEvents"] = original["envelopeEvents"]?.ToString();
     body["includeSenderAccountasCustomField"] = "true";
     
+    var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
     uriBuilder.Path = uriBuilder.Path.Replace("v2.1", "v2");
     this.Context.Request.RequestUri = uriBuilder.Uri;
 
@@ -4763,71 +4730,6 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     return body;
   }
 
-  private JObject SearchListEnvelopesTransformation(JObject body)
-  { 
-      var uriBuilder = new UriBuilder(this.Context.Request.RequestUri);
-      var query = HttpUtility.ParseQueryString(this.Context.Request.RequestUri.Query);
-      uriBuilder.Path = uriBuilder.Path.Replace("/SearchListEnvelopes", "");
-
-      var orderByMapping = new Dictionary<string, string> { 
-      { "Action required", "action_required" },
-      { "Created", "created" },
-      { "Completed", "completed" },
-      { "Envelope name", "envelope_name" },
-      { "Expire", "expire" },
-      { "Last modified", "last_modified" },
-      { "Sent", "sent" },
-      { "Signer list", "signer_list" },
-      { "Status", "status" },
-      { "Subject", "subject" },
-      { "User name", "user_name" },
-      { "Status changed", "status_changed" }
-    };
-
-      var folderIDMapping = new Dictionary<string, string> {
-      { "Awaiting my signature", "awaiting_my_signature" },
-      { "Completed", "completed" },
-      { "Draft", "draft" },
-      { "Drafts", "drafts" },
-      { "Expiring soon", "expiring_soon" },
-      { "Inbox", "inbox" },
-      { "Out for signature", "out_for_signature" },
-      { "Recycle bin", "recyclebin" },
-      { "Sent items", "sent_items" },
-      { "Waiting for others", "waiting_for_others" }
-    };
-
-      var envelopeStatusMapping = new Dictionary<string, string> {
-      { "Any", "any" },
-      { "Created", "created" },
-      { "Sent", "sent" },
-      { "Delivered", "delivered" },
-      { "Signed", "signed" },
-      { "Completed", "completed" },
-      { "Declined", "declined" },
-      { "Voided", "voided" },
-      { "Deleted", "deleted" }
-    };
-      query["include"] = "custom_fields, recipients, documents, folders";
-      query["order"] = "desc";
-
-      query["status"] = string.IsNullOrEmpty(query.Get("envelopeStatus")) ? 
-        null : envelopeStatusMapping[query.Get("envelopeStatus")];
-      query["folder_ids"] = string.IsNullOrEmpty(query.Get("folder_ids")) ? 
-        null : folderIDMapping[query.Get("folder_ids").ToString()];
-       query["order_by"] = string.IsNullOrEmpty(query.Get("order_by")) ? 
-        "status_changed" : orderByMapping[query.Get("order_by")];
-      query["from_date"] = string.IsNullOrEmpty(query.Get("from_date")) ? 
-        "2000-01-02T12:45Z" : query.Get("from_date");
-      query["to_date"] = string.IsNullOrEmpty(query.Get("to_date")) ? 
-        DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : query.Get("to_date");
-
-      uriBuilder.Query = query.ToString();
-      this.Context.Request.RequestUri = uriBuilder.Uri;
-
-    return body;
-  }
-
   private JObject AddRecipientToEnvelopeBodyTransformation(JObject body)
   {
       var signers = body["signers"] as JArray;
@@ -4916,8 +4818,8 @@ private void RenameSpecificKeys(JObject jObject, Dictionary<string, string> keyM
     body["authenticationMethod"] = query.Get("authenticationMethod");
     
     var returnUrl = query.Get("returnUrl");
-if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.Equals("Default URL")) 
-{  
+    if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.Equals("Default URL"))
+    {
       body["returnUrl"] = "https://postsign.docusign.com/postsigning/en/finish-signing";
     }
     else if (returnUrl.Equals("Add A Different URL"))
@@ -4963,6 +4865,7 @@ if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.E
 
 
     var recipientType = query.Get("recipientType");
+
     var recipientTypeMap = new Dictionary<string, string>() {
       {"agent", "agents"},
       {"editor", "editors"},
@@ -4973,6 +4876,7 @@ if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.E
       {"intermediary", "intermediaries"},
       {"witness", "witnesses"}
     };
+
     var recipientId = query.Get("recipientId");
 
     var recipient = new JObject();
@@ -5037,6 +4941,7 @@ if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.E
     
     recipient["recipientId"] = recipientId;
     recipientArray.Add(recipient);
+
     body[!string.IsNullOrEmpty(recipientType) && recipientTypeMap.ContainsKey(recipientType) 
     ? recipientTypeMap[recipientType] :
      recipientType] = recipientArray;
@@ -6498,7 +6403,7 @@ if (returnUrl.Equals("Default URL (Not compatible with iframes)") || returnUrl.E
       await this.TransformRequestJsonBody(this.listEnvelopeIdsBodyTransformation).ConfigureAwait(false);
     }
     
-    if (("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase)))
+    if ("SearchListEnvelopes".Equals(this.Context.OperationId, StringComparison.OrdinalIgnoreCase))
     {
       await this.TransformRequestJsonBody(this.SearchListEnvelopesTransformation).ConfigureAwait(false);
     }

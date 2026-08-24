@@ -306,7 +306,7 @@
       "x-ms-notification-content": {
         "description": "Details for Webhook",
         "schema": {
-          "$ref": "#/definitions/WebhookEnvelopeResponseV2"
+          "$ref": "#/definitions/WebhookEnvelopeResponseV4"
         }
       }
     },
@@ -322,6 +322,7 @@
             "description": "Account id",
             "required": true,
             "x-ms-summary": "Account",
+            "x-ms-visibility": "important",
             "x-ms-test-value": "insert account id",
             "x-ms-dynamic-values": {
               "operationId": "GetLoginAccounts",
@@ -351,16 +352,16 @@
             "description": "This Account lacks sufficient permissions. Connect not enabled for account."
           }
         },
-        "deprecated": true,
+        "deprecated": false,
         "x-ms-trigger": "single",
         "x-ms-trigger-hint": "To see it work now, send an envelope.",
-        "x-ms-visibility": "internal",
+        "x-ms-visibility": "important",
         "x-ms-no-generic-test": true
       },
       "x-ms-notification-content": {
         "description": "Details for Webhook",
         "schema": {
-          "$ref": "#/definitions/WebhookEnvelopeResponseV2"
+          "$ref": "#/definitions/WebhookEnvelopeResponseV3"
         }
       }
     },
@@ -1658,105 +1659,6 @@
         "x-ms-no-generic-test": true
       }
     },
-    "/accounts/{accountId}/envelopes/compositeTemplates": {
-      "post": {
-        "summary": "Create envelope using composite templates",
-        "operationId": "CompositeTemplates",
-        "description": "Create envelope using composite templates",
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account id",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account id",
-            "x-ms-visibility": "important",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string"
-          },
-          {
-            "name": "emailSubject",
-            "in": "query",
-            "description": "Subject of the email.",
-            "required": true,
-            "x-ms-summary": "Email subject",
-            "x-ms-visibility": "important",
-            "type": "string"
-          },
-          {
-            "name": "emailBody",
-            "in": "query",
-            "description": "Body of the email.",
-            "required": false,
-            "x-ms-summary": "Email body",
-            "x-ms-visibility": "important",
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Envelope status",
-            "required": true,
-            "x-ms-summary": "Envelope status",
-            "x-ms-test-value": "Created",
-            "x-ms-visibility": "important",
-            "type": "string",
-            "enum": [
-              "Sent",
-              "Created"
-            ]
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/CompositeTemplateSchema"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "default",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "envelopeId": {
-                  "description": "The id of the envelope.",
-                  "type": "string",
-                  "x-ms-summary": "Envelope Id",
-                  "x-ms-visibility": "important"
-                },
-                "status": {
-                  "description": "The status of the envelope.",
-                  "type": "string",
-                  "x-ms-summary": "Status",
-                  "x-ms-visibility": "important"
-                },
-                "statusDateTime": {
-                  "description": "The datetime the status was set.",
-                  "type": "string",
-                  "x-ms-summary": "Status date time",
-                  "x-ms-visibility": "important"
-                },
-                "uri": {
-                  "description": "The URI for the envelope in DocuSign.",
-                  "type": "string",
-                  "x-ms-summary": "URI",
-                  "x-ms-visibility": "important"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/accounts/salesCopilotAccount/envelopes/getRelatedActivities": {
       "get": {
         "tags": [
@@ -3046,7 +2948,7 @@
         "tags": [
           "DocuSign"
         ],
-        "summary": "DEPRECATED: Create envelope using template with recipients",
+        "summary": "Create envelope using template with recipients",
         "description": "Create a new envelope using a specified template and specify recipients.",
         "operationId": "SendEnvelope",
         "x-ms-no-generic-test": true,
@@ -3638,198 +3540,6 @@
             "description": "Enter an envelope ID.",
             "required": true,
             "x-ms-summary": "Envelope ID",
-            "x-ms-test-value": "insert envelope id",
-            "type": "string",
-            "x-ms-visibility": "important"
-          },
-          {
-            "name": "fieldId",
-            "in": "query",
-            "description": "Custom Field ID",
-            "required": true,
-            "x-ms-summary": "Field ID",
-            "type": "string"
-          },
-          {
-            "name": "fieldType",
-            "in": "query",
-            "description": "Custom Field Type",
-            "required": true,
-            "x-ms-summary": "Field Type",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "in": "query",
-            "description": "Custom Field Name",
-            "required": true,
-            "x-ms-summary": "Name",
-            "type": "string"
-          },
-          {
-            "name": "value",
-            "in": "query",
-            "description": "Custom Field Value",
-            "required": true,
-            "x-ms-summary": "Value",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/UpdateEnvelopeCustomFieldResponse"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-visibility": "important",
-        "x-ms-no-generic-test": true
-      }
-    },
-    "/accounts/{accountId}/envelopes/{envelopeId}/views/sender": {
-      "post": {
-        "tags": [
-          "DocuSign"
-        ],
-        "summary": "Generate Embedded Sender URL",
-        "description": "Generate Embedded Sender URL",
-        "operationId": "GenerateEmbeddedSenderURL",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml",
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml"
-        ],
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account id",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account id",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string"
-          },
-          {
-            "name": "envelopeId",
-            "in": "path",
-            "description": "Envelope id",
-            "required": true,
-            "x-ms-summary": "Envelope",
-            "x-ms-test-value": "insert envelope id",
-            "type": "string"
-          },
-          {
-            "name": "openIn",
-            "in": "query",
-            "description": "Open in",
-            "required": true,
-            "x-ms-summary": "Open in",
-            "x-ms-visibility": "important",
-            "type": "string",
-            "enum": [
-              "Prepare",
-              "Tagging"
-            ],
-            "default": "Prepare"
-          },
-          {
-            "name": "returnUrl",
-            "in": "query",
-            "description": "Return URL",
-            "required": true,
-            "x-ms-summary": "Return URL",
-            "x-ms-visibility": "important",
-            "type": "string",
-            "enum": [
-              "DocuSign homepage",
-              "Add a different URL"
-            ],
-            "default": "DocuSign homepage"
-          },
-          {
-            "name": "additionalURL",
-            "in": "body",
-            "description": "Additional added URL.",
-            "schema": {
-              "$ref": "#/definitions/AdditionalURLForSenderView"
-            },
-            "x-ms-summary": "Additional added URL",
-            "x-ms-visibility": "advanced"
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/EmbeddedSenderResponse"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-visibility": "important",
-        "x-ms-no-generic-test": true
-      }
-    },
-    "/accounts/{accountId}/envelopes/{envelopeId}/views/recipient": {
-      "post": {
-        "tags": [
-          "DocuSign"
-        ],
-        "summary": "Generate Embedded Signing URL",
-        "description": "Generate Embedded Signing URL",
-        "operationId": "GenerateEmbeddedSigningURL",
-        "consumes": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml",
-          "application/x-www-form-urlencoded"
-        ],
-        "produces": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml"
-        ],
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account ID",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account id",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string",
-            "x-ms-visibility": "important"
-          },
-          {
-            "name": "envelopeId",
-            "in": "path",
-            "description": "Envelope ID",
-            "required": true,
-            "x-ms-summary": "Envelope",
             "x-ms-test-value": "insert envelope id",
             "type": "string",
             "x-ms-visibility": "important"
@@ -4448,60 +4158,6 @@
         "x-ms-visibility": "important"
       }
     },
-    "/accounts/{accountId}/envelopes/{envelopeId}/audit_events": {
-      "get": {
-        "tags": [
-          "DocuSign"
-        ],
-        "summary": "Get audit event list",
-        "description": "Get audit event list",
-        "operationId": "GetAuditEvents",
-        "consumes": [],
-        "produces": [
-          "application/json",
-          "text/json",
-          "application/xml",
-          "text/xml"
-        ],
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account id",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account id",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string"
-          },
-          {
-            "name": "envelopeId",
-            "in": "path",
-            "description": "Envelope id",
-            "required": true,
-            "x-ms-summary": "Envelope",
-            "x-ms-test-value": "insert envelope id",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/AuditResponse"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-no-generic-test": true,
-        "x-ms-visibility": "advanced"
-      }
-    },
     "/accounts/{accountId}/envelopes/{envelopeId}/recipients/addRecipientV2": {
       "post": {
         "tags": [
@@ -4696,25 +4352,6 @@
             "x-ms-summary": "SMS Phone Number",
             "x-ms-visibility": "advanced",
             "type": "string"
-          },
-          {
-            "name": "signingGroupId",
-            "in": "query",
-            "description": "Signing Group",
-            "x-ms-summary": "Signing Group",
-            "x-ms-visibility": "advanced",
-            "type": "string",
-            "x-ms-dynamic-values": {
-              "operationId": "GetSigningGroups",
-              "parameters": {
-                "accountId": {
-                  "parameter": "accountId"
-                }
-              },
-              "value-collection": "groups",
-              "value-path": "signingGroupId",
-              "value-title": "groupName"
-            }
           },
           {
             "name": "signingGroupId",
@@ -5090,25 +4727,6 @@
             "x-ms-summary": "SMS Phone Number",
             "x-ms-visibility": "advanced",
             "type": "string"
-          },
-          {
-            "name": "signingGroupId",
-            "in": "query",
-            "description": "Signing Group",
-            "x-ms-summary": "Signing Group",
-            "x-ms-visibility": "advanced",
-            "type": "string",
-            "x-ms-dynamic-values": {
-              "operationId": "GetSigningGroups",
-              "parameters": {
-                "accountId": {
-                  "parameter": "accountId"
-                }
-              },
-              "value-collection": "groups",
-              "value-path": "signingGroupId",
-              "value-title": "groupName"
-            }
           },
           {
             "name": "signingGroupId",
@@ -6742,132 +6360,6 @@
         "x-ms-visibility": "important"
       }
     },
-    "/accounts/{accountId}/maestro-workflows": {
-      "get": {
-        "summary": "Get Maestro Workflow Definitions",
-        "operationId": "GetMaestroWorkflowDefinitions",
-        "description": "Get Maestro Workflow Definitions",
-        "x-ms-visibility": "internal",
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkflowDefinitionsResponse"
-            }
-          }
-        }
-      }
-    },
-    "/accounts/{accountId}/maestro-workflows/{workflowId}": {
-      "get": {
-        "summary": "Get Maestro Workflow Definition",
-        "operationId": "GetMaestroWorkflowDefinition",
-        "description": "Get Maestro Workflow Definition",
-        "x-ms-visibility": "internal",
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "workflowId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/WorkflowDefinitionResponse"
-            }
-          }
-        }
-      }
-    },
-    "/accounts/{accountId}/maestro-workflows/trigger/{workflowId}": {
-      "post": {
-        "summary": "Start Docusign Maestro workflow",
-        "description": "Start Docusign Maestro workflow",
-        "operationId": "TriggerMaestroFlow",
-        "parameters": [
-          {
-            "name": "accountId",
-            "in": "path",
-            "description": "Account ID",
-            "required": true,
-            "x-ms-summary": "Account",
-            "x-ms-test-value": "insert account ID",
-            "x-ms-dynamic-values": {
-              "operationId": "GetLoginAccounts",
-              "value-collection": "loginAccounts",
-              "value-path": "accountIdGuid",
-              "value-title": "name"
-            },
-            "type": "string"
-          },
-          {
-            "name": "workflowId",
-            "in": "path",
-            "description": "Enter the workflow ID or select the workflow name from the dropdown",
-            "x-ms-summary": "workflow",
-            "x-ms-test-value": "insert workflow ID",
-            "required": true,
-            "x-ms-dynamic-values": {
-              "operationId": "GetMaestroWorkflowDefinitions",
-              "parameters": {
-                "accountId": {
-                  "parameter": "accountId"
-                }
-              },
-              "value-collection": "workflowDefinitions",
-              "value-path": "id",
-              "value-title": "name"
-            },
-            "type": "string"
-          },
-          {
-            "name": "instanceName",
-            "in": "query",
-            "description": "Name of the Maestro workflow instance",
-            "x-ms-summary": "instance Name",
-            "x-ms-test-value": "insert instance name",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "variable",
-            "in": "body",
-            "required": false,
-            "schema": {
-              "$ref": "#/definitions/MaestroInputVariables"
-            },
-            "x-ms-visibility": "important"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/TriggerMaestroFlowResponse"
-            }
-          }
-        },
-        "deprecated": false,
-        "x-ms-visibility": "important"
-      }
-    },
     "/document_types": {
       "get": {
         "tags": [
@@ -7327,7 +6819,299 @@
         }
       }
     },
-    "WebhookEnvelopeResponseV2": {
+     "WebhookEnvelopeResponseV2": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "envelopeSummary": {
+              "type": "object",
+              "properties": {
+                "customFields": {
+                  "description": "Key-value pairs representing the custom fields for this envelope (where key is the field name, and value is the field value).",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "x-ms-visibility": "important",
+                  "x-ms-summary": "Custom Fields"
+                },
+                "createdDateTime": {
+                  "format": "date-time",
+                  "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                  "type": "string",
+                  "x-ms-summary": "Envelope Created Date-Time",
+                  "x-ms-visibility": "advanced"
+                },
+                "envelopeId": {
+                  "type": "string",
+                  "x-ms-summary": "Envelope ID",
+                  "x-ms-visibility": "important"
+                },
+                "sentDateTime": {
+                  "format": "date-time",
+                  "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                  "type": "string",
+                  "x-ms-summary": "Envelope Sent Date-Time",
+                  "x-ms-visibility": "important"
+                },
+                "status": {
+                  "type": "string",
+                  "x-ms-summary": "Envelope Status",
+                  "x-ms-visibility": "important"
+                },
+                "emailSubject": {
+                  "type": "string",
+                  "x-ms-summary": "Email Subject",
+                  "x-ms-visibility": "important"
+                },
+                "sender": {
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's Name",
+                      "x-ms-visibility": "important"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's User ID",
+                      "x-ms-visibility": "important"
+                    },
+                    "accountId": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's Account ID",
+                      "x-ms-visibility": "important"
+                    },
+                    "email": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's Email Address",
+                      "x-ms-visibility": "important"
+                    }
+                  }
+                },
+                "recipients": {
+                  "type": "object",
+                  "properties": {
+                    "signers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tabs": {
+                            "description": "Key-value pairs representing the tabs for this recipient (where key is the field name, and value is the field value).",
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "x-ms-visibility": "important",
+                            "x-ms-summary": "Tabs"
+                          },
+                          "email": {
+                            "type": "string",
+                            "x-ms-summary": "Recipient Email",
+                            "x-ms-visibility": "important"
+                          },
+                          "recipientId": {
+                            "type": "string",
+                            "x-ms-summary": "Recipient Id",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "routingOrder": {
+                            "type": "string",
+                            "x-ms-summary": "Routing Order",
+                            "x-ms-visibility": "important"
+                          },
+                          "sentDateTime": {
+                            "format": "date-time",
+                            "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Sent Date-Time",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "status": {
+                            "description": "The status of the recipient.",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Status",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "recipientType": {
+                            "description": "The type of recipient.",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Type",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "verificationType": {
+                            "description": "The type of the verification.",
+                            "type": "string",
+                            "x-ms-summary": "Verification Type",
+                            "x-ms-visibility": "important"
+                          },
+                          "name": {
+                            "description": "The name of the recipient.",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Name",
+                            "x-ms-visibility": "important"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "WebhookEnvelopeResponseV3": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "envelopeSummary": {
+              "type": "object",
+              "properties": {
+                "customFields": {
+                  "description": "Key-value pairs representing the custom fields for this envelope (where key is the field name, and value is the field value).",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "x-ms-visibility": "important",
+                  "x-ms-summary": "Custom Fields"
+                },
+                "createdDateTime": {
+                  "format": "date-time",
+                  "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                  "type": "string",
+                  "x-ms-summary": "Envelope Created Date-Time",
+                  "x-ms-visibility": "advanced"
+                },
+                "envelopeId": {
+                  "type": "string",
+                  "x-ms-summary": "Envelope ID",
+                  "x-ms-visibility": "important"
+                },
+                "sentDateTime": {
+                  "format": "date-time",
+                  "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                  "type": "string",
+                  "x-ms-summary": "Envelope Sent Date-Time",
+                  "x-ms-visibility": "important"
+                },
+                "status": {
+                  "type": "string",
+                  "x-ms-summary": "Envelope Status",
+                  "x-ms-visibility": "important"
+                },
+                "emailSubject": {
+                  "type": "string",
+                  "x-ms-summary": "Email Subject",
+                  "x-ms-visibility": "important"
+                },
+                "sender": {
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's Name",
+                      "x-ms-visibility": "important"
+                    },
+                    "userId": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's User ID",
+                      "x-ms-visibility": "important"
+                    },
+                    "accountId": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's Account ID",
+                      "x-ms-visibility": "important"
+                    },
+                    "email": {
+                      "type": "string",
+                      "x-ms-summary": "Sender's Email Address",
+                      "x-ms-visibility": "important"
+                    }
+                  }
+                },
+                "recipients": {
+                  "type": "object",
+                  "properties": {
+                    "signers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tabs": {
+                            "description": "Key-value pairs representing the tabs for this recipient (where key is the field name, and value is the field value).",
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            },
+                            "x-ms-visibility": "important",
+                            "x-ms-summary": "Tabs"
+                          },
+                          "email": {
+                            "type": "string",
+                            "x-ms-summary": "Recipient Email",
+                            "x-ms-visibility": "important"
+                          },
+                          "recipientId": {
+                            "type": "string",
+                            "x-ms-summary": "Recipient Id",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "routingOrder": {
+                            "type": "string",
+                            "x-ms-summary": "Routing Order",
+                            "x-ms-visibility": "important"
+                          },
+                          "sentDateTime": {
+                            "format": "date-time",
+                            "description": "yyyy-MM-ddTHH:mm:ss.fffZ",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Sent Date-Time",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "status": {
+                            "description": "The status of the recipient.",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Status",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "recipientType": {
+                            "description": "The type of recipient.",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Type",
+                            "x-ms-visibility": "advanced"
+                          },
+                          "verificationType": {
+                            "description": "The type of the verification.",
+                            "type": "string",
+                            "x-ms-summary": "Verification Type",
+                            "x-ms-visibility": "important"
+                          },
+                          "name": {
+                            "description": "The name of the recipient.",
+                            "type": "string",
+                            "x-ms-summary": "Recipient Name",
+                            "x-ms-visibility": "important"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "WebhookEnvelopeResponseV4": {
       "type": "object",
       "properties": {
         "data": {
@@ -7384,12 +7168,12 @@
                         "x-ms-summary": "Document ID",
                         "x-ms-visibility": "important"
                       },
-                      "documentGuid": {
+                      "documentIdGuid": {
                         "type": "string",
                         "x-ms-summary": "Document Guid",
                         "x-ms-visibility": "important"
                       },
-                      "documentName": {
+                      "name": {
                         "type": "string",
                         "x-ms-summary": "Document Name",
                         "x-ms-visibility": "important"
@@ -7518,7 +7302,7 @@
                     "type": "string"
                   },
                   "x-ms-visibility": "important",
-                  "x-ms-summary": "Envelope Custom Fields"
+                  "x-ms-summary": "Custom Fields"
                 },
                 "createdDateTime": {
                   "format": "date-time",
@@ -7559,12 +7343,12 @@
                         "x-ms-summary": "Document ID",
                         "x-ms-visibility": "important"
                       },
-                      "documentGuid": {
+                      "documentIdGuid": {
                         "type": "string",
                         "x-ms-summary": "Document Guid",
                         "x-ms-visibility": "important"
                       },
-                      "documentName": {
+                      "name": {
                         "type": "string",
                         "x-ms-summary": "Document Name",
                         "x-ms-visibility": "important"
