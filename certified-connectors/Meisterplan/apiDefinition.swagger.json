@@ -4680,7 +4680,6 @@
             "description": "Internal Meisterplan identifier",
             "required": true,
             "type": "string",
-            "minLength": 1,
             "x-ms-summary": "Scenario Id",
             "x-ms-url-encoding": "single",
             "x-example": "UUID"
@@ -4691,7 +4690,6 @@
             "description": "Internal Meisterplan identifier",
             "required": true,
             "type": "string",
-            "minLength": 1,
             "x-ms-summary": "Program Id",
             "x-ms-url-encoding": "single",
             "x-example": "UUID"
@@ -11831,22 +11829,6 @@
         }
       },
       "x-ms-summary": "User"
-    },
-    "MinimalPrimaryRoleResponse": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "UUID",
-          "x-ms-summary": "ID"
-        },
-        "name": {
-          "type": "string",
-          "example": "Junior Developer",
-          "x-ms-summary": "Name"
-        }
-      },
-      "x-ms-summary": "Primary Role"
     },
     "PaginatedResponseTeamResponse": {
       "type": "object",
